@@ -1,0 +1,23 @@
+{
+  "users": {
+    "admin": {
+      "canCreate": true,
+      "canEdit": true,
+      "canDelete": true,
+      "description": "Администратор - полный доступ"
+    },
+    "SidorkinV": {
+      "canCreate": true,
+      "canEdit": true,
+      "canDelete": false,
+      "description": "Пользователь - создание и редактирование без удаления"
+    }
+  },
+  "default": {
+    "canCreate": false,
+    "canEdit": false,
+    "canDelete": false,
+    "description": "Пользователь по умолчанию - без прав"
+  }
+}
+

@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# PHP
+composer.phar
+composer.lock
+
+# SSL certificates (if any)
+*.pem
+*.key
+*.crt
+
+# Backup files
+*.bak
+*~
+@archiv 2025/
+archiv 2025/

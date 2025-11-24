@@ -1,0 +1,1609 @@
+/**
+ * Proforma Invoice Styles
+ * Кастомные стили для приложения проформа-инвойс
+ * Объединено с improvements.css
+ */
+
+/* ============================================
+   CSS ПЕРЕМЕННЫЕ (из improvements.css)
+   ============================================ */
+
+:root {
+  /* Модульная типографическая шкала (Major Third 1.25) */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.25rem;    /* 20px */
+  --font-size-xl: 1.5rem;     /* 24px */
+  --font-size-2xl: 2rem;      /* 32px */
+  --font-size-3xl: 3rem;      /* 48px */
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.6;  /* Улучшено с 1.4 */
+  --line-height-relaxed: 1.8;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Primary Colors */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-900: #1e3a8a;
+  
+  /* Accent Colors */
+  --color-accent-500: #6366f1;
+  --color-accent-600: #4f46e5;
+  
+  /* Success */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  
+  /* Warning */
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  
+  /* Error */
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  
+  /* Neutral/Gray */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Semantic Colors */
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-muted: var(--color-gray-500);
+  --color-border: var(--color-gray-300);
+  --color-background: #ffffff;
+  --color-background-secondary: var(--color-gray-50);
+  
+  /* Spacing System (8px Grid) */
+  --space-0: 0;
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+}
+
+/* ============================================
+   КРИТИЧЕСКИЕ УЛУЧШЕНИЯ UI/UX (2025-11-21)
+   ============================================ */
+
+/* 1. Улучшенная типографика для лучшей читаемости */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+               'Roboto', 'Oxygen', 'Ubuntu', 'Helvetica Neue', sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal) !important; /* Было: 1.4 - КРИТИЧНО для читаемости */
+  color: var(--color-text-primary);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 2. Labels - КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ для WCAG AA */
+label {
+  display: block;
+  font-size: var(--font-size-sm) !important; /* 14px вместо 12px */
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700) !important; /* Было: #9CA3AF - НЕ проходило WCAG! */
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Переопределение Tailwind классов для labels - темный цвет */
+label.text-gray-600,
+label.text-gray-500,
+label.text-gray-400,
+label.text-gray-700 {
+  color: #374151 !important; /* Темный цвет для лучшей читаемости */
+}
+
+/* Переопределение серого текста для меток и важных элементов */
+.text-gray-600.text-xs.font-medium,
+.text-gray-600.text-sm,
+.text-gray-600.text-xs,
+label.text-gray-600,
+label.text-gray-500,
+label.text-gray-400 {
+  color: #374151 !important; /* Темный цвет вместо серого */
+}
+
+/* Переопределение для заголовков таблиц */
+th.text-gray-600,
+th.text-gray-500 {
+  color: #374151 !important;
+}
+
+/* Основной текст должен быть темным, а не серым */
+p.text-gray-600,
+p.text-gray-700,
+.text-gray-700 {
+  color: #1F2937 !important; /* Очень темный серый для основного текста */
+}
+
+/* Вспомогательный текст может быть немного светлее, но не слишком */
+.text-gray-500 {
+  color: #4B5563 !important; /* Средний серый вместо очень светлого */
+}
+
+/* Для footer и второстепенного текста */
+.text-gray-400 {
+  color: #6B7280 !important; /* Чуть светлее, но все еще читаемо */
+}
+
+/* 3. Focus Indicators - КРИТИЧНО для Accessibility */
+*:focus-visible {
+  outline: 3px solid var(--color-primary-500) !important;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-primary-500) !important;
+  outline-offset: 2px;
+}
+
+/* 4. Улучшенные заголовки с правильной иерархией */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em; /* Оптический кернинг */
+  margin-top: 0;
+}
+
+h1 {
+  font-size: var(--font-size-3xl); /* 48px вместо 32px */
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: var(--font-size-2xl); /* 32px вместо 24px */
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: var(--font-size-xl); /* 24px вместо 20px */
+  margin-bottom: 1rem;
+}
+
+/* 5. Оптимальная длина строки для параграфов */
+p {
+  max-width: 65ch;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* 6. Улучшенные кнопки с hover эффектами */
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 44px; /* Touch-friendly размер */
+  min-width: 44px;
+}
+
+button:hover:not(:disabled),
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled),
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 7. Улучшенные поля ввода */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background: white;
+  border: 2px solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background: var(--color-gray-100);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* 9. Skip Link для keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary-600);
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  border-radius: 0 0 0.5rem 0;
+  transition: top 0.2s;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0 !important;
+}
+
+/* 8. Адаптивная типографика для мобильных */
+@media (max-width: 640px) {
+  :root {
+    --font-size-3xl: 2rem;  /* 32px вместо 48px */
+    --font-size-2xl: 1.5rem; /* 24px вместо 32px */
+  }
+  
+  body {
+    font-size: var(--font-size-sm); /* 14px на мобильных */
+  }
+  
+  h1 {
+    font-size: var(--font-size-2xl); /* 32px на мобильных */
+  }
+  
+  h2 {
+    font-size: var(--font-size-xl); /* 24px */
+  }
+  
+  h3 {
+    font-size: var(--font-size-lg); /* 20px */
+  }
+  
+  button,
+  .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .table-enhanced {
+    font-size: var(--font-size-sm);
+  }
+  
+  .toast-container {
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+  
+  .toast {
+    min-width: 100%;
+  }
+}
+
+/* ============================================
+   КОНЕЦ КРИТИЧЕСКИХ УЛУЧШЕНИЙ
+   ============================================ */
+
+/* ============================================
+   ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ИЗ improvements.css
+   ============================================ */
+
+/* Улучшенные кнопки с ripple эффектом */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Primary Button с градиентом */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3), 0 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: white;
+  color: var(--color-primary-600);
+  border: 2px solid var(--color-primary-600);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-primary-50);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Success Button с градиентом */
+.btn-success {
+  background: linear-gradient(135deg, var(--color-success-500) 0%, var(--color-success-600) 100%);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Улучшенные поля ввода с состояниями */
+.form-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background: white;
+  border: 2px solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Error State */
+.form-input.error,
+input.error {
+  border-color: var(--color-error-500);
+}
+
+.form-input.error:focus,
+input.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Success State */
+.form-input.success,
+input.success {
+  border-color: var(--color-success-500);
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2310b981'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+}
+
+/* Placeholder */
+::placeholder {
+  color: var(--color-gray-400);
+  opacity: 1;
+}
+
+/* Улучшенные таблицы */
+.table-enhanced {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-enhanced thead {
+  background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+}
+
+.table-enhanced th {
+  padding: var(--space-4);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--color-gray-300);
+}
+
+.table-enhanced tbody tr {
+  transition: all 0.15s ease;
+  background: white;
+}
+
+.table-enhanced tbody tr:hover {
+  background: var(--color-primary-50);
+  transform: scale(1.01);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-enhanced td {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+  font-size: var(--font-size-base);
+}
+
+/* Сортируемые заголовки */
+.table-sortable th {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 2rem;
+}
+
+.table-sortable th:hover {
+  background: var(--color-gray-200);
+}
+
+.table-sortable th.sorted::after {
+  content: '▲';
+  position: absolute;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-primary-600);
+}
+
+.table-sortable th.sorted.desc::after {
+  content: '▼';
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.toast {
+  min-width: 300px;
+  padding: var(--space-4) var(--space-5);
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  pointer-events: auto;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-success {
+  border-left: 4px solid var(--color-success-500);
+}
+
+.toast-error {
+  border-left: 4px solid var(--color-error-500);
+}
+
+.toast-warning {
+  border-left: 4px solid var(--color-warning-500);
+}
+
+.toast-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-title {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-1);
+}
+
+.toast-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Skeleton Loaders */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200) 0%,
+    var(--color-gray-300) 50%,
+    var(--color-gray-200) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.25rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: var(--space-2);
+}
+
+.skeleton-text:last-child {
+  width: 70%;
+}
+
+.skeleton-card {
+  padding: var(--space-6);
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Микроанимации */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted { color: var(--color-text-muted); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+.mb-8 { margin-bottom: var(--space-8); }
+
+/* Применение spacing */
+.section {
+  padding: var(--space-12) 0;
+}
+
+.card {
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+/* Малый текст */
+small, .text-sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Темная тема (опционально) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-background: #111827;
+    --color-background-secondary: #1f2937;
+    --color-border: #374151;
+  }
+  
+  body {
+    background: var(--color-background);
+    color: var(--color-text-primary);
+  }
+  
+  .table-enhanced {
+    background: var(--color-background-secondary);
+  }
+  
+  .form-input {
+    background: var(--color-background-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+  }
+}
+
+/* Адаптивность для планшетов */
+@media (min-width: 641px) and (max-width: 1024px) {
+  :root {
+    --font-size-3xl: 2.5rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+    /* Убираем заголовок и футер браузера */
+    @page {
+        size: A4 portrait;
+        margin: 10mm; /* Уменьшено с 15mm */
+    }
+    
+    /* Скрываем URL, дату и заголовок страницы которые добавляет браузер */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Сброс базовых стилей */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    body {
+        background: white !important;
+        font-size: 11pt;
+        line-height: 1.4;
+    }
+    
+    /* Скрываем всё кроме контента */
+    body * {
+        visibility: hidden;
+    }
+    
+    #printable-content,
+    #printable-content * {
+        visibility: visible;
+    }
+    
+    #printable-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 8mm !important; /* Уменьшено с 15mm */
+        margin: 0 !important;
+    }
+    
+    /* Скрываем элементы управления */
+    .no-print {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Убираем рамки и фоны у полей ввода */
+    input,
+    textarea,
+    select {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        outline: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        font-size: inherit !important;
+        color: black !important;
+    }
+    
+    /* Убираем значок изменения размера у textarea */
+    textarea {
+        resize: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        line-height: 1.5 !important;
+        padding: 4pt 0 !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        display: block !important;
+    }
+    
+    /* Специальные стили для многострочных полей Bill To и Address */
+    textarea[readonly] {
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+    }
+    
+    /* Убираем фокус */
+    input:focus,
+    textarea:focus,
+    select:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Оптимизация таблиц */
+    table {
+        page-break-inside: avoid;
+        border-collapse: collapse !important;
+        width: 100% !important;
+        table-layout: auto !important;
+    }
+    
+    /* Колонка "Описание Товара" - максимальная ширина */
+    table colgroup col:nth-child(2),
+    table thead th:nth-child(2),
+    table tbody td:nth-child(2) {
+        min-width: 200px !important;
+        max-width: none !important;
+    }
+    
+    thead {
+        display: table-header-group;
+    }
+    
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    td, th {
+        page-break-inside: avoid;
+        border: 1px solid #333 !important;
+        padding: 6pt !important;
+    }
+    
+    /* Заголовки */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        color: black !important;
+    }
+    
+    /* Логотип */
+    img:not([alt="PDF"]) {
+        max-width: 150px !important;
+        height: auto !important;
+    }
+    
+    /* Иконка PDF в кнопке - фиксированный размер */
+    img[alt="PDF"],
+    img[src*="pdf-svgrepo-com.svg"] {
+        max-width: 32px !important;
+        max-height: 32px !important;
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    /* Печать и подпись - фиксированные размеры */
+    img[alt="Company Stamp"] {
+        max-width: none !important;
+        width: auto !important;
+        height: 96px !important; /* h-24 = 6rem = 96px */
+        object-fit: contain !important;
+        opacity: 0.8 !important;
+    }
+    
+    img[alt="Authorized Signature"] {
+        max-width: none !important;
+        width: auto !important;
+        height: 64px !important; /* h-16 = 4rem = 64px */
+        object-fit: contain !important;
+        position: absolute !important;
+        top: 40px !important; /* top-10 = 2.5rem = 40px */
+        left: 0 !important;
+    }
+    
+    /* Градиенты для печати */
+    .bg-gradient-to-r {
+        background: #eff6ff !important;
+        border: none !important;
+    }
+    
+    /* Убираем серые фоны */
+    .bg-gray-50,
+    .bg-gray-100 {
+        background: white !important;
+    }
+    
+    /* Убираем синие фоны из футера таблицы */
+    .bg-blue-50 {
+        background: #f0f9ff !important;
+    }
+    
+    /* Убираем ненужные отступы */
+    .p-4, .p-6, .p-8 {
+        padding: 8pt !important;
+    }
+    
+    .px-3, .px-4, .px-6 {
+        padding-left: 4pt !important;
+        padding-right: 4pt !important;
+    }
+    
+    .py-2, .py-3, .py-4 {
+        padding-top: 4pt !important;
+        padding-bottom: 4pt !important;
+    }
+    
+    /* Оптимизация для A4 - уже определено выше */
+    
+    /* Разрывы страниц */
+    .page-break-before {
+        page-break-before: always;
+    }
+    
+    .page-break-after {
+        page-break-after: always;
+    }
+    
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+
+    .print-avoid-break {
+        display: block !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+        page-break-before: avoid !important;
+        break-before: avoid-page !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+    
+    /* Подпись */
+    .border-t-2 {
+        border-top: 2px solid #333 !important;
+        margin-top: 20pt !important;
+        padding-top: 15pt !important;
+    }
+    
+    /* Убираем тени */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    /* Ссылки */
+    a {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+    
+    /* Даты - скрываем поле ввода, показываем форматированную дату */
+    input[type="date"] {
+        display: none !important;
+    }
+    
+    .print-date {
+        display: block !important;
+        font-size: 10pt !important;
+        color: black !important;
+        font-weight: normal !important;
+    }
+    
+    /* Label для полей */
+    label {
+        font-weight: bold !important;
+        font-size: 9pt !important;
+        display: block !important;
+        margin-bottom: 2pt !important;
+    }
+    
+    /* Убираем серые фоны карточек для более чистого вида */
+    .bg-gray-50 {
+        background: white !important;
+        border: none !important;
+        padding: 4pt 0 !important;
+    }
+    
+    .rounded-lg {
+        border-radius: 0 !important;
+    }
+    
+    /* Убираем серые метки "из редактора" */
+    .text-gray-600,
+    .text-gray-700,
+    .text-gray-500 {
+        color: black !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Усиление контрастности для всех текстовых элементов при печати */
+    label,
+    p,
+    span,
+    div {
+        color: #000000 !important;
+    }
+    
+    /* Усиление контрастности для меток */
+    label.text-gray-600,
+    label.text-xs {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Усиление контрастности для дат */
+    .text-x1.text-gray-600,
+    .print-date {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Усиление контрастности для текста в карточках */
+    .bg-gray-50 *,
+    .bg-gray-100 * {
+        color: #000000 !important;
+    }
+    
+    /* Усиление контрастности для информации о компании */
+    .text-xs.text-gray-600.text-right,
+    .text-xs.text-gray-600.text-right * {
+        color: #000000 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Убираем синие акценты */
+    .text-blue-600,
+    .text-blue-900 {
+        color: #1e40af !important;
+    }
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Убираем значок изменения размера у textarea в режиме просмотра */
+textarea[readonly] {
+    resize: none !important;
+    cursor: default !important;
+    overflow: hidden !important;
+    height: auto !important;
+    min-height: auto !important;
+    line-height: 1.5 !important;
+    padding: 4px 0 !important;
+}
+
+/* Типографические отступы для текстовых блоков */
+.text-block {
+    margin-bottom: 8pt;
+    line-height: 1.5;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Smooth Transitions */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Custom Scrollbar для таблиц */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Улучшение читаемости в режиме просмотра */
+.print-mode-field {
+    border: none !important;
+    background: transparent !important;
+    padding-left: 0 !important;
+}
+
+.print-mode-field:focus {
+    outline: none !important;
+}
+
+/* ========================================
+   УЛУЧШЕНИЕ КОНТРАСТНОСТИ ДЛЯ ЯНДЕКС БРАУЗЕРА
+   ======================================== */
+
+/* Усиление контрастности для всех серых текстов */
+.text-gray-600 {
+    color: #374151 !important; /* Темный серый вместо светлого */
+}
+
+.text-gray-500 {
+    color: #4B5563 !important; /* Средний серый для лучшей читаемости */
+}
+
+.text-gray-700 {
+    color: #1F2937 !important; /* Очень темный серый */
+}
+
+/* Улучшение контрастности для меток */
+label.text-gray-600,
+label.text-xs.text-gray-600 {
+    color: #1F2937 !important; /* Очень темный для меток */
+    font-weight: 600 !important;
+}
+
+/* Улучшение контрастности для дат */
+.text-x1.text-gray-600,
+.print-date.text-gray-600 {
+    color: #111827 !important; /* Почти черный для дат */
+    font-weight: 500 !important;
+}
+
+/* Улучшение контрастности для текста в карточках */
+.bg-gray-50 .text-gray-600,
+.bg-gray-50 .text-gray-500,
+.bg-gray-50 .text-gray-700 {
+    color: #1F2937 !important;
+}
+
+/* Улучшение контрастности для информации о компании */
+.text-xs.text-gray-600.text-right {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+.text-xs.text-gray-600.text-right p {
+    color: #1F2937 !important;
+}
+
+/* Улучшение контрастности для подсказок */
+.text-xs.text-gray-500 {
+    color: #4B5563 !important;
+    font-weight: 500 !important;
+}
+
+/* Улучшение контрастности для текста в таблицах */
+table .text-gray-600,
+table .text-gray-500 {
+    color: #1F2937 !important;
+}
+
+/* Улучшение контрастности для текста в блоках с серым фоном */
+.bg-gray-50 p,
+.bg-gray-50 label,
+.bg-gray-50 .text-sm {
+    color: #111827 !important;
+}
+
+/* Улучшение контрастности для pre-блоков */
+pre.text-gray-700 {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Специальные стили для Яндекс браузера */
+@supports (-webkit-appearance: none) {
+    /* Дополнительное усиление для WebKit браузеров (включая Яндекс) */
+    .text-gray-600,
+    .text-gray-500 {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    /* Усиление контрастности для всех текстовых элементов */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Улучшение контрастности для всех элементов с серым текстом на белом фоне */
+.bg-white .text-gray-600,
+.bg-white .text-gray-500,
+.bg-white .text-gray-700 {
+    color: #1F2937 !important;
+}
+
+/* Улучшение контрастности для элементов с серым текстом на светло-сером фоне */
+.bg-gray-50 .text-gray-600,
+.bg-gray-50 .text-gray-500,
+.bg-gray-50 .text-gray-700,
+.bg-gray-100 .text-gray-600,
+.bg-gray-100 .text-gray-500,
+.bg-gray-100 .text-gray-700 {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Улучшение контрастности для подписей и меток в формах */
+label.text-xs.font-medium.text-gray-600 {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+/* Улучшение контрастности для вторичного текста */
+.text-gray-600.text-sm,
+.text-gray-600.text-xs {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+/* Улучшение контрастности для текста в режиме просмотра */
+#printable-content .text-gray-600,
+#printable-content .text-gray-500,
+#printable-content .text-gray-700 {
+    color: #111827 !important;
+}
+
+/* Улучшение контрастности для текста в заголовках и подзаголовках */
+h3 + .text-gray-600,
+h3 + .text-gray-500 {
+    color: #1F2937 !important;
+}
+
+/* Улучшение контрастности для текста в блоках с градиентом */
+.bg-gradient-to-r + .text-gray-600,
+.bg-gradient-to-r + .text-gray-500 {
+    color: #1F2937 !important;
+}
+
+/* Дополнительные правила для обеспечения WCAG AA контрастности (минимум 4.5:1) */
+/* Специфичные правила для проблемных элементов в Яндекс браузере */
+
+/* Усиление контрастности для меток и подписей */
+label.text-gray-600,
+label.text-gray-500,
+label.text-xs.font-medium.text-gray-600 {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+/* Усиление контрастности для дат и чисел */
+.text-x1.text-gray-600,
+.print-date.text-gray-600,
+div.text-x1.text-gray-600.mt-1 {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+/* Усиление контрастности для текста в карточках с серым фоном */
+.bg-gray-50 label,
+.bg-gray-50 .text-sm,
+.bg-gray-50 p:not(.text-white):not(.text-blue-600):not(.text-green-600),
+.bg-gray-100 label,
+.bg-gray-100 .text-sm {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Усиление контрастности для информации о компании */
+.text-xs.text-gray-600.text-right p:not(.text-white),
+.text-xs.text-gray-600.text-right:not(.text-white) {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Усиление контрастности для подсказок (но не слишком темно) */
+.text-xs.text-gray-500:not(.text-white):not(.text-blue-600) {
+    color: #4B5563 !important;
+    font-weight: 500 !important;
+}
+
+/* Усиление контрастности для текста в таблицах (только обычный текст) */
+table td.text-gray-600,
+table td.text-gray-500,
+table th.text-gray-600 {
+    color: #111827 !important;
+}
+
+/* Усиление контрастности для pre-блоков */
+pre.text-gray-700,
+pre.text-sm.text-gray-700 {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Усиление контрастности для текста в блоках коммерческих условий */
+.bg-gray-50 p.text-gray-700,
+.bg-gray-50 .text-gray-700 {
+    color: #111827 !important;
+    font-weight: 500 !important;
+}
+
+/* Специальное правило для Яндекс браузера - принудительное усиление контраста */
+/* Определяем Яндекс браузер по user-agent или специфичным свойствам */
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+    /* Дополнительное усиление для WebKit браузеров (включая Яндекс) */
+    
+    /* Усиление контрастности для всех проблемных элементов */
+    .text-gray-600:not(.text-white):not(.text-blue-600):not(.text-green-600):not(.text-red-600):not(.text-orange-600) {
+        color: #1F2937 !important;
+        font-weight: 500 !important;
+    }
+    
+    .text-gray-500:not(.text-white):not(.text-blue-600):not(.text-green-600):not(.text-red-600):not(.text-orange-600) {
+        color: #374151 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Усиление контрастности для меток */
+    label.text-gray-600,
+    label.text-gray-500 {
+        color: #111827 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Усиление контрастности для дат */
+    .text-x1.text-gray-600,
+    div.text-x1.text-gray-600.mt-1 {
+        color: #111827 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Усиление контрастности для текста в карточках */
+    .bg-gray-50 .text-gray-600,
+    .bg-gray-50 .text-gray-500,
+    .bg-gray-50 .text-gray-700,
+    .bg-gray-100 .text-gray-600,
+    .bg-gray-100 .text-gray-500 {
+        color: #111827 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Усиление контрастности для информации о компании */
+    .text-xs.text-gray-600.text-right {
+        color: #111827 !important;
+        font-weight: 500 !important;
+    }
+    
+    .text-xs.text-gray-600.text-right p {
+        color: #111827 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Улучшение рендеринга шрифтов */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+}
+
+/* Стили для кнопок (улучшенные версии уже определены выше) */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-warning {
+    background-color: var(--color-warning-500);
+    color: white;
+}
+
+.btn-warning:hover:not(:disabled) {
+    background-color: var(--color-warning-600);
+}
+
+/* Статус индикаторы */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Градиент для заголовка */
+.gradient-header {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+/* Hover эффекты для карточек */
+.card-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Адаптивная типография */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    h2 {
+        font-size: 1.25rem !important;
+    }
+    
+    h3 {
+        font-size: 1.125rem !important;
+    }
+}
+
+/* Accessibility improvements */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Loading state для кнопок */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* ========================================
+   TABLE COLUMN WIDTHS
+   Ширины колонок таблицы
+   ======================================== */
+
+/* Колонка "Описание Товара" - максимальная ширина */
+table colgroup col:nth-child(2),
+table thead th:nth-child(2),
+table tbody td:nth-child(2) {
+    min-width: 200px;
+}
+
+/* ========================================
+   ADAPTIVE TABLE INPUTS
+   Адаптивные поля ввода в таблице
+   ======================================== */
+
+/* Стиль для родительской ячейки числового поля */
+.table-number-cell {
+    position: relative;
+}
+
+/* Базовый стиль для числовых полей в таблице */
+.table-number-input {
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+/* При фокусе - увеличиваем поле */
+.table-number-input:focus {
+    z-index: 100;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    min-width: 120px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 0 2px #3b82f6;
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    font-size: 16px;
+    padding: 8px 12px;
+}
+
+/* Для очень узких колонок (Qty, Unit) - еще больше увеличиваем */
+.table-number-input.compact:focus {
+    transform: translate(-50%, -50%) scale(2.2);
+    min-width: 140px;
+}
+
+/* Анимация появления при фокусе */
+@keyframes inputExpand {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: none;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1.8);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* Убираем стрелки у number input для чистоты */
+.table-number-input::-webkit-inner-spin-button,
+.table-number-input::-webkit-outer-spin-button {
+    opacity: 0.5;
+}
+
+.table-number-input:focus::-webkit-inner-spin-button,
+.table-number-input:focus::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+/* Для режима печати - убираем все эффекты */
+@media print {
+    .table-number-input:focus {
+        transform: none !important;
+        position: static !important;
+        box-shadow: none !important;
+        z-index: auto !important;
+        min-width: auto !important;
+    }
+}
+
+/* Для мобильных устройств - еще более заметное увеличение */
+@media (max-width: 768px) {
+    .table-number-input:focus {
+        transform: translate(-50%, -50%) scale(2.5);
+        min-width: 150px;
+        font-size: 18px;
+    }
+    
+    .table-number-input.compact:focus {
+        transform: translate(-50%, -50%) scale(2.8);
+        min-width: 160px;
+    }
+}
+
