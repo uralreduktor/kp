@@ -1,0 +1,607 @@
+/**
+ * Dark theme overrides.
+ * Подключается только при prefers-color-scheme: dark (см. pi.html).
+ */
+
+:root {
+  color-scheme: dark;
+  --color-text-primary: #cbd5f5;
+  --color-text-secondary: #cbd5f5;
+  --color-text-muted: #94a3b8;
+  --color-background: #0f172a;
+  --color-background-secondary: #151f32;
+  --color-surface: #1f2a40;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+#printable-content {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Все текстовые элементы внутри printable-content по умолчанию светлые */
+#printable-content * {
+  color: inherit;
+}
+
+.no-print {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-bottom-color: var(--color-border) !important;
+}
+
+.bg-white {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Все элементы внутри блоков с белым фоном */
+.bg-white * {
+  color: inherit;
+}
+
+.bg-white p,
+.bg-white div,
+.bg-white span {
+  color: var(--color-text-primary) !important;
+}
+
+/* Специфичное правило для шапки компании */
+.bg-white.border-b p,
+.bg-white.border-b div,
+.bg-white.border-b span,
+.bg-white.border-b b,
+.bg-white.border-b strong {
+  color: var(--color-text-primary) !important;
+}
+
+.bg-gray-50,
+.bg-gray-100 {
+  background: var(--color-background-secondary) !important;
+  color: var(--color-text-primary);
+}
+
+.bg-blue-50 {
+  background: #1d3260 !important;
+  color: var(--color-text-primary);
+}
+
+.bg-blue-100 {
+  background: #24407c !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Все элементы внутри .bg-blue-100 по умолчанию светлые */
+.bg-blue-100 * {
+  color: inherit;
+}
+
+/* Градиентные фоны */
+.bg-gradient-to-r.from-blue-50.to-blue-100 {
+  background: linear-gradient(to right, #1d3260, #24407c) !important;
+}
+
+/* Градиент для блока "Базис поставки" */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 {
+  background: linear-gradient(to bottom right, #1d3260, #1e3a6e) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Все элементы внутри градиентного блока светлые */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 * {
+  color: inherit;
+}
+
+.bg-gradient-to-br.from-blue-50.to-indigo-50 label,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 p,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 div {
+  color: var(--color-text-primary) !important;
+}
+
+/* Вложенный белый блок внутри градиента */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .bg-white {
+  background: var(--color-surface) !important;
+}
+
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .bg-white * {
+  color: var(--color-text-primary) !important;
+}
+
+/* Текст text-blue-900 внутри градиентного блока */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .text-blue-900,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 label.text-blue-900,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 p.text-blue-900,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .text-sm.text-blue-900 {
+  color: #bfdbfe !important;
+}
+
+/* Strong внутри text-blue-900 в градиенте */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .text-blue-900 strong,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 p.text-blue-900 strong {
+  color: #bfdbfe !important;
+}
+
+/* Italic text внутри градиента */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .text-gray-600.italic,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 p.text-gray-600.italic,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .text-xs.text-gray-600 {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Font-bold и font-semibold внутри градиента */
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .font-bold,
+.bg-gradient-to-br.from-blue-50.to-indigo-50 .font-semibold {
+  color: var(--color-text-primary) !important;
+}
+
+/* Тени внутри градиентного блока */
+.bg-gradient-to-br.from-blue-50.to-indigo-50.shadow-sm {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Дополнительная специфичность для всех текстовых элементов в градиенте */
+.bg-gradient-to-br label.text-blue-900.font-bold {
+  color: #bfdbfe !important;
+}
+
+.bg-gradient-to-br p.text-sm.font-semibold.text-blue-900 {
+  color: #bfdbfe !important;
+}
+
+.bg-gradient-to-br p.text-sm.font-semibold.text-blue-900 strong {
+  color: #bfdbfe !important;
+}
+
+.bg-blue-600 {
+  background: #2563eb !important;
+}
+
+.border,
+.border-b,
+.border-t,
+.border-l,
+.border-r,
+.border-gray-100,
+.border-gray-200,
+.border-gray-300 {
+  border-color: var(--color-border) !important;
+}
+
+.border-blue-200 {
+  border-color: #3b5998 !important;
+}
+
+.border-blue-300 {
+  border-color: #4c78ff !important;
+}
+
+.border-blue-500 {
+  border-color: #60a5fa !important;
+}
+
+.shadow-lg,
+.shadow-md,
+.shadow-sm {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Все серые текстовые классы -> светлый цвет */
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-gray-600,
+.text-gray-500,
+.text-gray-400,
+.text-gray-300,
+p.text-gray-900,
+p.text-gray-800,
+p.text-gray-700,
+p.text-gray-600,
+p.text-gray-500,
+div.text-gray-900,
+div.text-gray-800,
+div.text-gray-700,
+div.text-gray-600,
+div.text-gray-500 {
+  color: var(--color-text-primary) !important;
+}
+
+/* Все лейблы должны быть светлыми */
+label,
+label.text-gray-600,
+label.text-gray-500,
+label.text-gray-400,
+label.text-xs,
+label.text-sm,
+label.font-medium,
+label.text-xs.font-medium,
+label.text-xs.font-medium.text-gray-600,
+.text-xs.font-medium.text-gray-600 {
+  color: var(--color-text-primary) !important;
+}
+
+/* Даты и мелкие подписи */
+.text-gray-600.mt-1,
+.text-x1.text-gray-600,
+.text-x1.text-gray-600.mt-1,
+div.text-x1.text-gray-600,
+div.text-x1.text-gray-600.mt-1,
+.print-date,
+.text-xs.text-gray-600,
+.text-xs.text-gray-500 {
+  color: var(--color-text-primary) !important;
+  font-weight: 500 !important;
+}
+
+p,
+span,
+div {
+  color: inherit;
+}
+
+.text-blue-900 {
+  color: #93c5fd !important;
+}
+
+input,
+textarea,
+select,
+.table-number-input {
+  background: #10192c !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border-strong) !important;
+  box-shadow: none !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.table-number-input:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25) !important;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background: #1a2332 !important;
+  color: var(--color-text-secondary) !important;
+  opacity: 0.8;
+}
+
+/* Disabled поля с серым фоном (например, адрес получателя) */
+textarea.bg-gray-100[disabled],
+textarea.border-gray-200[disabled],
+input.bg-gray-100[disabled],
+input.border-gray-200[disabled] {
+  background: #1a2332 !important;
+  color: var(--color-text-secondary) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* Options в select */
+option {
+  background: #10192c !important;
+  color: var(--color-text-primary) !important;
+}
+
+.bg-gray-200,
+.bg-gray-300 {
+  background: #2a3652 !important;
+}
+
+table {
+  background: transparent;
+}
+
+table thead tr {
+  background: rgba(148, 163, 184, 0.1) !important;
+}
+
+table th {
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border-strong) !important;
+  font-weight: 600 !important;
+}
+
+/* Заголовки таблицы с классом text-xs */
+th.text-xs,
+th.text-sm {
+  color: var(--color-text-primary) !important;
+}
+
+table td {
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+table tfoot tr {
+  background: rgba(37, 99, 235, 0.15) !important;
+}
+
+.bg-blue-100.rounded,
+.bg-blue-100.rounded-lg {
+  border-color: rgba(96, 165, 250, 0.4) !important;
+}
+
+.bg-blue-100.rounded p,
+.bg-blue-100.rounded div {
+  color: var(--color-text-primary);
+}
+
+/* Заголовки и все элементы с text-blue-900 */
+.text-blue-900,
+.text-blue-900.uppercase,
+h1.text-blue-900,
+h1.text-blue-900.uppercase,
+p.text-blue-900,
+div.text-blue-900,
+span.text-blue-900,
+.bg-blue-100 .text-blue-900,
+.text-sm.text-blue-900,
+p.text-sm.text-blue-900,
+.font-semibold.text-blue-900 {
+  color: #bfdbfe !important;
+}
+
+/* Strong и b элементы */
+.bg-blue-100 strong,
+.bg-blue-50 strong,
+b,
+strong {
+  color: var(--color-text-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Strong внутри элементов с text-blue-900 */
+.text-blue-900 strong,
+p.text-blue-900 strong,
+.text-sm.text-blue-900 strong {
+  color: #bfdbfe !important;
+}
+
+.bg-blue-100 .text-xs.text-gray-600,
+.bg-blue-100 .text-xs.text-gray-500 {
+  color: var(--color-text-muted) !important;
+}
+
+.bg-blue-100 .border-l-4 {
+  border-color: #60a5fa !important;
+}
+
+.bg-blue-100 .bg-blue-100 {
+  background: #1e3a8a !important;
+}
+
+/* Элементы с текстом text-blue-900 в блоках условий поставки */
+.text-sm.font-semibold.text-blue-900,
+p.text-sm.font-semibold.text-blue-900,
+.text-sm.text-blue-900,
+p.text-sm.text-blue-900 {
+  color: #bfdbfe !important;
+}
+
+p.text-sm.font-semibold.text-blue-900 strong {
+  color: #bfdbfe !important;
+}
+
+/* Текст внутри блоков с серым фоном */
+.bg-gray-50 .text-gray-700,
+.bg-gray-50 .text-gray-600,
+.bg-gray-50 p,
+.bg-gray-50 pre,
+.bg-gray-50 div {
+  color: var(--color-text-primary) !important;
+}
+
+/* Банковские реквизиты - специальные блоки */
+.bg-gray-50.p-4.rounded-lg {
+  background: var(--color-background-secondary) !important;
+}
+
+.bg-gray-50.p-4.rounded-lg * {
+  color: var(--color-text-primary) !important;
+}
+
+/* Все текстовые элементы внутри блоков с серым фоном */
+.bg-gray-50 .text-sm,
+.bg-gray-50 .font-semibold,
+.bg-gray-50 strong,
+.bg-gray-100 .text-sm,
+.bg-gray-100 .font-semibold,
+.bg-gray-100 strong {
+  color: var(--color-text-primary) !important;
+}
+
+.status-badge {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #e2e8f0 !important;
+}
+
+.status-badge-warning {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fde68a !important;
+}
+
+.status-badge-error {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #fecaca !important;
+}
+
+.toast,
+.card,
+.bg-gray-50.p-6.rounded-lg {
+  background: var(--color-surface) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.toast-message {
+  color: var(--color-text-muted) !important;
+}
+
+/* Pre-блоки (например, банковские реквизиты) */
+pre,
+pre.text-sm,
+pre.text-gray-700,
+pre.font-mono,
+pre.whitespace-pre-line {
+  color: var(--color-text-primary) !important;
+  background: transparent !important;
+}
+
+/* Strong элементы внутри банковских реквизитов */
+.bg-gray-50 strong,
+strong.text-blue-700,
+strong.text-sm {
+  color: #93c5fd !important;
+}
+
+.text-blue-600 {
+  color: #60a5fa !important;
+}
+
+.text-blue-700 {
+  color: #93c5fd !important;
+}
+
+.text-green-600 {
+  color: #4ade80 !important;
+}
+
+.text-orange-600 {
+  color: #fb923c !important;
+}
+
+.text-red-600 {
+  color: #f87171 !important;
+}
+
+.bg-purple-600 {
+  background: #7c3aed !important;
+}
+
+.hover\:bg-gray-300:hover {
+  background: #334155 !important;
+}
+
+.hover\:bg-blue-700:hover {
+  background: #1d4ed8 !important;
+}
+
+.hover\:bg-blue-50:hover {
+  background: rgba(148, 163, 184, 0.2) !important;
+}
+
+/* Информация о компании в шапке (правый верхний угол) */
+.text-xs.text-gray-600.text-right {
+  color: var(--color-text-primary) !important;
+}
+
+.text-xs.text-gray-600.text-right p,
+.text-xs.text-gray-600.text-right p.mb-1,
+.text-xs.text-gray-600.text-right p.mb-2,
+.text-xs.text-gray-600.text-right p.mb-3 {
+  color: var(--color-text-primary) !important;
+}
+
+.text-xs.text-gray-600.text-right b,
+.text-xs.text-gray-600.text-right strong {
+  color: var(--color-text-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Дополнительное принудительное правило для параграфов в шапке компании */
+/* Очень высокая специфичность для перебития правил из styles.css */
+.bg-white.border-b .text-xs.text-gray-600.text-right p,
+.bg-white.border-b.p-6 .text-xs.text-gray-600.text-right p,
+div.bg-white.border-b .text-xs.text-gray-600.text-right p,
+.bg-white.border-b .text-xs.text-gray-600.text-right p.mb-1,
+.bg-white.border-b .text-xs.text-gray-600.text-right p.mb-2 {
+  color: var(--color-text-primary) !important;
+}
+
+/* Перебиваем правила из styles.css для Яндекс браузера */
+body .bg-white .text-xs.text-gray-600.text-right p {
+  color: var(--color-text-primary) !important;
+}
+
+body .text-xs.text-gray-600.text-right p:not(.text-white) {
+  color: var(--color-text-primary) !important;
+}
+
+/* Таблица товаров */
+.table-number-cell .table-number-input {
+  background: #111c32 !important;
+}
+
+.table-number-cell .table-number-input:focus {
+  background: #192541 !important;
+}
+
+.bg-blue-100.rounded p.text-sm.text-blue-900 {
+  color: #dbeafe !important;
+}
+
+/* Все элементы внутри блока с синим фоном (условия поставки) */
+.bg-blue-100.rounded p,
+.bg-blue-100.rounded div,
+.bg-blue-100.rounded span,
+.bg-blue-100.rounded strong,
+.bg-blue-100 p.text-sm,
+.bg-blue-100 .text-sm {
+  color: var(--color-text-primary) !important;
+}
+
+.bg-blue-100 p.text-sm.font-semibold,
+.bg-blue-100 p.text-sm.font-semibold strong {
+  color: #bfdbfe !important;
+}
+
+/* Подписи и штампы */
+img[alt="Company Stamp"],
+img[alt="Authorized Signature"] {
+  filter: drop-shadow(0 0 10px rgba(15, 23, 42, 0.6));
+}
+
+/* Все элементы с текстовыми размерами без явного цвета должны быть светлыми */
+.text-xs:not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-red"]):not([class*="text-orange"]):not([class*="text-yellow"]),
+.text-sm:not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-red"]):not([class*="text-orange"]):not([class*="text-yellow"]),
+.text-base:not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-red"]):not([class*="text-orange"]):not([class*="text-yellow"]),
+.text-lg:not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-red"]):not([class*="text-orange"]):not([class*="text-yellow"]) {
+  color: var(--color-text-primary) !important;
+}
+
+/* Заголовок секции банковских реквизитов */
+.text-lg.font-bold,
+h3.text-lg.font-bold {
+  color: var(--color-text-primary) !important;
+}
+
+/* Заголовки всех уровней */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary) !important;
+}
+
+/* Параграфы */
+p:not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-red"]):not([class*="text-orange"]):not([class*="text-yellow"]) {
+  color: inherit;
+}
+
+/* Блоки с текстом внутри printable-content */
+#printable-content h3,
+#printable-content h4,
+#printable-content h5,
+#printable-content label,
+#printable-content .font-semibold,
+#printable-content .font-medium,
+#printable-content .font-bold {
+  color: var(--color-text-primary) !important;
+}
+

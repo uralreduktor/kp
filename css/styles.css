@@ -711,32 +711,6 @@ small, .text-sm {
   line-height: var(--line-height-normal);
 }
 
-/* Темная тема (опционально) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text-primary: #f9fafb;
-    --color-text-secondary: #d1d5db;
-    --color-background: #111827;
-    --color-background-secondary: #1f2937;
-    --color-border: #374151;
-  }
-  
-  body {
-    background: var(--color-background);
-    color: var(--color-text-primary);
-  }
-  
-  .table-enhanced {
-    background: var(--color-background-secondary);
-  }
-  
-  .form-input {
-    background: var(--color-background-secondary);
-    border-color: var(--color-border);
-    color: var(--color-text-primary);
-  }
-}
-
 /* Адаптивность для планшетов */
 @media (min-width: 641px) and (max-width: 1024px) {
   :root {
@@ -1140,9 +1114,10 @@ textarea[readonly] {
 }
 
 /* ========================================
-   УЛУЧШЕНИЕ КОНТРАСТНОСТИ ДЛЯ ЯНДЕКС БРАУЗЕРА
+   УЛУЧШЕНИЕ КОНТРАСТНОСТИ ДЛЯ ЯНДЕКС БРАУЗЕРА (ТОЛЬКО ДЛЯ СВЕТЛОЙ ТЕМЫ)
    ======================================== */
 
+@media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
 /* Усиление контрастности для всех серых текстов */
 .text-gray-600 {
     color: #374151 !important; /* Темный серый вместо светлого */
@@ -1278,10 +1253,12 @@ h3 + .text-gray-500 {
 .bg-gradient-to-r + .text-gray-500 {
     color: #1F2937 !important;
 }
+} /* Конец @media (prefers-color-scheme: light) */
 
 /* Дополнительные правила для обеспечения WCAG AA контрастности (минимум 4.5:1) */
-/* Специфичные правила для проблемных элементов в Яндекс браузере */
+/* Специфичные правила для проблемных элементов в Яндекс браузере (ТОЛЬКО ДЛЯ СВЕТЛОЙ ТЕМЫ) */
 
+@media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
 /* Усиление контрастности для меток и подписей */
 label.text-gray-600,
 label.text-gray-500,
@@ -1341,9 +1318,11 @@ pre.text-sm.text-gray-700 {
     color: #111827 !important;
     font-weight: 500 !important;
 }
+} /* Конец @media (prefers-color-scheme: light) */
 
-/* Специальное правило для Яндекс браузера - принудительное усиление контраста */
+/* Специальное правило для Яндекс браузера - принудительное усиление контраста (ТОЛЬКО ДЛЯ СВЕТЛОЙ ТЕМЫ) */
 /* Определяем Яндекс браузер по user-agent или специфичным свойствам */
+@media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
 @supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
     /* Дополнительное усиление для WebKit браузеров (включая Яндекс) */
     
@@ -1400,6 +1379,7 @@ pre.text-sm.text-gray-700 {
         text-rendering: optimizeLegibility;
     }
 }
+} /* Конец @media (prefers-color-scheme: light) */
 
 /* Стили для кнопок (улучшенные версии уже определены выше) */
 .btn:disabled {
