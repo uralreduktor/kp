@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Коммерческое Предложение - ООО "Вектор"</title>
+    <title>Коммерческое Предложение для Тендеров - ООО "Вектор"</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="logo_vector.svg">
@@ -32,6 +32,7 @@
     <script src="js/incoterms.js"></script>
     <script src="js/organizations.js"></script>
     <script src="js/cities.js"></script>
+    <script src="js/trading-platforms.js"></script>
 </head>
 <body>
     <!-- Skip Link для keyboard navigation (A11Y) -->
@@ -345,6 +346,7 @@
           const [addressSearchResults, setAddressSearchResults] = useState([]);
           const [showAddressDropdown, setShowAddressDropdown] = useState(false);
           const [deliveryPlaceInput, setDeliveryPlaceInput] = useState(''); // Локальное состояние для поля ввода
+          const [tenderDataLoading, setTenderDataLoading] = useState(false); // Состояние загрузки данных торгов
           const [templateSelection, setTemplateSelection] = useState({
             paymentTerms: '',
             warranty: '',
@@ -384,11 +386,15 @@
             position: 'Менеджер по продажам',
             organizationId: null,
             selectedBankId: null, // ID выбранного банковского счета
-            documentType: 'regular' // Тип документа: 'regular' для обычных КП
+            documentType: 'tender', // Тип документа: 'tender' для КП для тендеров
+            tenderNumber: '', // Номер торгов
+            tradingPlatform: '', // ID торговой площадки
+            tenderLink: '' // Ссылка на торги
           });
           
           // Флаг для отслеживания, был ли номер отредактирован пользователем
           const [numberManuallyEdited, setNumberManuallyEdited] = useState(false);
+          const [incotermManuallyEdited, setIncotermManuallyEdited] = useState(false);
 
           const t = translations[language];
           
@@ -774,6 +780,7 @@
                     setFormData(loadedData);
                     setLoadedFilename(filename);
                     setNumberManuallyEdited(true); // При загрузке существующего документа считаем номер отредактированным
+                    setIncotermManuallyEdited(true); // Не переопределяем базис поставки для существующих документов
                     setViewMode('print');
                   }
                 })
@@ -900,6 +907,7 @@
             
             // Автоматическая установка места доставки для условий самовывоза
             if (field === 'incoterm') {
+              setIncotermManuallyEdited(true);
               const isPickupCondition = value === 'САМОВЫВОЗ' || value === 'ФРАНКО-СКЛАД ПРОДАВЦА' || value === 'ДО ТРАНСПОРТА ПОКУПАТЕЛЯ';
               const wasPickupCondition = formData.incoterm === 'САМОВЫВОЗ' || formData.incoterm === 'ФРАНКО-СКЛАД ПРОДАВЦА' || formData.incoterm === 'ДО ТРАНСПОРТА ПОКУПАТЕЛЯ';
               
@@ -1373,6 +1381,388 @@
                           ) : (
                             <div className="text-x1 text-gray-600 mt-1">{formatDate(formData.validUntil)}</div>
                           )}
+                        </div>
+                      </div>
+                      
+                      {/* Поля для тендеров */}
+                      <div className="mt-4 pt-4 border-t border-gray-200">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Информация о торгах</h4>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Номер торгов</label>
+                            {renderInput('tenderNumber', { 
+                              placeholder: 'Введите номер торгов',
+                              className: 'text-sm'
+                            })}
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Торговая площадка</label>
+                            {viewMode === 'edit' ? (
+                              <select
+                                value={formData.tradingPlatform}
+                                onChange={(e) => handleChange(e, 'tradingPlatform')}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                              >
+                                <option value="">Выберите площадку...</option>
+                                {tradingPlatforms && tradingPlatforms.map(platform => (
+                                  <option key={platform.id} value={platform.id}>
+                                    {platform.name}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <div className="text-sm text-gray-700 mt-1">
+                                {formData.tradingPlatform && tradingPlatforms ? 
+                                  (tradingPlatforms.find(p => p.id === formData.tradingPlatform)?.name || formData.tradingPlatform) 
+                                  : '-'}
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Ссылка на торги</label>
+                            {renderInput('tenderLink', { 
+                              type: 'url',
+                              placeholder: 'https://...',
+                              className: 'text-sm'
+                            })}
+                            {viewMode === 'edit' && formData.tenderLink && (
+                              <div className="mt-1">
+                                <button
+                                  type="button"
+                                  onClick={async () => {
+                                    if (!formData.tenderLink) {
+                                      alert('Введите ссылку на торги');
+                                      return;
+                                    }
+                                    setTenderDataLoading(true);
+                                    try {
+                                      const apiUrl = `${getApiUrl('parse-tender-data.php')}?url=${encodeURIComponent(formData.tenderLink)}`;
+                                      console.log('Запрос к API:', apiUrl);
+                                      
+                                      const response = await fetch(apiUrl);
+                                      
+                                      if (!response.ok) {
+                                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                                      }
+                                      
+                                      const data = await response.json();
+                                      
+                                      // Отладочная информация
+                                      console.log('Ответ от API:', data);
+                                      console.log('success:', data.success);
+                                      console.log('data:', data.data);
+                                      console.log('items:', data.data?.items);
+                                      
+                                      if (data.success && data.data) {
+                                        // Автозаполнение данных из парсера
+                                        const updates = {};
+                                        
+                                        // Номер торгов
+                                        if (data.data.tenderNumber && !formData.tenderNumber) {
+                                          updates.tenderNumber = data.data.tenderNumber;
+                                        }
+                                        
+                                        // Заказчик
+                                        if (data.data.recipient && (!formData.recipient || formData.recipient === 'Наименование организации')) {
+                                          updates.recipient = data.data.recipient;
+                                        }
+                                        
+                                        // ИНН заказчика (автозаполнение названия и адреса произойдёт автоматически)
+                                        if (data.data.recipientINN && !formData.recipientINN) {
+                                          updates.recipientINN = data.data.recipientINN;
+                                          console.log('Получен ИНН заказчика:', data.data.recipientINN);
+                                          
+                                          // Если ИНН был автоматически сопоставлен, показываем уведомление
+                                          if (data.data.autoMatchedCompany) {
+                                            console.log('Компания автоматически определена по совпадению региона');
+                                          }
+                                        }
+                                        
+                                        // Адрес заказчика (если получен из DaData)
+                                        if (data.data.recipientAddress && (!formData.recipientAddress || formData.recipientAddress === 'Адрес организации')) {
+                                          updates.recipientAddress = data.data.recipientAddress;
+                                          console.log('Получен адрес заказчика:', data.data.recipientAddress);
+                                        }
+                                        
+                                        // Адрес места поставки
+                                        if (data.data.deliveryAddress && (!formData.deliveryPlace || formData.deliveryPlace === 'Екатеринбург, Россия')) {
+                                          updates.deliveryPlace = data.data.deliveryAddress;
+                                          console.log('Получен адрес поставки:', data.data.deliveryAddress);
+                                        }
+                                        
+                                        // Предложенный базис поставки
+                                        if (data.data.deliveryIncoterm && !incotermManuallyEdited) {
+                                          updates.incoterm = data.data.deliveryIncoterm;
+                                          if (data.data.deliveryIncotermReason) {
+                                            console.log('Incoterm предложен на основе условий:', data.data.deliveryIncotermReason);
+                                          } else {
+                                            console.log('Incoterm предложен на основе условий:', data.data.deliveryIncoterm);
+                                          }
+                                        }
+                                        
+                                        // Если есть варианты компаний для выбора и нет автоматического совпадения
+                                        if (data.data.companySuggestions && data.data.companySuggestions.length > 0 && !data.data.recipientINN) {
+                                          console.log('Найдено вариантов компаний:', data.data.companySuggestions.length);
+                                          
+                                          // Формируем список для выбора
+                                          const suggestions = data.data.companySuggestions;
+                                          let message = 'Найдено несколько компаний с похожим названием.\n\n';
+                                          message += 'Адрес поставки: ' + (data.data.deliveryAddress || 'не указан') + '\n\n';
+                                          message += 'Выберите номер компании:\n\n';
+                                          
+                                          suggestions.slice(0, 5).forEach((company, index) => {
+                                            const matchInfo = company.matchScore >= 80 ? ' ⭐ (совпадение региона)' : '';
+                                            message += `${index + 1}. ${company.name}\n`;
+                                            message += `   ИНН: ${company.inn || 'н/д'}${matchInfo}\n`;
+                                            message += `   ${company.region || company.address || ''}\n\n`;
+                                          });
+                                          
+                                          message += '0 - Ввести ИНН вручную';
+                                          
+                                          const choice = prompt(message, '1');
+                                          
+                                          if (choice !== null && choice !== '0') {
+                                            const selectedIndex = parseInt(choice) - 1;
+                                            if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+                                              const selected = suggestions[selectedIndex];
+                                              updates.recipientINN = selected.inn;
+                                              updates.recipientAddress = selected.address;
+                                              updates.recipient = selected.name;
+                                              console.log('Выбрана компания:', selected.name, 'ИНН:', selected.inn);
+                                            }
+                                          }
+                                        }
+                                        
+                                        // Если ИНН не получен, но есть название заказчика - пробуем найти через company-suggest API
+                                        if (!updates.recipientINN && !data.data.recipientINN && data.data.recipient) {
+                                          console.log('Пробуем найти компанию через API:', data.data.recipient);
+                                          try {
+                                            const companyResponse = await fetch(`${getApiUrl('company-suggest.php')}?query=${encodeURIComponent(data.data.recipient)}&count=5`);
+                                            const companyData = await companyResponse.json();
+                                            
+                                            if (companyData.success && companyData.suggestions && companyData.suggestions.length > 0) {
+                                              const suggestions = companyData.suggestions;
+                                              const deliveryAddr = data.data.deliveryAddress || '';
+                                              
+                                              // Ищем совпадение по региону
+                                              let bestMatch = null;
+                                              for (const company of suggestions) {
+                                                if (deliveryAddr && company.address) {
+                                                  // Проверяем совпадение города или региона
+                                                  const deliveryLower = deliveryAddr.toLowerCase();
+                                                  const companyAddrLower = company.address.toLowerCase();
+                                                  
+                                                  if (deliveryLower.includes('белгород') && companyAddrLower.includes('белгород') ||
+                                                      deliveryLower.includes('старый оскол') && companyAddrLower.includes('старый оскол')) {
+                                                    bestMatch = company;
+                                                    break;
+                                                  }
+                                                }
+                                              }
+                                              
+                                              if (bestMatch) {
+                                                // Нашли совпадение по региону
+                                                updates.recipientINN = bestMatch.inn;
+                                                updates.recipientAddress = bestMatch.address;
+                                                console.log('Найдено совпадение по региону:', bestMatch.name, 'ИНН:', bestMatch.inn);
+                                              } else if (suggestions.length === 1) {
+                                                // Только один вариант - используем его
+                                                updates.recipientINN = suggestions[0].inn;
+                                                updates.recipientAddress = suggestions[0].address;
+                                                console.log('Единственный вариант:', suggestions[0].name);
+                                              } else {
+                                                // Показываем диалог выбора
+                                                let message = 'Найдено несколько компаний:\n\n';
+                                                message += 'Адрес поставки: ' + deliveryAddr + '\n\n';
+                                                
+                                                suggestions.forEach((company, index) => {
+                                                  message += `${index + 1}. ${company.name}\n`;
+                                                  message += `   ИНН: ${company.inn || 'н/д'}\n`;
+                                                  message += `   ${company.address || ''}\n\n`;
+                                                });
+                                                message += '0 - Ввести ИНН вручную';
+                                                
+                                                const choice = prompt(message, '1');
+                                                if (choice && choice !== '0') {
+                                                  const idx = parseInt(choice) - 1;
+                                                  if (idx >= 0 && idx < suggestions.length) {
+                                                    updates.recipientINN = suggestions[idx].inn;
+                                                    updates.recipientAddress = suggestions[idx].address;
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          } catch (err) {
+                                            console.error('Ошибка поиска компании:', err);
+                                          }
+                                        }
+                                        
+                                        // Торговая площадка
+                                        if (data.platform && !formData.tradingPlatform) {
+                                          updates.tradingPlatform = data.platform;
+                                        }
+                                        // Если платформа не определена в ответе, пробуем определить по URL
+                                        if (!updates.tradingPlatform) {
+                                          const detectedPlatform = detectTradingPlatform(formData.tenderLink);
+                                          if (detectedPlatform && !formData.tradingPlatform) {
+                                            updates.tradingPlatform = detectedPlatform.id;
+                                          }
+                                        }
+                                        
+                                        // Позиции товаров - заполняем таблицу товаров
+                                        if (data.data.items && data.data.items.length > 0) {
+                                          console.log('Найдено позиций:', data.data.items.length, data.data.items);
+                                          
+                                          // Преобразуем данные из парсера в формат таблицы товаров
+                                          // item.name -> type (колонка "Описание товара")
+                                          // item.quantity -> quantity (колонка "Количество")
+                                          const newItems = data.data.items.map((item, index) => {
+                                            const mappedItem = {
+                                              type: item.name || `Позиция ${index + 1}`, // Описание товара (из "Наименование позиции")
+                                              name: '',
+                                              hsCode: '',
+                                              countryOfOrigin: 'Россия',
+                                              unit: 'шт.',
+                                              quantity: parseFloat(item.quantity) || 1, // Количество (из колонки "Количество")
+                                              price: 0,
+                                              leadTime: ''
+                                            };
+                                            console.log(`Позиция ${index + 1}:`, mappedItem);
+                                            console.log(`  - type: "${mappedItem.type}"`);
+                                            console.log(`  - quantity: ${mappedItem.quantity}`);
+                                            return mappedItem;
+                                          });
+                                          
+                                          // Если есть только одна позиция, заменяем первую строку в таблице
+                                          if (newItems.length === 1) {
+                                            if (formData.items.length > 0) {
+                                              // Заменяем первую позицию, сохраняя остальные
+                                              // ВАЖНО: создаем полностью новый объект для первой позиции
+                                              const firstItem = { 
+                                                ...formData.items[0], 
+                                                type: newItems[0].type || formData.items[0].type,      // Описание товара
+                                                quantity: newItems[0].quantity || formData.items[0].quantity // Количество
+                                              };
+                                              updates.items = [
+                                                firstItem,
+                                                ...formData.items.slice(1)
+                                              ];
+                                              console.log('Обновлена первая позиция:', updates.items[0]);
+                                              console.log('  - type:', updates.items[0].type);
+                                              console.log('  - quantity:', updates.items[0].quantity);
+                                            } else {
+                                              // Если таблица пустая, добавляем позицию
+                                              updates.items = [...newItems];
+                                              console.log('Добавлена новая позиция:', updates.items[0]);
+                                            }
+                                          } else {
+                                            // Если несколько позиций, заменяем все или добавляем
+                                            updates.items = newItems.length >= formData.items.length 
+                                              ? [...newItems] 
+                                              : [...newItems, ...formData.items.slice(newItems.length)];
+                                            console.log('Обновлено позиций:', updates.items.length);
+                                          }
+                                        } else if (data.data.itemName || data.data.quantity) {
+                                          // Если есть только название позиции или количество (старый формат)
+                                          if (formData.items.length > 0) {
+                                            const firstItem = { ...formData.items[0] };
+                                            if (data.data.itemName) {
+                                              firstItem.type = data.data.itemName; // Описание товара
+                                            }
+                                            if (data.data.quantity) {
+                                              firstItem.quantity = parseFloat(data.data.quantity) || 1; // Количество
+                                            }
+                                            updates.items = [
+                                              firstItem,
+                                              ...formData.items.slice(1)
+                                            ];
+                                          } else {
+                                            // Если таблица пустая, создаем новую позицию
+                                            updates.items = [{
+                                              type: data.data.itemName || 'Описание товара',
+                                              name: '',
+                                              hsCode: '',
+                                              countryOfOrigin: 'Россия',
+                                              unit: 'шт.',
+                                              quantity: parseFloat(data.data.quantity) || 1,
+                                              price: 0,
+                                              leadTime: ''
+                                            }];
+                                          }
+                                        }
+                                        
+                                        if (Object.keys(updates).length > 0) {
+                                          console.log('Применяем обновления:', updates);
+                                          
+                                          // ВАЖНО: Используем функциональное обновление состояния
+                                          setFormData(prev => {
+                                            const newData = { ...prev };
+                                            
+                                            // Применяем все обновления
+                                            Object.keys(updates).forEach(key => {
+                                              if (key === 'items') {
+                                                // Для items заменяем полностью, создавая новый массив
+                                                console.log('Обновляем items:', updates.items);
+                                                console.log('Старые items:', prev.items);
+                                                newData.items = updates.items.map(item => ({ ...item })); // Глубокое копирование
+                                                console.log('Новые items в formData:', newData.items);
+                                              } else {
+                                                newData[key] = updates[key];
+                                              }
+                                            });
+                                            
+                                            console.log('Итоговый formData после обновления:', newData);
+                                            console.log('Проверка первой позиции:', newData.items[0]);
+                                            return newData;
+                                          });
+                                          
+                                          // Небольшая задержка для гарантии обновления состояния
+                                          setTimeout(() => {
+                                            const loadedItems = updates.items ? updates.items.length : 0;
+                                            const message = loadedItems > 0 
+                                              ? `Данные успешно загружены из ссылки. Загружено позиций: ${loadedItems}`
+                                              : 'Данные успешно загружены из ссылки';
+                                            alert(message);
+                                          }, 100);
+                                        } else {
+                                          console.warn('Нет данных для обновления. Ответ API:', data);
+                                          alert('Данные не найдены. Заполните поля вручную.');
+                                        }
+                                      } else {
+                                        // Автоопределение площадки по URL
+                                        const detectedPlatform = detectTradingPlatform(formData.tenderLink);
+                                        if (detectedPlatform && !formData.tradingPlatform) {
+                                          setFormData(prev => ({ ...prev, tradingPlatform: detectedPlatform.id }));
+                                        }
+                                        alert('Не удалось автоматически извлечь данные. Заполните поля вручную.');
+                                      }
+                                    } catch (error) {
+                                      console.error('Ошибка парсинга:', error);
+                                      // Автоопределение площадки по URL даже при ошибке
+                                      const detectedPlatform = detectTradingPlatform(formData.tenderLink);
+                                      if (detectedPlatform && !formData.tradingPlatform) {
+                                        setFormData(prev => ({ ...prev, tradingPlatform: detectedPlatform.id }));
+                                      }
+                                      alert('Ошибка при загрузке данных. Заполните поля вручную.');
+                                    } finally {
+                                      setTenderDataLoading(false);
+                                    }
+                                  }}
+                                  className="text-xs text-blue-600 hover:text-blue-800 underline mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  disabled={tenderDataLoading}
+                                >
+                                  {tenderDataLoading ? '⏳ Загрузка...' : '🔄 Загрузить данные из ссылки'}
+                                </button>
+                              </div>
+                            )}
+                            {viewMode === 'print' && formData.tenderLink && (
+                              <div className="text-sm text-blue-600 mt-1">
+                                <a href={formData.tenderLink} target="_blank" rel="noopener noreferrer" className="underline">
+                                  {formData.tenderLink}
+                                </a>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

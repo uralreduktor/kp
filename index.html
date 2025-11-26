@@ -70,6 +70,9 @@
             canDelete: true
           });
           
+          // Активная вкладка: 'regular' или 'tender'
+          const [activeTab, setActiveTab] = useState('regular');
+          
           const t = translations[language];
           
           // Вспомогательная функция для получения пути к API
@@ -248,6 +251,12 @@
               return inv.organizationId === organization.id;
             });
             
+            // Фильтр по типу документа (regular или tender)
+            filtered = filtered.filter(inv => {
+              const docType = inv.documentType || 'regular'; // По умолчанию 'regular' для обратной совместимости
+              return docType === activeTab;
+            });
+            
             // Поиск по контрагенту и номеру
             if (searchTerm) {
               const term = searchTerm.toLowerCase();
@@ -379,9 +388,33 @@
                     </div>
 
                     <div className="flex flex-wrap gap-3 items-center">
+                      {/* Tabs */}
+                      <div className="flex bg-blue-500 rounded-lg p-1">
+                        <button
+                          onClick={() => { setActiveTab('regular'); setCurrentPage(1); }}
+                          className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                            activeTab === 'regular'
+                              ? 'bg-white text-blue-600 shadow-sm'
+                              : 'text-white hover:bg-blue-400'
+                          }`}
+                        >
+                          КП
+                        </button>
+                        <button
+                          onClick={() => { setActiveTab('tender'); setCurrentPage(1); }}
+                          className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                            activeTab === 'tender'
+                              ? 'bg-white text-blue-600 shadow-sm'
+                              : 'text-white hover:bg-blue-400'
+                          }`}
+                        >
+                          КП для тендеров
+                        </button>
+                      </div>
+                      
                       {/* Create New Button */}
                       <a
-                        href="pi.html"
+                        href={activeTab === 'tender' ? 'torgikp.html' : 'pi.html'}
                         className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors shadow-md"
                       >
                         ➕ {t.createNew}
@@ -399,7 +432,10 @@
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800">{t.invoicesList}</h2>
                       <p className="text-sm text-gray-500 mt-1">
-                        {loading ? t.loading : `${totalFiltered} из ${invoices.length} коммерческих предложений`}
+                        {loading ? t.loading : `${totalFiltered} из ${invoices.filter(inv => {
+                          const docType = inv.documentType || 'regular';
+                          return docType === activeTab;
+                        }).length} коммерческих предложений (${activeTab === 'regular' ? 'обычные' : 'для тендеров'})`}
                       </p>
                     </div>
                     <button
@@ -553,7 +589,7 @@
                       Создайте первый проформа-инвойс
                     </p>
                     <a
-                      href="pi.html"
+                      href={activeTab === 'tender' ? 'torgikp.html' : 'pi.html'}
                       className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                     >
                       ➕ {t.createNew}
@@ -676,7 +712,7 @@
                                 <td className="px-4 py-4 whitespace-nowrap text-center">
                                   <div className="flex items-center justify-center gap-2">
                                     <a
-                                      href={`pi.html?filename=${encodeURIComponent(invoice.filename)}`}
+                                      href={`${(invoice.documentType || 'regular') === 'tender' ? 'torgikp.html' : 'pi.html'}?filename=${encodeURIComponent(invoice.filename)}`}
                                       className="text-blue-600 hover:text-blue-900 transition-colors"
                                       title={t.open}
                                     >

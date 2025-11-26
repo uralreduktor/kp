@@ -118,26 +118,65 @@ try {
         error_log("  Path exists: " . ($isDir ? 'yes' : 'no') . ", readable: " . ($isReadable ? 'yes' : 'no') . ", realpath: " . ($realPath ?: 'N/A'));
         
         if ($isDir && $isReadable) {
-            // Дополнительная проверка: есть ли там браузер
-            $browserPath = $path . '/chromium_headless_shell-1194/chrome-linux/headless_shell';
-            $browserExists = @file_exists($browserPath);
-            $browserExecutable = @is_executable($browserPath);
-            $browserRealPath = @realpath($browserPath);
-            error_log("  Browser path: $browserPath");
-            error_log("  Browser exists: " . ($browserExists ? 'yes' : 'no') . ", executable: " . ($browserExecutable ? 'yes' : 'no') . ", realpath: " . ($browserRealPath ?: 'N/A'));
+            // Проверяем браузер в разных версиях и структурах
+            // Новая структура (версия 1200+): chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+            // Старая структура (версия <1200): chromium_headless_shell-1194/chrome-linux/headless_shell
+            $browserFound = false;
+            $browserPath = null;
             
-            if ($browserExists && $browserExecutable) {
+            // Сначала проверяем новые версии (1200+) с новой структурой
+            $newVersionPatterns = [
+                '/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell',
+                '/chromium_headless_shell-1201/chrome-headless-shell-linux64/chrome-headless-shell',
+                '/chromium_headless_shell-1202/chrome-headless-shell-linux64/chrome-headless-shell',
+            ];
+            
+            foreach ($newVersionPatterns as $pattern) {
+                $testPath = $path . $pattern;
+                if (@file_exists($testPath) && @is_executable($testPath)) {
+                    $browserPath = $testPath;
+                    $browserFound = true;
+                    error_log("  Found browser (new structure): $testPath");
+                    break;
+                }
+            }
+            
+            // Если не нашли в новой структуре, проверяем старую структуру
+            if (!$browserFound) {
+                $oldVersionPatterns = [
+                    '/chromium_headless_shell-1194/chrome-linux/headless_shell',
+                    '/chromium_headless_shell-1187/chrome-linux/headless_shell',
+                    '/chromium_headless_shell-1181/chrome-linux/headless_shell',
+                ];
+                
+                foreach ($oldVersionPatterns as $pattern) {
+                    $testPath = $path . $pattern;
+                    if (@file_exists($testPath) && @is_executable($testPath)) {
+                        $browserPath = $testPath;
+                        $browserFound = true;
+                        error_log("  Found browser (old structure): $testPath");
+                        break;
+                    }
+                }
+            }
+            
+            if ($browserFound && $browserPath) {
+                $browserRealPath = @realpath($browserPath);
+                error_log("  Browser path: $browserPath");
+                error_log("  Browser realpath: " . ($browserRealPath ?: 'N/A'));
+                
                 // Используем путь как есть - симлинк должен работать
                 // Playwright сам разрешит симлинк при поиске браузера
                 $playwrightCachePath = $path;
                 error_log("Found Playwright browser at: $path");
                 
                 // Дополнительная проверка: если это симлинк, логируем реальный путь
-                $browserRealPath = @realpath($browserPath);
                 if ($browserRealPath && $browserRealPath !== $browserPath) {
                     error_log("  Browser is symlink, real path: $browserRealPath");
                 }
                 break;
+            } else {
+                error_log("  No browser found in this path");
             }
         } else {
             // Логируем причину недоступности
@@ -157,13 +196,25 @@ try {
             $isDir = @is_dir($path);
             $isReadable = @is_readable($path);
             if ($isDir && $isReadable) {
-                // Ищем любую версию chromium_headless_shell
-                $globPattern = $path . '/chromium_headless_shell-*/chrome-linux/headless_shell';
-                $browsers = @glob($globPattern);
-                error_log("  Checking path: $path, found browsers: " . (is_array($browsers) ? count($browsers) : 'error'));
-                if (!empty($browsers) && @file_exists($browsers[0]) && @is_executable($browsers[0])) {
+                // Ищем любую версию chromium_headless_shell в новой структуре (1200+)
+                $newGlobPattern = $path . '/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell';
+                $newBrowsers = @glob($newGlobPattern);
+                error_log("  Checking path (new structure): $path, found browsers: " . (is_array($newBrowsers) ? count($newBrowsers) : 'error'));
+                
+                if (!empty($newBrowsers) && @file_exists($newBrowsers[0]) && @is_executable($newBrowsers[0])) {
                     $playwrightCachePath = $path;
-                    error_log("Found Playwright browser (any version) at: $path");
+                    error_log("Found Playwright browser (new structure, any version) at: $path");
+                    break;
+                }
+                
+                // Ищем любую версию chromium_headless_shell в старой структуре (<1200)
+                $oldGlobPattern = $path . '/chromium_headless_shell-*/chrome-linux/headless_shell';
+                $oldBrowsers = @glob($oldGlobPattern);
+                error_log("  Checking path (old structure): $path, found browsers: " . (is_array($oldBrowsers) ? count($oldBrowsers) : 'error'));
+                
+                if (!empty($oldBrowsers) && @file_exists($oldBrowsers[0]) && @is_executable($oldBrowsers[0])) {
+                    $playwrightCachePath = $path;
+                    error_log("Found Playwright browser (old structure, any version) at: $path");
                     break;
                 }
             }
@@ -187,13 +238,49 @@ try {
         $finalPath = $playwrightCachePath;
         if (strpos($playwrightCachePath, '/var/www/.cache/ms-playwright') === 0) {
             // Это симлинк, получаем реальный путь к директории ms-playwright
-            $testBrowserPath = $playwrightCachePath . '/chromium_headless_shell-1194/chrome-linux/headless_shell';
-            $realBrowserPath = @realpath($testBrowserPath);
+            // Проверяем обе структуры (новую и старую)
+            $testBrowserPaths = [
+                // Новая структура (версия 1200+)
+                $playwrightCachePath . '/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell',
+                $playwrightCachePath . '/chromium_headless_shell-1201/chrome-headless-shell-linux64/chrome-headless-shell',
+                // Старая структура (версия <1200)
+                $playwrightCachePath . '/chromium_headless_shell-1194/chrome-linux/headless_shell',
+                $playwrightCachePath . '/chromium_headless_shell-1187/chrome-linux/headless_shell',
+            ];
+            
+            $realBrowserPath = null;
+            foreach ($testBrowserPaths as $testPath) {
+                $resolved = @realpath($testPath);
+                if ($resolved) {
+                    $realBrowserPath = $resolved;
+                    error_log("Found browser path for symlink resolution: $testPath -> $resolved");
+                    break;
+                }
+            }
+            
             if ($realBrowserPath) {
                 // Получаем путь к директории ms-playwright: /home/serveradmin/.cache/ms-playwright
-                $realMsPlaywrightPath = dirname(dirname(dirname($realBrowserPath)));
+                // Для новой структуры нужно на 3 уровня вверх, для старой - на 2
+                $realMsPlaywrightPath = null;
+                if (strpos($realBrowserPath, 'chrome-headless-shell-linux64') !== false) {
+                    // Новая структура: .../chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+                    $realMsPlaywrightPath = dirname(dirname(dirname($realBrowserPath)));
+                } else {
+                    // Старая структура: .../chromium_headless_shell-1194/chrome-linux/headless_shell
+                    $realMsPlaywrightPath = dirname(dirname(dirname($realBrowserPath)));
+                }
+                
                 // Проверяем доступность реального пути
-                if ($realMsPlaywrightPath && @is_dir($realMsPlaywrightPath) && @is_readable($realMsPlaywrightPath . '/chromium_headless_shell-1194/chrome-linux/headless_shell')) {
+                $browserCheckPath = null;
+                if (strpos($realBrowserPath, 'chrome-headless-shell-linux64') !== false) {
+                    // Проверяем новую структуру
+                    $browserCheckPath = $realMsPlaywrightPath . '/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell';
+                } else {
+                    // Проверяем старую структуру
+                    $browserCheckPath = $realMsPlaywrightPath . '/chromium_headless_shell-1194/chrome-linux/headless_shell';
+                }
+                
+                if ($realMsPlaywrightPath && @is_dir($realMsPlaywrightPath) && @is_readable($browserCheckPath)) {
                     $finalPath = $realMsPlaywrightPath;
                     error_log("Using real path instead of symlink: $finalPath (was: $playwrightCachePath)");
                     // При использовании реального пути устанавливаем HOME в /home/serveradmin
@@ -223,9 +310,15 @@ try {
         $isReadable = is_readable($serveradminCachePath);
         error_log("Fallback path check - is_dir: " . ($isDir ? 'yes' : 'no') . ", is_readable: " . ($isReadable ? 'yes' : 'no'));
         
-        // Проверяем наличие браузера в fallback пути
+        // Проверяем наличие браузера в fallback пути (обе структуры)
         if ($isDir && $isReadable) {
-            $fallbackBrowser = glob($serveradminCachePath . '/chromium_headless_shell-*/chrome-linux/headless_shell');
+            // Проверяем новую структуру (1200+)
+            $fallbackBrowserNew = glob($serveradminCachePath . '/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell');
+            // Проверяем старую структуру (<1200)
+            $fallbackBrowserOld = glob($serveradminCachePath . '/chromium_headless_shell-*/chrome-linux/headless_shell');
+            
+            $fallbackBrowser = !empty($fallbackBrowserNew) ? $fallbackBrowserNew : $fallbackBrowserOld;
+            
             if (!empty($fallbackBrowser) && file_exists($fallbackBrowser[0])) {
                 $env['PLAYWRIGHT_BROWSERS_PATH'] = $serveradminCachePath;
                 error_log("Using fallback PLAYWRIGHT_BROWSERS_PATH: $serveradminCachePath (browser found: " . $fallbackBrowser[0] . ")");
@@ -237,7 +330,11 @@ try {
             // В крайнем случае используем симлинк из /var/www/.cache/ms-playwright
             $symlinkPath = '/var/www/.cache/ms-playwright';
             if (@is_dir($symlinkPath)) {
-                $symlinkBrowser = @glob($symlinkPath . '/chromium_headless_shell-*/chrome-linux/headless_shell');
+                // Проверяем обе структуры
+                $symlinkBrowserNew = @glob($symlinkPath . '/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell');
+                $symlinkBrowserOld = @glob($symlinkPath . '/chromium_headless_shell-*/chrome-linux/headless_shell');
+                $symlinkBrowser = !empty($symlinkBrowserNew) ? $symlinkBrowserNew : $symlinkBrowserOld;
+                
                 if (!empty($symlinkBrowser) && @file_exists($symlinkBrowser[0])) {
                     $env['PLAYWRIGHT_BROWSERS_PATH'] = $symlinkPath;
                     error_log("Using symlink path as fallback: $symlinkPath (browser: " . $symlinkBrowser[0] . ")");

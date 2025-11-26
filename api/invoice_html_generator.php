@@ -140,7 +140,7 @@ function generateInvoiceHTML($data, $orgId, $styleType = 'playwright') {
         <div class="terms-left">
             <p><strong>Условия поставки:</strong> ' . htmlspecialchars($data['incoterm'] ?? '') . ' ' . htmlspecialchars($data['deliveryPlace'] ?? '') . '</p>
             <p><strong>Условия оплаты:</strong> ' . htmlspecialchars($data['paymentTerms'] ?? '') . '</p>
-            <p><strong>Срок поставки:</strong> ' . htmlspecialchars($data['deliveryTime'] ?? '') . '</p>
+            <p><strong>' . (in_array(trim($data['incoterm'] ?? ''), ['САМОВЫВОЗ', 'ФРАНКО-СКЛАД ПРОДАВЦА', 'ДО ТРАНСПОРТА ПОКУПАТЕЛЯ'], true) ? 'Срок готовности' : 'Срок поставки') . ':</strong> ' . htmlspecialchars($data['deliveryTime'] ?? '') . '</p>
         </div>
         <div class="terms-right">
             <p><strong>Гарантия:</strong> ' . htmlspecialchars($data['warranty'] ?? '') . '</p>

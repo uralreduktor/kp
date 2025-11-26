@@ -62,6 +62,7 @@ foreach ($files as $file) {
                 return $sum + ($item['quantity'] * $item['price']);
             }, 0) : 0,
             'organizationId' => $data['organizationId'] ?? null, // ВАЖНО: для фильтрации по организациям
+            'documentType' => $data['documentType'] ?? 'regular', // Тип документа: 'regular' или 'tender'
             'saved_at' => $data['_metadata']['saved_at'] ?? date('c', filemtime($file)),
             'filesize' => filesize($file)
         ];
