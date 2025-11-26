@@ -38,11 +38,12 @@ function detect_delivery_incoterm_from_text($text) {
     $rules = [
         'DDP' => [
             'patterns' => [
+                '/DDP/i',
                 '/включая\s+все\s+налоги/u',
                 '/с\s+уплатой\s+всех\s+пошлин/u',
                 '/с\s+растаможк/u'
             ],
-            'reason' => 'Указано, что стоимость включает все налоги и пошлины (DDP)'
+            'reason' => 'Указано условие DDP'
         ],
         'DAP' => [
             'patterns' => [
@@ -168,8 +169,11 @@ $isB2BCenter = strpos($urlLower, 'b2b-center.ru') !== false;
 // Извлечение номера торгов для B2B-Center
 $tenderNumber = null;
 if ($isB2BCenter) {
-    // Паттерн для B2B-Center: /tender-4242870/
+    // Паттерн для B2B-Center: /tender-4242870/ или ?id=4250788
     if (preg_match('/tender-(\d+)/i', $path, $matches)) {
+        $tenderNumber = $matches[1];
+        $extractedData['tenderNumber'] = $tenderNumber;
+    } elseif (preg_match('/id=(\d+)/i', $parsedUrl['query'] ?? '', $matches)) {
         $tenderNumber = $matches[1];
         $extractedData['tenderNumber'] = $tenderNumber;
     }

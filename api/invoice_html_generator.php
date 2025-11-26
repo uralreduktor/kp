@@ -83,8 +83,8 @@ function generateInvoiceHTML($data, $orgId, $styleType = 'playwright') {
             <div class="bill-to">
                 <div class="info-label">Плательщик:</div>
                 <div class="info-value">' . htmlspecialchars($data['recipient'] ?? 'N/A') . '</div>
-                <div style="font-size: 9pt; color: #374151;">' . htmlspecialchars($data['recipientAddress'] ?? '') . '</div>
-                ' . (!empty($data['recipientINN']) ? '<div style="font-size: 9pt; color: #374151; margin-top: 3px;">ИНН: ' . htmlspecialchars($data['recipientINN']) . '</div>' : '') . '
+                <div style="font-size: 10pt; color: #374151;">' . htmlspecialchars($data['recipientAddress'] ?? '') . '</div>
+                ' . (!empty($data['recipientINN']) ? '<div style="font-size: 10pt; color: #374151; margin-top: 3px;">ИНН: ' . htmlspecialchars($data['recipientINN']) . '</div>' : '') . '
             </div>
             <div class="invoice-details">
                 <div class="info-row"><span class="info-label">Номер:</span> <span class="info-value">' . htmlspecialchars($data['number'] ?? 'N/A') . '</span></div>
@@ -250,16 +250,21 @@ function getPlaywrightStyles() {
             text-align: center;
             font-size: 18pt;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 10px 0;
             color: #1e40af;
         }
         .document-info {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+             text-align: left;
+            margin-bottom: 5px;
         }
-        .bill-to, .invoice-details {
+        .bill-to {
+            flex: 3;
+        }
+        .invoice-details {
             flex: 1;
+            text-align: left;
+            margin-left: 140px;
         }
         .info-label {
             font-weight: bold;
@@ -284,7 +289,7 @@ function getPlaywrightStyles() {
         .intro-text {
             font-size: 10pt;
             color: #1F2937;
-            margin: 20px 0;
+            margin: 10px 0;
             line-height: 1.6;
         }
         table {
@@ -340,8 +345,8 @@ function getPlaywrightStyles() {
             margin: 0;
         }
         .banking-section {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 10px;
             background-color: #f9fafb;
             border: 1px solid #e5e7eb;
             border-radius: 4px;
@@ -363,7 +368,7 @@ function getPlaywrightStyles() {
         .banking-details-list {
             font-family: Arial, sans-serif;
             font-size: 9pt;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .banking-detail-item {
             margin-bottom: 8px;
@@ -518,6 +523,7 @@ function getMpdfStyles() {
         .invoice-details {
             flex: 1;
             text-align: right;
+            margin-left: 50px;
         }
         .info-label { font-size: 9pt; color: #374151; }
         .info-value { font-weight: bold; margin-bottom: 8px; }
