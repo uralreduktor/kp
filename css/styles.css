@@ -1587,3 +1587,34 @@ table tbody td:nth-child(2) {
     }
 }
 
+/* ============================================
+   РУЧНОЕ ДОБАВЛЕНИЕ TAILWIND UTILITIES
+   Для случаев, когда CSS файл не перегенерируется
+   ============================================ */
+
+@media (min-width: 768px) {
+  .md\:block {
+    display: block !important;
+  }
+  .md\:hidden {
+    display: none !important;
+  }
+  .md\:flex-row {
+    flex-direction: row !important;
+  }
+  .md\:text-left {
+    text-align: left !important;
+  }
+  .md\:items-center {
+      align-items: center !important;
+  }
+  .md\:justify-between {
+      justify-content: space-between !important;
+  }
+  .md\:mb-0 {
+      margin-bottom: 0 !important;
+  }
+  .md\:mr-4 {
+      margin-right: 1rem !important;
+  }
+}

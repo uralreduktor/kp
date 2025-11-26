@@ -1969,138 +1969,253 @@
                   <p className="mb-6 text-gray-700">{t.introText}</p>
 
                   {/* Items Table */}
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse" style={viewMode === 'edit' ? {minWidth: '800px'} : {}}>
-                      <colgroup>
-                        <col style={{width: '4%'}} /> {/* # */}
-                        <col /> {/* Description - максимальная ширина */}
-                        <col style={{width: '13%'}} /> {/* Country of Origin */}
-                        <col style={{width: '8%'}} /> {/* Qty */}
-                        <col style={{width: '8%'}} /> {/* Unit */}
-                        <col style={{width: '12%'}} /> {/* Unit Price */}
-                        <col style={{width: '12%'}} /> {/* Amount */}
-                        {viewMode === 'edit' && <col style={{width: '8%'}} />} {/* Actions */}
-                      </colgroup>
-                      <thead>
-                        <tr className="bg-gray-100">
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.number}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.type}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.countryOfOrigin}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.quantity}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.unit}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.pricePerUnit}, {formData.currency}</th>
-                          <th className="border border-gray-300 px-2 py-2 text-xs">{t.total}, {formData.currency}</th>
-                          {viewMode === 'edit' && <th className="border border-gray-300 px-2 py-2 text-xs">{t.actions}</th>}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {formData.items.map((item, idx) => (
-                          <tr key={idx}>
-                            <td className="border px-2 py-2 text-center">{idx + 1}</td>
-                            
-                            {/* Description (type) - left aligned */}
-                            <td className="border px-2 py-2">
-                              {viewMode === 'edit' ? (
-                                <input
-                                  type="text"
-                                  value={item.type}
-                                  onChange={(e) => handleItemChange(idx, 'type', e.target.value)}
-                                  className="w-full px-2 py-1 text-sm border rounded"
-                                />
-                              ) : (
-                                <span className="text-sm">{item.type}</span>
+                  {/* Items Table - Responsive Wrapper */}
+                  <div className="mb-6">
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full border-collapse" style={viewMode === 'edit' ? {minWidth: '800px'} : {}}>
+                        <colgroup>
+                          <col style={{width: '4%'}} /> {/* # */}
+                          <col /> {/* Description - максимальная ширина */}
+                          <col style={{width: '13%'}} /> {/* Country of Origin */}
+                          <col style={{width: '8%'}} /> {/* Qty */}
+                          <col style={{width: '8%'}} /> {/* Unit */}
+                          <col style={{width: '12%'}} /> {/* Unit Price */}
+                          <col style={{width: '12%'}} /> {/* Amount */}
+                          {viewMode === 'edit' && <col style={{width: '8%'}} />} {/* Actions */}
+                        </colgroup>
+                        <thead>
+                          <tr className="bg-gray-100">
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.number}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.type}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.countryOfOrigin}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.quantity}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.unit}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.pricePerUnit}, {formData.currency}</th>
+                            <th className="border border-gray-300 px-2 py-2 text-xs">{t.total}, {formData.currency}</th>
+                            {viewMode === 'edit' && <th className="border border-gray-300 px-2 py-2 text-xs">{t.actions}</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {formData.items.map((item, idx) => (
+                            <tr key={idx}>
+                              <td className="border px-2 py-2 text-center">{idx + 1}</td>
+                              
+                              {/* Description (type) - left aligned */}
+                              <td className="border px-2 py-2">
+                                {viewMode === 'edit' ? (
+                                  <input
+                                    type="text"
+                                    value={item.type}
+                                    onChange={(e) => handleItemChange(idx, 'type', e.target.value)}
+                                    className="w-full px-2 py-1 text-sm border rounded"
+                                  />
+                                ) : (
+                                  <span className="text-sm">{item.type}</span>
+                                )}
+                              </td>
+                              
+                              {/* Country of Origin - center aligned */}
+                              <td className="border px-2 py-2 text-center">
+                                {viewMode === 'edit' ? (
+                                  <input
+                                    type="text"
+                                    value={item.countryOfOrigin}
+                                    onChange={(e) => handleItemChange(idx, 'countryOfOrigin', e.target.value)}
+                                    className="w-full px-2 py-1 text-sm border rounded text-center"
+                                  />
+                                ) : (
+                                  <span className="text-sm">{item.countryOfOrigin}</span>
+                                )}
+                              </td>
+                              
+                              {/* Quantity - center aligned */}
+                              <td className="border px-2 py-2 text-center table-number-cell">
+                                {viewMode === 'edit' ? (
+                                  <input
+                                    type="number"
+                                    value={item.quantity}
+                                    onChange={(e) => handleItemChange(idx, 'quantity', parseInt(e.target.value) || 1)}
+                                    className="w-full px-2 py-1 text-sm border rounded text-center table-number-input compact"
+                                  />
+                                ) : (
+                                  <span className="text-sm">{item.quantity}</span>
+                                )}
+                              </td>
+                              
+                              {/* Unit - center aligned */}
+                              <td className="border px-2 py-2 text-center">
+                                {viewMode === 'edit' ? (
+                                  <input
+                                    type="text"
+                                    value={item.unit}
+                                    onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
+                                    className="w-full px-2 py-1 text-sm border rounded text-center"
+                                  />
+                                ) : (
+                                  <span className="text-sm">{item.unit}</span>
+                                )}
+                              </td>
+                              
+                              {/* Unit Price - center aligned */}
+                              <td className="border px-2 py-2 text-center table-number-cell">
+                                {viewMode === 'edit' ? (
+                                  <input
+                                    type="number"
+                                    value={item.price}
+                                    onChange={(e) => handleItemChange(idx, 'price', parseFloat(e.target.value) || 0)}
+                                    className="w-full px-2 py-1 text-sm border rounded text-center table-number-input"
+                                  />
+                                ) : (
+                                  <span className="text-sm">{formatNumber(item.price)}</span>
+                                )}
+                              </td>
+                              
+                              {/* Amount - center aligned */}
+                              <td className="border px-2 py-2 font-medium text-sm text-center">
+                                {formatNumber(item.quantity * item.price)}
+                              </td>
+                              
+                              {viewMode === 'edit' && (
+                                <td className="border px-2 py-2 text-center">
+                                  <button
+                                    onClick={() => removeItem(idx)}
+                                    disabled={formData.items.length <= 1}
+                                    className="px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
+                                    title="Удалить"
+                                  >
+                                    <img src="delete.svg" alt="Удалить" className="w-5 h-5" />
+                                  </button>
+                                </td>
                               )}
-                            </td>
-                            
-                            {/* Country of Origin - center aligned */}
-                            <td className="border px-2 py-2 text-center">
+                            </tr>
+                          ))}
+                        </tbody>
+                        <tfoot>
+                          <tr className="font-bold bg-blue-50">
+                            <td colSpan={viewMode === 'edit' ? 6 : 6} className="border px-3 py-2 text-right">{t.totalLabel} {formData.currency}:</td>
+                            <td className="border px-3 py-2 text-center">{formatNumber(calculateTotal())}</td>
+                            {viewMode === 'edit' && <td className="border"></td>}
+                          </tr>
+                          <tr className="bg-gray-50">
+                            <td colSpan={viewMode === 'edit' ? 6 : 6} className="border px-3 py-2 text-right">В том числе НДС - 20%:</td>
+                            <td className="border px-3 py-2 text-center">{formatNumber(calculateVAT())}</td>
+                            {viewMode === 'edit' && <td className="border"></td>}
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="md:hidden space-y-4">
+                      {formData.items.map((item, idx) => (
+                        <div key={idx} className="bg-white rounded-lg border shadow-sm p-4">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="font-bold text-gray-700">#{idx + 1}</div>
+                            {viewMode === 'edit' && (
+                              <button 
+                                onClick={() => removeItem(idx)}
+                                disabled={formData.items.length <= 1}
+                                className="text-red-500 p-1"
+                              >
+                                <img src="delete.svg" alt="Удалить" className="w-5 h-5" />
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="text-xs text-gray-500 uppercase block mb-1">{t.type}</label>
+                            {viewMode === 'edit' ? (
+                              <textarea
+                                rows={2}
+                                value={item.type}
+                                onChange={(e) => handleItemChange(idx, 'type', e.target.value)}
+                                className="w-full px-2 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                              />
+                            ) : (
+                              <div className="text-sm font-medium">{item.type}</div>
+                            )}
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                              <label className="text-xs text-gray-500 uppercase block mb-1">{t.countryOfOrigin}</label>
                               {viewMode === 'edit' ? (
                                 <input
                                   type="text"
                                   value={item.countryOfOrigin}
                                   onChange={(e) => handleItemChange(idx, 'countryOfOrigin', e.target.value)}
-                                  className="w-full px-2 py-1 text-sm border rounded text-center"
+                                  className="w-full px-2 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                               ) : (
-                                <span className="text-sm">{item.countryOfOrigin}</span>
+                                <div className="text-sm">{item.countryOfOrigin}</div>
                               )}
-                            </td>
-                            
-                            {/* Quantity - center aligned */}
-                            <td className="border px-2 py-2 text-center table-number-cell">
-                              {viewMode === 'edit' ? (
-                                <input
-                                  type="number"
-                                  value={item.quantity}
-                                  onChange={(e) => handleItemChange(idx, 'quantity', parseInt(e.target.value) || 1)}
-                                  className="w-full px-2 py-1 text-sm border rounded text-center table-number-input compact"
-                                />
-                              ) : (
-                                <span className="text-sm">{item.quantity}</span>
-                              )}
-                            </td>
-                            
-                            {/* Unit - center aligned */}
-                            <td className="border px-2 py-2 text-center">
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-500 uppercase block mb-1">{t.unit}</label>
                               {viewMode === 'edit' ? (
                                 <input
                                   type="text"
                                   value={item.unit}
                                   onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
-                                  className="w-full px-2 py-1 text-sm border rounded text-center"
+                                  className="w-full px-2 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                               ) : (
-                                <span className="text-sm">{item.unit}</span>
+                                <div className="text-sm">{item.unit}</div>
                               )}
-                            </td>
-                            
-                            {/* Unit Price - center aligned */}
-                            <td className="border px-2 py-2 text-center table-number-cell">
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                              <label className="text-xs text-gray-500 uppercase block mb-1">{t.quantity}</label>
+                              {viewMode === 'edit' ? (
+                                <input
+                                  type="number"
+                                  value={item.quantity}
+                                  onChange={(e) => handleItemChange(idx, 'quantity', parseInt(e.target.value) || 1)}
+                                  className="w-full px-2 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                              ) : (
+                                <div className="text-sm">{item.quantity}</div>
+                              )}
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-500 uppercase block mb-1">{t.pricePerUnit}</label>
                               {viewMode === 'edit' ? (
                                 <input
                                   type="number"
                                   value={item.price}
                                   onChange={(e) => handleItemChange(idx, 'price', parseFloat(e.target.value) || 0)}
-                                  className="w-full px-2 py-1 text-sm border rounded text-center table-number-input"
+                                  className="w-full px-2 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                               ) : (
-                                <span className="text-sm">{formatNumber(item.price)}</span>
+                                <div className="text-sm">{formatNumber(item.price)}</div>
                               )}
-                            </td>
-                            
-                            {/* Amount - center aligned */}
-                            <td className="border px-2 py-2 font-medium text-sm text-center">
-                              {formatNumber(item.quantity * item.price)}
-                            </td>
-                            
-                            {viewMode === 'edit' && (
-                              <td className="border px-2 py-2 text-center">
-                                <button
-                                  onClick={() => removeItem(idx)}
-                                  disabled={formData.items.length <= 1}
-                                  className="px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
-                                  title="Удалить"
-                                >
-                                  <img src="delete.svg" alt="Удалить" className="w-5 h-5" />
-                                </button>
-                              </td>
-                            )}
-                          </tr>
-                        ))}
-                      </tbody>
-                      <tfoot>
-                        <tr className="font-bold bg-blue-50">
-                          <td colSpan={viewMode === 'edit' ? 6 : 6} className="border px-3 py-2 text-right">{t.totalLabel} {formData.currency}:</td>
-                          <td className="border px-3 py-2 text-center">{formatNumber(calculateTotal())}</td>
-                          {viewMode === 'edit' && <td className="border"></td>}
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td colSpan={viewMode === 'edit' ? 6 : 6} className="border px-3 py-2 text-right">В том числе НДС - 20%:</td>
-                          <td className="border px-3 py-2 text-center">{formatNumber(calculateVAT())}</td>
-                          {viewMode === 'edit' && <td className="border"></td>}
-                        </tr>
-                      </tfoot>
-                    </table>
+                            </div>
+                          </div>
+
+                          <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
+                            <div className="text-xs font-medium text-gray-500 uppercase">{t.total}</div>
+                            <div className="text-lg font-bold text-blue-600">
+                              {formatNumber(item.quantity * item.price)} {formData.currency}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      {/* Mobile Totals */}
+                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-bold text-gray-900">{t.totalLabel} {formData.currency}:</span>
+                          <span className="text-lg font-bold">{formatNumber(calculateTotal())}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm text-gray-600">
+                          <span>В том числе НДС - 20%:</span>
+                          <span>{formatNumber(calculateVAT())}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {viewMode === 'edit' && (
