@@ -73,6 +73,11 @@
           // Активная вкладка: 'regular' или 'tender'
           const [activeTab, setActiveTab] = useState('regular');
           
+          // Модальное окно копирования
+          const [copyModalOpen, setCopyModalOpen] = useState(false);
+          const [copyInvoiceFilename, setCopyInvoiceFilename] = useState(null);
+          const [copying, setCopying] = useState(false);
+          
           const t = translations[language];
           
           // Вспомогательная функция для получения пути к API
@@ -206,6 +211,49 @@
               }
             } catch (err) {
               alert(t.deleteError + ': ' + err.message);
+            }
+          };
+
+          // Открытие модального окна копирования
+          const handleCopy = (filename) => {
+            setCopyInvoiceFilename(filename);
+            setCopyModalOpen(true);
+          };
+
+          // Закрытие модального окна копирования
+          const handleCopyCancel = () => {
+            setCopyModalOpen(false);
+            setCopyInvoiceFilename(null);
+          };
+
+          // Выполнение копирования
+          const handleCopyConfirm = async (documentType) => {
+            if (!copyInvoiceFilename) return;
+            
+            setCopying(true);
+            try {
+              const response = await fetch(getApiUrl('copy.php'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  filename: copyInvoiceFilename,
+                  documentType: documentType
+                })
+              });
+              
+              const result = await response.json();
+              
+              if (result.success) {
+                alert(`Коммерческое предложение успешно скопировано в реестр "${documentType === 'regular' ? 'КП' : 'КП для тендеров'}"`);
+                handleCopyCancel();
+                loadInvoices();
+              } else {
+                alert('Ошибка при копировании: ' + (result.error || 'Неизвестная ошибка'));
+              }
+            } catch (err) {
+              alert('Ошибка при копировании: ' + err.message);
+            } finally {
+              setCopying(false);
             }
           };
 
@@ -731,6 +779,15 @@
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                       </svg>
                                     </a>
+                                    <button
+                                      onClick={() => handleCopy(invoice.filename)}
+                                      className="text-green-600 hover:text-green-900 transition-colors"
+                                      title="Копировать"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                      </svg>
+                                    </button>
                                     {userPermissions.canDelete && (
                                       <button
                                         onClick={() => handleDelete(invoice.filename)}
@@ -777,7 +834,7 @@
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-3 gap-2">
+                          <div className={`grid gap-2 ${userPermissions.canDelete ? 'grid-cols-4' : 'grid-cols-3'}`}>
                             <a
                               href={`${(invoice.documentType || 'regular') === 'tender' ? 'torgikp.html' : 'pi.html'}?filename=${encodeURIComponent(invoice.filename)}`}
                               className="flex items-center justify-center py-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors font-medium text-sm border border-blue-200"
@@ -791,6 +848,12 @@
                             >
                               PDF
                             </a>
+                            <button
+                              onClick={() => handleCopy(invoice.filename)}
+                              className="flex items-center justify-center py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors font-medium text-sm border border-green-200"
+                            >
+                              Копировать
+                            </button>
                             {userPermissions.canDelete && (
                               <button
                                 onClick={() => handleDelete(invoice.filename)}
@@ -881,6 +944,109 @@
                   </>
                 )}
               </div>
+
+              {/* Модальное окно копирования */}
+              {copyModalOpen && (
+                <div 
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1rem'
+                  }}
+                  onClick={!copying ? handleCopyCancel : undefined}
+                >
+                  <div 
+                    className="bg-white rounded-lg shadow-xl overflow-hidden" 
+                    style={{
+                      maxWidth: '28rem',
+                      width: '100%',
+                      maxHeight: '90vh',
+                      overflowY: 'auto'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Заголовок с градиентом */}
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 border-b">
+                      <h3 className="text-xl font-bold text-blue-900">
+                        Копирование КП
+                      </h3>
+                    </div>
+
+                    <div className="p-6">
+                      <p className="text-gray-700 mb-6">
+                        Выберите реестр для копирования:
+                      </p>
+                      
+                      <div className="space-y-3 mb-6">
+                        <button
+                          onClick={() => handleCopyConfirm('regular')}
+                          disabled={copying}
+                          className={`w-full px-4 py-3 bg-white border-2 border-blue-100 hover:border-blue-500 hover:shadow-md text-blue-700 rounded-lg font-medium transition-all text-left flex items-center justify-between group ${copying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                              📄
+                            </span>
+                            <span>В реестр КП</span>
+                          </div>
+                          {!copying && (
+                            <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                          )}
+                        </button>
+                        
+                        <button
+                          onClick={() => handleCopyConfirm('tender')}
+                          disabled={copying}
+                          className={`w-full px-4 py-3 bg-white border-2 border-green-100 hover:border-green-500 hover:shadow-md text-green-700 rounded-lg font-medium transition-all text-left flex items-center justify-between group ${copying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                              ⚖️
+                            </span>
+                            <span>В реестр Тендеров</span>
+                          </div>
+                          {!copying && (
+                            <svg className="w-5 h-5 text-gray-400 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                      
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleCopyCancel}
+                          disabled={copying}
+                          style={{
+                            backgroundColor: '#e5e7eb',
+                            color: '#1f2937',
+                            padding: '0.5rem 1.5rem',
+                            borderRadius: '0.375rem',
+                            fontWeight: 500,
+                            border: 'none',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.2s'
+                          }}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#d1d5db'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+                        >
+                          Отмена
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Footer */}
               <div className="bg-white border-t border-gray-200 mt-12">
