@@ -10,7 +10,7 @@
  */
 
 if (!function_exists('generateInvoiceHTML')) {
-function generateInvoiceHTML($data, $orgId, $styleType = 'playwright') {
+function generateInvoiceHTML($data, $orgId, $styleType = 'playwright', $documentType = 'commercial') {
     // Загрузка данных организации из organizations.js
     $orgFile = dirname(__DIR__) . '/js/organizations.js';
     if (!file_exists($orgFile)) {
@@ -34,6 +34,199 @@ function generateInvoiceHTML($data, $orgId, $styleType = 'playwright') {
     $logoPath = imageToBase64($orgData['logo'], $baseDir, $isForPdf);
     $stampPath = imageToBase64($orgData['stamp'], $baseDir, $isForPdf);
     $signaturePath = imageToBase64($orgData['signature'], $baseDir, $isForPdf);
+    
+    $documentType = ($documentType === 'technical') ? 'technical' : 'commercial';
+    
+    if ($documentType === 'technical') {
+        $css = getTechnicalAppendixStyles();
+        $headerHtml = ($styleType === 'mpdf') ? getMpdfHeader($logoPath, $orgData) : getPlaywrightHeader($logoPath, $orgData);
+        
+        $proposalNumber = htmlspecialchars($data['number'] ?? '—');
+        $proposalDate = formatInvoiceDate($data['date'] ?? '');
+        $technicalSummary = trim($data['technicalSummary'] ?? '');
+        if ($technicalSummary === '') {
+            $technicalSummary = 'Технические параметры будут уточнены при заключении договора.';
+        }
+        $technicalSummaryHtml = nl2br(htmlspecialchars($technicalSummary));
+        $technicalBindingNote = 'Техническое приложение является неотъемлемой частью основного коммерческого предложения.';
+        
+        $items = is_array($data['items'] ?? null) ? $data['items'] : [];
+        $defaultTechText = 'Технические параметры будут уточнены при заключении договора.';
+        $itemsRowsHtml = '';
+        if (!empty($items)) {
+            foreach ($items as $idx => $item) {
+                $technicalDescription = trim($item['technicalDescription'] ?? '');
+                if ($technicalDescription === '') {
+                    $technicalDescription = $defaultTechText;
+                }
+                $itemsRowsHtml .= '<tr>
+                    <td class="text-center">' . ($idx + 1) . '</td>
+                    <td>
+                        <div class="item-title">' . htmlspecialchars($item['type'] ?? '—') . '</div>
+                    </td>
+                    <td class="text-center">' . htmlspecialchars($item['quantity'] ?? '') . '</td>
+                    <td class="text-center">' . htmlspecialchars($item['unit'] ?? '') . '</td>
+                    <td>' . nl2br(htmlspecialchars($technicalDescription)) . '</td>
+                </tr>';
+            }
+        } else {
+            $itemsRowsHtml = '<tr><td colspan="5" class="text-center">Нет позиций для отображения</td></tr>';
+        }
+        
+        $reducerSpecs = is_array($data['reducerSpecs'] ?? null) ? $data['reducerSpecs'] : [];
+        $reducerPdfFieldsDefaults = [
+            'type' => true,
+            'stages' => true,
+            'torqueNm' => true,
+            'ratio' => true,
+            'housingMaterial' => true,
+            'gearMaterial' => true,
+            'bearings' => true,
+            'additionalInfo' => true
+        ];
+        $pdfFields = $reducerPdfFieldsDefaults;
+        if (isset($reducerSpecs['pdfFields']) && is_array($reducerSpecs['pdfFields'])) {
+            $pdfFields = array_merge($reducerPdfFieldsDefaults, $reducerSpecs['pdfFields']);
+        }
+        
+        $reducerRows = [];
+        $typeValue = '';
+        if (($reducerSpecs['type'] ?? '') === 'custom') {
+            $typeValue = trim($reducerSpecs['customType'] ?? '');
+        } else {
+            $typeValue = trim($reducerSpecs['type'] ?? '');
+        }
+        if (!empty($pdfFields['type']) && $typeValue !== '') {
+            $reducerRows[] = ['label' => 'Тип редуктора', 'value' => htmlspecialchars($typeValue)];
+        }
+        if (!empty($pdfFields['stages']) && ($reducerSpecs['stages'] ?? '') !== '') {
+            $reducerRows[] = ['label' => 'Количество ступеней', 'value' => htmlspecialchars($reducerSpecs['stages']) . ' ступ.'];
+        }
+        if (!empty($pdfFields['torqueNm']) && ($reducerSpecs['torqueNm'] ?? '') !== '') {
+            $reducerRows[] = ['label' => 'Номинальный крутящий момент', 'value' => htmlspecialchars($reducerSpecs['torqueNm']) . ' Н·м'];
+        }
+        if (!empty($pdfFields['ratio']) && ($reducerSpecs['ratio'] ?? '') !== '') {
+            $reducerRows[] = ['label' => 'Передаточное отношение (U)', 'value' => htmlspecialchars($reducerSpecs['ratio'])];
+        }
+        if (!empty($pdfFields['housingMaterial']) && ($reducerSpecs['housingMaterial'] ?? '') !== '') {
+            $housing = htmlspecialchars($reducerSpecs['housingMaterial']);
+            $housingNote = trim($reducerSpecs['housingMaterialNote'] ?? '');
+            if ($housingNote !== '') {
+                $housing .= ' (' . htmlspecialchars($housingNote) . ')';
+            }
+            $reducerRows[] = ['label' => 'Материал корпуса', 'value' => $housing];
+        }
+        if (!empty($pdfFields['gearMaterial']) && ($reducerSpecs['gearMaterial'] ?? '') !== '') {
+            $gearValue = htmlspecialchars($reducerSpecs['gearMaterial']);
+            if (($reducerSpecs['gearMaterial'] ?? '') === 'custom') {
+                $gearValue = htmlspecialchars($reducerSpecs['gearMaterialNote'] ?? '—');
+            } elseif (($reducerSpecs['gearMaterialNote'] ?? '') !== '') {
+                $gearValue .= ' (' . htmlspecialchars($reducerSpecs['gearMaterialNote']) . ')';
+            }
+            $reducerRows[] = ['label' => 'Материал зубчатой передачи', 'value' => $gearValue];
+        }
+        if (!empty($pdfFields['bearings'])) {
+            $bearingsList = [];
+            foreach ($reducerSpecs['bearings'] ?? [] as $bearing) {
+                $bearing = trim($bearing);
+                if ($bearing !== '') {
+                    $bearingsList[] = htmlspecialchars($bearing);
+                }
+            }
+            if (!empty($bearingsList)) {
+                $reducerRows[] = ['label' => 'Устанавливаемые подшипники', 'value' => implode(', ', $bearingsList)];
+            }
+        }
+        if (!empty($pdfFields['additionalInfo'])) {
+            $additionalInfo = trim($reducerSpecs['additionalInfo'] ?? '');
+            if ($additionalInfo !== '') {
+                $reducerRows[] = ['label' => 'Прочая техническая информация', 'value' => nl2br(htmlspecialchars($additionalInfo))];
+            }
+        }
+        
+        $reducerRowsHtml = '';
+        if (!empty($reducerRows)) {
+            foreach ($reducerRows as $row) {
+                $reducerRowsHtml .= '<tr>
+                    <td class="tech-params-label">' . $row['label'] . '</td>
+                    <td>' . $row['value'] . '</td>
+                </tr>';
+            }
+        } else {
+            $reducerRowsHtml = '<tr><td class="tech-params-label">Параметры</td><td>Нет выбранных параметров для отображения</td></tr>';
+        }
+        
+        $contactPerson = htmlspecialchars($data['contactPerson'] ?? '');
+        $position = htmlspecialchars($data['position'] ?? '');
+        $signatureHtml = '';
+        if ($contactPerson || $position || $stampPath || $signaturePath) {
+            $signatureHtml = '<div class="signature signature-technical">
+                <div class="signature-center">
+                    <div class="signature-text">
+                        <div style="margin-bottom: 5px; font-weight: bold;">' . ($contactPerson ?: '—') . '</div>
+                        <div class="signature-position">' . ($position ?: '') . '</div>
+                    </div>
+                </div>
+                <div class="signature-right">'
+                    . (($stampPath || $signaturePath)
+                        ? '<div class="signature-images">
+                            ' . ($stampPath ? '<img src="' . htmlspecialchars($stampPath) . '" alt="Печать" class="signature-stamp" />' : '') . '
+                            ' . ($signaturePath ? '<img src="' . htmlspecialchars($signaturePath) . '" alt="Подпись" class="signature-sign" />' : '') . '
+                        </div>'
+                        : '') . '
+                </div>
+            </div>';
+        }
+        
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техническое приложение</title>
+    <style>' . $css . '</style>
+</head>
+<body>
+    <div class="tech-container">
+        ' . $headerHtml . '
+        <div class="tech-title">Техническое приложение</div>
+        <div class="tech-subtitle">к Коммерческому Предложению № ' . $proposalNumber . ' от ' . $proposalDate . '</div>
+        <div class="tech-section">
+            <h3>Общий технический комментарий</h3>
+            <div class="tech-summary">' . $technicalSummaryHtml . '</div>
+        </div>
+        <div class="tech-section">
+            <h3>Технические параметры редуктора</h3>
+            <table class="tech-params-table">
+                <tbody>
+                    ' . $reducerRowsHtml . '
+                </tbody>
+            </table>
+        </div>
+        <div class="tech-section">
+            <h3>Позиции предложения</h3>
+            <table class="tech-items-table">
+                <thead>
+                    <tr>
+                        <th style="width:5%; text-align:center;">№</th>
+                        <th style="width:40%;">Описание</th>
+                        <th style="width:8%; text-align:center;">Кол-во</th>
+                        <th style="width:7%; text-align:center;">Ед.</th>
+                        <th style="text-align:center;">Техническое описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ' . $itemsRowsHtml . '
+                </tbody>
+            </table>
+        </div>
+        <div class="tech-note">' . $technicalBindingNote . '</div>
+        ' . $signatureHtml . '
+    </div>
+</body>
+</html>';
+        return $html;
+    }
     
     // Расчет итогов
     $total = 0;
@@ -688,6 +881,187 @@ function getMpdfStyles() {
             text-align: center;
             position: relative;
             z-index: 3;
+        }
+    ';
+}
+
+function getTechnicalAppendixStyles() {
+    return '
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #111827;
+            margin: 2;
+            padding: 5px;
+            
+        }
+        .tech-container {
+            max-width: 227mm;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 3mm;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+        .logo {
+            max-height: 60px !important;
+            width: auto;
+        }
+        .company-info {
+            text-align: right;
+            font-size: 9pt;
+            color: #475569;
+        }
+        .tech-title {
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin: 10px 0 4px;
+        }
+        .tech-subtitle {
+            text-align: center;
+            font-size: 11pt;
+            color: #0f172a;
+            margin-bottom: 16px;
+        }
+        .tech-intro {
+            text-align: center;
+            font-size: 9.5pt;
+            color: #475569;
+        }
+        .tech-section {
+            margin-top: 24px;
+        }
+        .tech-section h3 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        .tech-summary {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            line-height: 1.5;
+        }
+        .drawing-number {
+            font-size: 9pt;
+            color: #475569;
+            margin: 4px 0 8px;
+        }
+        .tech-params-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+        }
+        .tech-params-table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            vertical-align: top;
+            font-size: 9.5pt;
+        }
+        .tech-params-label {
+            width: 35%;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .tech-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+        .tech-items-table th {
+            background: #1d4ed8;
+            color: #fff;
+            text-align: left;
+            font-size: 10pt;
+            padding: 8px;
+        }
+        .tech-items-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px;
+            font-size: 9.5pt;
+            vertical-align: top;
+        }
+        .tech-items-table tr:last-child td {
+            border-bottom: none;
+        }
+        .item-title {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .item-meta {
+            font-size: 8.5pt;
+            color: #64748b;
+        }
+        .text-center { text-align: center; }
+        .tech-note {
+            margin-top: 18px;
+            padding: 10px 14px;
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            font-size: 9.5pt;
+            color: #0369a1;
+        }
+        .signature {
+            margin-top: 18px;
+            padding-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 40px;
+        }
+        .signature-center {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: flex-start;
+        }
+        .signature-right {
+            flex: 0 0 auto;
+        }
+        .signature-text {
+            text-align: left;
+            color: #0f172a;
+        }
+        .signature-position {
+            font-size: 9pt;
+            color: #475569;
+        }
+        .signature-images {
+            position: relative;
+            display: inline-block;
+            margin-top: -5px;
+        }
+        .signature-stamp {
+            max-width: 130px;
+            height: auto;
+            opacity: 0.85;
+        }
+        .signature-sign {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            max-width: 100px;
+            height: auto;
+        }
+        .signature-technical {
+            margin-bottom: 0;
+        }
+        @page {
+            margin: 5mm;
         }
     ';
 }

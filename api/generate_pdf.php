@@ -31,6 +31,7 @@ try {
     $invoiceData = $loadedData['invoiceData'];
     $archiveDir = $loadedData['archiveDir'];
     error_log('generate_pdf.php: Invoice data loaded successfully');
+    $documentType = (isset($_GET['document']) && $_GET['document'] === 'technical') ? 'technical' : 'commercial';
 } catch (Exception $e) {
     $code = $e->getCode() ?: 400;
     error_log('generate_pdf.php error: ' . $e->getMessage());
@@ -91,7 +92,7 @@ if (file_exists($mpdfPath)) {
         $orgCode = !empty($orgData['code']) ? $orgData['code'] : strtoupper(substr($orgId, 0, 3));
         
         // Генерация HTML (используем стили для mPDF)
-        $html = generateInvoiceHTML($invoiceData, $orgId, 'mpdf');
+        $html = generateInvoiceHTML($invoiceData, $orgId, 'mpdf', $documentType);
         
         // Создание PDF
         // Используем системную временную директорию для mPDF
@@ -119,7 +120,8 @@ if (file_exists($mpdfPath)) {
         
         // Генерация имени файла PDF в новом формате
         $invoiceDate = $invoiceData['date'] ?? null;
-        $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate);
+        $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+        $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
         $pdfPath = $archiveDir . '/' . $pdfFilename;
         
         // Проверка и исправление прав доступа к директории архива
@@ -219,7 +221,7 @@ if (file_exists($mpdfPath)) {
 // Fallback: используем wkhtmltopdf если доступен
 $wkhtmltopdfPath = '/usr/bin/wkhtmltopdf';
 if (file_exists($wkhtmltopdfPath)) {
-    $html = generateInvoiceHTML($invoiceData, $orgId, 'playwright');
+    $html = generateInvoiceHTML($invoiceData, $orgId, 'playwright', $documentType);
     $htmlPath = sys_get_temp_dir() . '/' . uniqid('invoice_') . '.html';
     $pdfPath = sys_get_temp_dir() . '/' . uniqid('invoice_') . '.pdf';
     
@@ -248,7 +250,8 @@ if (file_exists($wkhtmltopdfPath)) {
             $orgCode = !empty($orgData['code']) ? $orgData['code'] : strtoupper(substr($orgId, 0, 3));
             $archiveDir = dirname(__DIR__) . '/@archiv 2025';
             $invoiceDate = $invoiceData['date'] ?? null;
-            $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate);
+            $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+            $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
         } else {
             $pdfFilename = str_replace('.json', '.pdf', $filename);
         }

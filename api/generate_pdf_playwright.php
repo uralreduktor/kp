@@ -29,6 +29,7 @@ try {
     $orgId = $loadedData['orgId'];
     $invoiceData = $loadedData['invoiceData'];
     $archiveDir = $loadedData['archiveDir'];
+    $documentType = (isset($_GET['document']) && $_GET['document'] === 'technical') ? 'technical' : 'commercial';
 } catch (Exception $e) {
     $code = $e->getCode() ?: 400;
     sendJsonError($e->getMessage(), $code);
@@ -50,7 +51,7 @@ try {
     $orgCode = !empty($orgData['code']) ? $orgData['code'] : strtoupper(substr($orgId, 0, 3));
     
     // Генерация HTML (используем стили для Playwright)
-    $html = generateInvoiceHTML($invoiceData, $orgId, 'playwright');
+    $html = generateInvoiceHTML($invoiceData, $orgId, 'playwright', $documentType);
     
     // Создание временного файла для HTML
     $tempDir = sys_get_temp_dir() . '/playwright_pdf_' . uniqid();
@@ -63,7 +64,8 @@ try {
     
     // Генерация имени файла PDF в новом формате
     $invoiceDate = $invoiceData['date'] ?? null;
-    $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate);
+    $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+    $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
     
     // Создаем PDF во временной директории (где есть права на запись)
     $tempPdfPath = $tempDir . '/' . $pdfFilename;

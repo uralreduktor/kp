@@ -121,6 +121,86 @@
           { id: 'smirnova', person: 'Мария Смирнова', position: 'Исполнительный директор' }
         ];
 
+        const reducerTypeOptions = ['цилиндрический', 'червячный', 'планетарный', 'конический', 'коническо-цилиндрический', 'комбинированный'];
+        const reducerStageOptions = [1, 2, 3, 4, 5, 6];
+        const reducerMaterialOptions = ['Чугун', 'Высокопрочный чугун', 'Сварной стальной', 'Стальной литой', 'Алюминиевый сплав', 'Нержавеющая сталь', 'Комбинированный'];
+        const gearMaterialOptions = ['Сталь 40Х - нормализация, ТВЧ', 'Сталь 18CrNiMo7-6 цементация, шлифовка зуба'];
+        const bearingSuggestions = ['SKF', 'FAG', 'Timken', 'SKF Explorer', 'РФ ГОСТ', 'Высокоточный Китай', 'C&U'];
+        const reducerPdfFieldsDefaults = {
+          type: true,
+          stages: true,
+          torqueNm: true,
+          ratio: true,
+          housingMaterial: true,
+          gearMaterial: true,
+          bearings: true,
+          additionalInfo: true
+        };
+
+        const defaultReducerSpecs = {
+          type: '',
+          customType: '',
+          stages: '',
+          torqueNm: '',
+          ratio: '',
+          housingMaterial: '',
+          housingMaterialNote: '',
+          gearMaterial: '',
+          gearMaterialNote: '',
+          additionalInfo: '',
+          bearings: [''],
+          pdfFields: { ...reducerPdfFieldsDefaults }
+        };
+
+        const normalizeReducerSpecs = (incoming) => {
+          const normalized = incoming
+            ? { ...defaultReducerSpecs, ...incoming }
+            : { ...defaultReducerSpecs };
+          normalized.bearings = Array.isArray(incoming?.bearings) && incoming.bearings.length
+            ? incoming.bearings.map(item => item || '')
+            : [''];
+          normalized.pdfFields = {
+            ...reducerPdfFieldsDefaults,
+            ...(incoming?.pdfFields || {})
+          };
+          return normalized;
+        };
+
+        const DEFAULT_TECHNICAL_SUMMARY = 'Технические параметры и комплектация оборудования соответствуют требованиям заказчика и уточняются при заключении договора. Все характеристики подтверждаются паспортами и сертификатами производителя.';
+        const technicalSummaryOptions = [
+          {
+            value: 'drawing',
+            label: 'По чертежу заказчика',
+            template: 'Технические параметры и комплектность оборудования соответствуют требованиям заказчика и данным чертежа {}. После заключения договора поставщик разрабатывает конструктивную документацию на основании указанного чертежа, которую согласовывает с заказчиком в течение тридцати календарных дней.'
+          },
+          {
+            value: 'unique_product',
+            label: 'Уникальные характеристики изделия',
+            template: 'Предлагаемая продукция разработана производителем самостоятельно и обладает уникальными техническими характеристиками, обеспечивающими полное соответствие заявленным требованиям и ожиданиям заказчика.'
+          },
+          {
+            value: 'documentation_property',
+            label: 'Право собственности на КД',
+            template: 'Конструкторская документация является исключительной собственностью Поставщика.'
+          }
+        ];
+        const fillTechnicalSummaryTemplate = (template, drawingNumber) => {
+          if (!template) return '';
+          if (!template.includes('{}')) return template;
+          const value = drawingNumber?.trim() || '_____';
+          return template.replace('{}', value);
+        };
+        const getTechnicalSummaryTemplate = (presetValue) => {
+          const option = technicalSummaryOptions.find(opt => opt.value === presetValue);
+          return option ? option.template : DEFAULT_TECHNICAL_SUMMARY;
+        };
+        const ensureItemsHaveTechnical = (items = []) => {
+          return (items || []).map(item => ({
+            ...item,
+            technicalDescription: item.technicalDescription || ''
+          }));
+        };
+
         const CityAutocomplete = React.memo(({ value, onChange, onCitySelect, onBlur, results, showDropdown, onClose, disabled }) => {
           const wrapperRef = useRef(null);
           const inputRef = useRef(null);
@@ -335,6 +415,401 @@
           );
         };
 
+        const TechnicalAppendix = ({
+          formData,
+          viewMode,
+          handleChange,
+          handleItemChange,
+          handleTechnicalSummaryPresetChange,
+          handleReducerSpecsChange,
+          handleReducerPdfFieldToggle,
+          reducerSpecs,
+          handleBearingChange,
+          addBearing,
+          removeBearing,
+          t
+        }) => {
+          const proposalNumber = formData.number || '—';
+          const proposalDate = formData.date ? formatDate(formData.date) : '—';
+          const renderPdfToggle = (field) => {
+            if (viewMode !== 'edit') return null;
+            const checked = reducerSpecs.pdfFields?.[field] !== false;
+            return (
+              <label className="flex items-center gap-1 text-xs font-medium text-gray-500">
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300"
+                  checked={checked}
+                  onChange={(e) => handleReducerPdfFieldToggle(field, e.target.checked)}
+                />
+                В PDF
+              </label>
+            );
+          };
+          
+          return (
+            <div className="p-6 space-y-6">
+              <div className="border-b pb-4 space-y-2">
+                <h2 className="text-3xl font-bold text-blue-900">{t.technicalAnnexTitle}</h2>
+                <p className="text-lg font-semibold text-gray-800">
+                  Техническое приложение к Коммерческому Предложению № {proposalNumber} от {proposalDate}
+                </p>
+                <p className="text-gray-600 mt-2">{t.technicalIntro}</p>
+              </div>
+              
+              <div>
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">{t.technicalSummaryLabel}</label>
+                {viewMode === 'edit' && (
+                  <>
+                    <select
+                      value={formData.technicalSummaryPreset || ''}
+                      onChange={(e) => handleTechnicalSummaryPresetChange(e.target.value)}
+                      className="w-full mb-3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="">Выберите шаблон комментария...</option>
+                      {technicalSummaryOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="mb-3">
+                      <label className="text-xs font-medium text-gray-600 block mb-1">Номер чертежа</label>
+                      <input
+                        type="text"
+                        value={formData.technicalDrawingNumber || ''}
+                        onChange={(e) => handleChange(e, 'technicalDrawingNumber')}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Например, КМ-123/456"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Значение автоматически подставляется вместо фигурных скобок в выбранном шаблоне.
+                      </p>
+                    </div>
+                  </>
+                )}
+                {viewMode !== 'edit' && formData.technicalDrawingNumber && (
+                  <p className="text-xs text-gray-600 mb-2">
+                    Номер чертежа: {formData.technicalDrawingNumber}
+                  </p>
+                )}
+                <AutoResizeTextarea 
+                  field="technicalSummary" 
+                  rows={4} 
+                  viewMode={viewMode} 
+                  formData={formData} 
+                  handleChange={handleChange} 
+                />
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full border border-gray-200 text-sm">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="border px-3 py-2 w-12 text-center">#</th>
+                      <th className="border px-3 py-2 text-left">{t.type}</th>
+                    <th className="border px-3 py-2 text-center">{t.quantity}</th>
+                    <th className="border px-3 py-2 text-center">{t.unit}</th>
+                      <th className="border px-3 py-2 text-left">{t.technicalSpecs}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formData.items.map((item, idx) => (
+                      <tr key={`tech-${idx}`} className="align-top">
+                        <td className="border px-3 py-2 text-center font-semibold">{idx + 1}</td>
+                        <td className="border px-3 py-2">
+                          <div className="font-semibold text-gray-900">{item.type || '—'}</div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            {item.hsCode ? `Код ТН ВЭД: ${item.hsCode}` : 'Код ТН ВЭД: —'}
+                            <br />
+                            {item.countryOfOrigin ? `Страна производства: ${item.countryOfOrigin}` : 'Страна производства: —'}
+                          </div>
+                        </td>
+                      <td className="border px-3 py-2 text-center">{item.quantity}</td>
+                      <td className="border px-3 py-2 text-center">{item.unit}</td>
+                        <td className="border px-3 py-2">
+                          {viewMode === 'edit' ? (
+                            <textarea
+                              value={item.technicalDescription || ''}
+                              onChange={(e) => handleItemChange(idx, 'technicalDescription', e.target.value)}
+                              rows={4}
+                              className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Опишите основные технические параметры, комплектацию и стандарты качества"
+                            />
+                          ) : (
+                            <div className="text-sm whitespace-pre-line">
+                              {item.technicalDescription || 'Технические параметры будут уточнены при заключении договора.'}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+            <div className="bg-white border rounded-lg p-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+                <h3 className="text-lg font-semibold text-blue-900">Технические параметры редуктора</h3>
+                {viewMode === 'edit' && (
+                  <p className="text-xs text-gray-500">Один набор значений для всего документа</p>
+                )}
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Тип редуктора</span>
+                    {renderPdfToggle('type')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <>
+                      <select
+                        value={reducerSpecs.type}
+                        onChange={(e) => handleReducerSpecsChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Выберите тип...</option>
+                        {reducerTypeOptions.map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))}
+                        <option value="custom">Другое...</option>
+                      </select>
+                      {reducerSpecs.type === 'custom' && (
+                        <input
+                          type="text"
+                          className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Укажите тип редуктора"
+                          value={reducerSpecs.customType}
+                          onChange={(e) => handleReducerSpecsChange('customType', e.target.value)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-900">
+                      {reducerSpecs.type === 'custom'
+                        ? (reducerSpecs.customType || '—')
+                        : (reducerSpecs.type || '—')}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Количество ступеней</span>
+                    {renderPdfToggle('stages')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <select
+                      value={reducerSpecs.stages}
+                      onChange={(e) => handleReducerSpecsChange('stages', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Выберите значение...</option>
+                      {reducerStageOptions.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <p className="text-sm text-gray-900">{reducerSpecs.stages || '—'}{reducerSpecs.stages ? ' ступ.' : ''}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Номинальный крутящий момент, Н·м</span>
+                    {renderPdfToggle('torqueNm')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <input
+                      type="number"
+                      min="0"
+                      step="10"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Например, 1600"
+                      value={reducerSpecs.torqueNm}
+                      onChange={(e) => handleReducerSpecsChange('torqueNm', e.target.value)}
+                    />
+                  ) : (
+                    <p className="text-sm text-gray-900">
+                      {reducerSpecs.torqueNm ? `${reducerSpecs.torqueNm} Н·м` : '—'}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Передаточное отношение (U)</span>
+                    {renderPdfToggle('ratio')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.1"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Например, 25.4"
+                      value={reducerSpecs.ratio}
+                      onChange={(e) => handleReducerSpecsChange('ratio', e.target.value)}
+                    />
+                  ) : (
+                    <p className="text-sm text-gray-900">{reducerSpecs.ratio || '—'}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Материал корпуса</span>
+                    {renderPdfToggle('housingMaterial')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <>
+                      <select
+                        value={reducerSpecs.housingMaterial}
+                        onChange={(e) => handleReducerSpecsChange('housingMaterial', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Выберите материал...</option>
+                        {reducerMaterialOptions.map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))}
+                        <option value="custom">Другое...</option>
+                      </select>
+                      {(reducerSpecs.housingMaterial === 'Комбинированный' || reducerSpecs.housingMaterial === 'custom') && (
+                        <input
+                          type="text"
+                          className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Уточните состав / материал"
+                          value={reducerSpecs.housingMaterialNote}
+                          onChange={(e) => handleReducerSpecsChange('housingMaterialNote', e.target.value)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-900">
+                      {reducerSpecs.housingMaterial === 'custom'
+                        ? (reducerSpecs.housingMaterialNote || '—')
+                        : reducerSpecs.housingMaterial || '—'}
+                      {reducerSpecs.housingMaterialNote && reducerSpecs.housingMaterial !== 'custom' && (
+                        <span className="text-gray-600"> ({reducerSpecs.housingMaterialNote})</span>
+                      )}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                    <span>Материал шестерён</span>
+                    {renderPdfToggle('gearMaterial')}
+                  </label>
+                  {viewMode === 'edit' ? (
+                    <>
+                      <select
+                        value={reducerSpecs.gearMaterial}
+                        onChange={(e) => handleReducerSpecsChange('gearMaterial', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Выберите материал...</option>
+                        {gearMaterialOptions.map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))}
+                        <option value="custom">Другое...</option>
+                      </select>
+                      {reducerSpecs.gearMaterial === 'custom' && (
+                        <input
+                          type="text"
+                          className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Уточните материал и обработку"
+                          value={reducerSpecs.gearMaterialNote}
+                          onChange={(e) => handleReducerSpecsChange('gearMaterialNote', e.target.value)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-900">
+                      {reducerSpecs.gearMaterial === 'custom'
+                        ? (reducerSpecs.gearMaterialNote || '—')
+                        : (reducerSpecs.gearMaterial || '—')}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                  <span>Устанавливаемые подшипники</span>
+                  {renderPdfToggle('bearings')}
+                </label>
+                {viewMode === 'edit' ? (
+                  <div className="space-y-2">
+                    {reducerSpecs.bearings.map((bearing, idx) => (
+                      <div key={`bearing-${idx}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          list="bearing-options-pi"
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Например, SKF 32210"
+                          value={bearing}
+                          onChange={(e) => handleBearingChange(idx, e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className="px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+                          onClick={() => removeBearing(idx)}
+                          disabled={reducerSpecs.bearings.length === 1}
+                        >
+                          Удалить
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="px-3 py-2 text-sm text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50"
+                      onClick={addBearing}
+                    >
+                      + Добавить подшипник
+                    </button>
+                    <datalist id="bearing-options-pi">
+                      {bearingSuggestions.map(option => (
+                        <option key={option} value={option} />
+                      ))}
+                    </datalist>
+                  </div>
+                ) : (
+                  <div>
+                    {reducerSpecs.bearings.filter(Boolean).length > 0 ? (
+                      <ul className="list-disc list-inside text-sm text-gray-900">
+                        {reducerSpecs.bearings.filter(Boolean).map((bearing, idx) => (
+                          <li key={`bearing-print-${idx}`}>{bearing}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-900">—</p>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="mt-4">
+                <label className="text-xs font-medium text-gray-600 mb-1 flex items-center justify-between">
+                  <span>Прочая техническая информация</span>
+                  {renderPdfToggle('additionalInfo')}
+                </label>
+                {viewMode === 'edit' ? (
+                  <textarea
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Дополнительные требования, допуски, опции"
+                    value={reducerSpecs.additionalInfo}
+                    onChange={(e) => handleReducerSpecsChange('additionalInfo', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm text-gray-900 whitespace-pre-line">
+                    {reducerSpecs.additionalInfo || '—'}
+                  </p>
+                )}
+              </div>
+            </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900">
+                {t.technicalBindingNote}
+              </div>
+            </div>
+          );
+        };
+
         const AutoResizeTextarea = ({ field, rows = 2, viewMode, formData, handleChange }) => {
           const isReadOnly = viewMode === 'print';
           const textareaRef = useRef(null);
@@ -454,6 +929,7 @@
             deliveryTime: '',
             contact: ''
           });
+          const [activeTab, setActiveTab] = useState('main');
           
           // Состояния для резервных копий данных при редактировании
           const [backupFormData, setBackupFormData] = useState(null);
@@ -467,33 +943,38 @@
             recipient: 'Наименование организации',
             recipientAddress: 'Адрес организации',
             recipientINN: '',
-            items: [{
+            items: ensureItemsHaveTechnical([{
               type: 'Описание товара',
               name: 'Модель',
-              hsCode: '8483.40',
+              hsCode: '',
               countryOfOrigin: 'Россия',
               unit: 'шт.',
               quantity: 1,
               price: 0,
               leadTime: '60-75 дней'
-            }],
+            }]),
             incoterm: 'САМОВЫВОЗ',
             deliveryPlace: 'Екатеринбург, Россия',
             deliveryTime: '60-75 дней после оплаты аванса',
             paymentTerms: '30% аванс, 70% до отгрузки',
             warranty: '12 месяцев с момента пуска в эксплуатацию или 18 месяцев с момента отгрузки',
             remarks: 'Все технические характеристики подлежат окончательному уточнению',
+            technicalSummary: DEFAULT_TECHNICAL_SUMMARY,
+            technicalSummaryPreset: '',
+            technicalDrawingNumber: '',
             contactPerson: 'Анна Иванова',
             position: 'Менеджер по продажам',
             organizationId: null,
             selectedBankId: null, // ID выбранного банковского счета
-            documentType: 'regular' // Тип документа: 'regular' для обычных КП
+            documentType: 'regular', // Тип документа: 'regular' для обычных КП
+            reducerSpecs: normalizeReducerSpecs()
           });
           
           // Флаг для отслеживания, был ли номер отредактирован пользователем
           const [numberManuallyEdited, setNumberManuallyEdited] = useState(false);
 
           const t = translations[language];
+          const reducerSpecs = normalizeReducerSpecs(formData.reducerSpecs);
           
           // Синхронизация deliveryPlaceInput с formData.deliveryPlace при загрузке
           // (только если значение реально изменилось извне, не от нашего onBlur)
@@ -874,7 +1355,15 @@
                       loadedData.selectedBankId = loadedOrg.bankAccounts[0].id;
                     }
                     
-                    setFormData(loadedData);
+                    const normalizedData = {
+                      ...loadedData,
+                      items: ensureItemsHaveTechnical(loadedData.items || []),
+                      technicalSummary: loadedData.technicalSummary || DEFAULT_TECHNICAL_SUMMARY,
+                      technicalSummaryPreset: loadedData.technicalSummaryPreset || '',
+                      technicalDrawingNumber: loadedData.technicalDrawingNumber || '',
+                      reducerSpecs: normalizeReducerSpecs(loadedData.reducerSpecs)
+                    };
+                    setFormData(normalizedData);
                     setLoadedFilename(filename);
                     setNumberManuallyEdited(true); // При загрузке существующего документа считаем номер отредактированным
                     setViewMode('print');
@@ -1029,6 +1518,23 @@
               }
               return;
             }
+
+            if (field === 'technicalSummary') {
+              setFormData(prev => ({ ...prev, technicalSummaryPreset: '', [field]: value }));
+              return;
+            }
+
+            if (field === 'technicalDrawingNumber') {
+              setFormData(prev => {
+                const nextState = { ...prev, technicalDrawingNumber: value };
+                if (prev.technicalSummaryPreset === 'drawing') {
+                  const template = getTechnicalSummaryTemplate('drawing');
+                  nextState.technicalSummary = fillTechnicalSummaryTemplate(template, value);
+                }
+                return nextState;
+              });
+              return;
+            }
             
             setFormData(prev => ({ ...prev, [field]: value }));
           };
@@ -1044,7 +1550,7 @@
               ...prev,
               items: [...prev.items, { 
                 type: '', name: '', hsCode: '', countryOfOrigin: 'Россия', 
-                unit: 'шт.', quantity: 1, price: 0, leadTime: '' 
+                unit: 'шт.', quantity: 1, price: 0, leadTime: '', technicalDescription: '' 
               }]
             }));
           };
@@ -1053,6 +1559,75 @@
             if (formData.items.length > 1) {
               setDeleteModalIndex(index);
             }
+          };
+
+          const handleTechnicalSummaryPresetChange = (value) => {
+            if (!value) {
+              setFormData(prev => ({ ...prev, technicalSummaryPreset: '', technicalSummary: prev.technicalSummary }));
+              return;
+            }
+            setFormData(prev => {
+              const template = getTechnicalSummaryTemplate(value);
+              const summaryText = value === 'drawing'
+                ? fillTechnicalSummaryTemplate(template, prev.technicalDrawingNumber)
+                : template;
+              return {
+                ...prev,
+                technicalSummaryPreset: value,
+                technicalSummary: summaryText
+              };
+            });
+          };
+
+          const handleReducerSpecsChange = (field, value) => {
+            setFormData(prev => ({
+              ...prev,
+              reducerSpecs: {
+                ...normalizeReducerSpecs(prev.reducerSpecs),
+                [field]: value
+              }
+            }));
+          };
+
+          const handleReducerPdfFieldToggle = (field, value) => {
+            setFormData(prev => {
+              const specs = normalizeReducerSpecs(prev.reducerSpecs);
+              const pdfFields = { ...specs.pdfFields, [field]: value };
+              return {
+                ...prev,
+                reducerSpecs: { ...specs, pdfFields }
+              };
+            });
+          };
+
+          const handleBearingChange = (index, value) => {
+            setFormData(prev => {
+              const specs = normalizeReducerSpecs(prev.reducerSpecs);
+              const bearings = [...specs.bearings];
+              bearings[index] = value;
+              return { ...prev, reducerSpecs: { ...specs, bearings } };
+            });
+          };
+
+          const addBearing = () => {
+            setFormData(prev => {
+              const specs = normalizeReducerSpecs(prev.reducerSpecs);
+              return {
+                ...prev,
+                reducerSpecs: { ...specs, bearings: [...specs.bearings, ''] }
+              };
+            });
+          };
+
+          const removeBearing = (index) => {
+            setFormData(prev => {
+              const specs = normalizeReducerSpecs(prev.reducerSpecs);
+              if (specs.bearings.length === 1) {
+                return prev;
+              }
+              const bearings = specs.bearings.filter((_, idx) => idx !== index);
+              return { ...prev, reducerSpecs: { ...specs, bearings } };
+            });
           };
 
           const handleDeleteConfirm = () => {
@@ -1136,16 +1711,17 @@
             setViewMode('edit');
           };
 
-          const handleDownloadPdf = async (e) => {
-            if (e) {
-              e.preventDefault();
-            }
+          const downloadPdf = async (mode) => {
             if (!loadedFilename) {
               alert('Сначала сохраните документ');
               return;
             }
             try {
-              const url = `${getApiUrl('generate_pdf.php')}?filename=${encodeURIComponent(loadedFilename)}`;
+              const params = new URLSearchParams({ filename: loadedFilename });
+              if (mode) {
+                params.set('document', mode);
+              }
+              const url = `${getApiUrl('generate_pdf.php')}?${params.toString()}`;
               const response = await fetch(url);
               
               const contentType = response.headers.get('content-type') || '';
@@ -1170,7 +1746,14 @@
               const downloadUrl = window.URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = downloadUrl;
-              a.download = loadedFilename.replace('.json', '.pdf');
+              const disposition = response.headers.get('content-disposition') || '';
+              const dispositionMatch = disposition.match(/filename="?([^"]+)"?/i);
+              if (dispositionMatch && dispositionMatch[1]) {
+                a.download = dispositionMatch[1];
+              } else {
+                const suffix = mode === 'technical' ? '_technical.pdf' : '.pdf';
+                a.download = loadedFilename.replace('.json', suffix);
+              }
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
@@ -1179,6 +1762,20 @@
               console.error('Ошибка при скачивании PDF:', err);
               alert('Ошибка при скачивании PDF: ' + err.message);
             }
+          };
+
+          const handleDownloadPdf = async (e) => {
+            if (e) {
+              e.preventDefault();
+            }
+            await downloadPdf();
+          };
+
+          const handleDownloadTechnicalPdf = async (e) => {
+            if (e) {
+              e.preventDefault();
+            }
+            await downloadPdf('technical');
           };
 
           const handlePrint = () => {
@@ -1327,6 +1924,13 @@
                         >
                           <img src="pdf-svgrepo-com.svg" alt="PDF" style={{ filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.9))', width: '50px', height: '50px', maxWidth: '50px', maxHeight: '50px', display: 'block' }} />
                         </button>
+                        <Button
+                          type="primary"
+                          className="bg-green-600 hover:bg-green-700"
+                          onClick={handleDownloadTechnicalPdf}
+                        >
+                          PDF техприложения
+                        </Button>
                       </>
                     )}
                   </div>
@@ -1342,6 +1946,39 @@
                 
                 
 
+                {/* Tab Navigation */}
+                <div className="bg-white border-b px-4">
+                  <div role="tablist" className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeTab === 'main'}
+                      onClick={() => setActiveTab('main')}
+                      className={`px-4 py-2 text-sm font-semibold rounded-t-md border-b-2 transition focus:outline-none ${
+                        activeTab === 'main'
+                          ? 'text-blue-900 border-blue-600 bg-white'
+                          : 'text-gray-500 border-transparent hover:text-blue-700'
+                      }`}
+                    >
+                      {t.mainTabLabel}
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeTab === 'technical'}
+                      onClick={() => setActiveTab('technical')}
+                      className={`px-4 py-2 text-sm font-semibold rounded-t-md border-b-2 transition focus:outline-none ${
+                        activeTab === 'technical'
+                          ? 'text-blue-900 border-blue-600 bg-white'
+                          : 'text-gray-500 border-transparent hover:text-blue-700'
+                      }`}
+                    >
+                      {t.technicalTabLabel}
+                    </button>
+                  </div>
+                </div>
+
+                <div className={activeTab === 'main' ? 'block' : 'hidden'} aria-hidden={activeTab !== 'main'}>
                 {/* Header */}
                 <div className="bg-white border-b p-6">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
@@ -1747,7 +2384,6 @@
                     </div>
                   </div>
 
-
                   {viewMode === 'edit' && (
                     <div className="flex justify-end mb-4">
                       <button onClick={addItem} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -2114,6 +2750,23 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className={activeTab === 'technical' ? 'block' : 'hidden'} aria-hidden={activeTab !== 'technical'}>
+                <TechnicalAppendix
+                  formData={formData}
+                  viewMode={viewMode}
+                  handleChange={handleChange}
+                  handleItemChange={handleItemChange}
+                  handleTechnicalSummaryPresetChange={handleTechnicalSummaryPresetChange}
+            handleReducerSpecsChange={handleReducerSpecsChange}
+                  handleReducerPdfFieldToggle={handleReducerPdfFieldToggle}
+            reducerSpecs={reducerSpecs}
+            handleBearingChange={handleBearingChange}
+            addBearing={addBearing}
+            removeBearing={removeBearing}
+                  t={t}
+                />
+              </div>
               </div>
               
               {/* Модальное окно подтверждения удаления */}
