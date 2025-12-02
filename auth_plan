@@ -1,0 +1,78 @@
+[2 tools called]
+
+## План перехода на FastAPI + Postgres (context7)
+
+**1. Требования и ограничения**
+- Отказ от Basic Auth в `nginx`, вся аутентификация через приложение.
+- Реализация password + device-bound refresh tokens, хранение устройств, отзыв, аудит.
+- Сохранение текущего UX (форма логина в `index.html`) + добавление «Запомнить устройство».
+- Безопасность: HTTPS, `Secure`/`HttpOnly` cookies, rate limiting, журналирование.
+- Надёжная инфраструктура: Postgres с бэкапами, миграциями, мониторингом.
+- Продуктивный домен `https://kp.uralreduktor.com/`; FastAPI размещаем за текущим `nginx`, статика остаётся без изменений.
+
+**2. Архитектура**
+- `nginx` остаётся фронтовым прокси: статика + проксирование `/api/*` на FastAPI.
+- FastAPI сервис (Python 3.11+, uvicorn/gunicorn) → REST API.
+- Postgres как основное хранилище (отдельный кластер/инстанс).
+- Дополнительно: Redis (опционально) для rate limit/caching, Celery/BackgroundTasks для async задач.
+- В репозитории создаём новый каталог `backend/` для FastAPI проекта (Poetry), пока legacy PHP остаётся для совместимости.
+
+**3. Фазы внедрения**
+
+- **Аналитика**
+  - Инвентаризация текущих пользователей/прав.
+  - Нефункциональные требования: SLA, аудит, требования регуляторов.
+
+- **Инфраструктура**
+  - Поднять Postgres (выделенный сервер/Managed DB), подготовить миграции (Alembic).
+  - Настроить окружение FastAPI: Poetry/uv, Dockerfile, CI/CD, secrets (Vault/.env).
+  - Создать скелет проекта в `backend/` (структура `app/`, `alembic/`, `pyproject.toml`, `.env.example`).
+  - Обновить `nginx` конфиг (`location /api/` → FastAPI, убрать Basic Auth) и удостовериться, что статика kp.uralreduktor.com обслуживается прежним образом.
+
+- **Схема базы**
+  - Таблицы: `users`, `sessions`, `trusted_devices`, `audit_log`, возможно `password_resets`.
+  - Индексы по `user_id`, хэшам токенов, обновления через `UPSERT`.
+  - Скрипты миграции (Alembic) + тестовые данные.
+
+- **Backend FastAPI**
+  - Структура проекта: `app/main.py`, `routers`, `services`, `repositories`, `models`, `schemas`.
+  - ORM: SQLModel или SQLAlchemy 2.0 с async (`asyncpg`).
+  - Конфигурация через `pydantic-settings` (`app/core/config.py`) с профилями `local`, `staging`, `prod` (домен kp.uralreduktor.com).
+  - Сервисы:
+    - `/api/login` (пароль → session cookie + device token при опции).
+    - `/api/refresh`, `/api/logout`, `/api/me`.
+    - `/api/devices` (листинг, revoke).
+    - `/api/password/forgot`, `/api/password/reset` (по необходимости).
+  - Middleware: `SessionGuard`, `DeviceGuard`, rate limiting, CORS, log correlation.
+  - Background tasks: чистка истёкших токенов, уведомления о новых устройствах.
+  - Тесты: pytest + httpx (unit/integration), k6/JMeter для нагрузки.
+
+- **Frontend изменения**
+  - Форма логина отправляет запрос на `/api/login`, включает fingerprint/checkbox.
+  - Страница «Мои устройства» (модуль в `index.html` или отдельный SPA раздел).
+  - Обработчик обновления сессии (silent refresh, интерсептор fetch/axios).
+
+- **Миграция пользователей**
+  - Скрипт импорта старых учёток (если пароли в `htpasswd` → временный пароль/сброс).
+  - Коммуникация пользователям: инструкции, требования к новым паролям/MFA.
+
+- **Безопасность и политика**
+  - Настроить HTTPS, HSTS, CSP, CSRF (Cookie + header double submit).
+  - Hashing: Argon2id/bcrypt для паролей; хранить только хэши сессий/устройств.
+  - Логи: успешные/неудачные логины, выдача/отзыв устройств, подозрительные действия.
+  - Возможности расширения: MFA (TOTP/WebAuthn), риск-скоринг по IP.
+
+- **Запуск и поддержка**
+  - Staging окружение: полный флоу, регрессионные тесты.
+  - Нагрузочное тестирование (критичные endpoints).
+  - Постепенный rollout (канареечный/параллельный запуск, возможность отката).
+  - Мониторинг: Prometheus/Grafana (метрики), Sentry/ELK (логи).
+  - План отката: резервный `nginx` конфиг с Basic Auth, резервные бекапы БД.
+
+**4. Дополнительные улучшения**
+- Внедрить Redis для rate limiting и blacklisting устройств после ревока.
+- Добавить систему уведомлений (email/push) при входе с нового устройства.
+- Подготовить roadmap для MFA/passkeys на базе FastAPI (легко добавить через `pyotp`/`webauthn` библиотеки).
+- Использовать Pydantic v2 для строгих схем, автоген Swagger для внутренней документации.
+
+Готов помочь с конкретной структурой FastAPI проекта, схемами Alembic и примером middleware/token-логики.

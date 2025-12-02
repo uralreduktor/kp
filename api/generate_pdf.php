@@ -120,7 +120,7 @@ if (file_exists($mpdfPath)) {
         
         // Генерация имени файла PDF в новом формате
         $invoiceDate = $invoiceData['date'] ?? null;
-        $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+        $label = $documentType === 'technical' ? 'Technical Appendix' : 'Commercial Proposal';
         $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
         $pdfPath = $archiveDir . '/' . $pdfFilename;
         
@@ -250,7 +250,7 @@ if (file_exists($wkhtmltopdfPath)) {
             $orgCode = !empty($orgData['code']) ? $orgData['code'] : strtoupper(substr($orgId, 0, 3));
             $archiveDir = dirname(__DIR__) . '/@archiv 2025';
             $invoiceDate = $invoiceData['date'] ?? null;
-            $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+            $label = $documentType === 'technical' ? 'Technical Appendix' : 'Commercial Proposal';
             $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
         } else {
             $pdfFilename = str_replace('.json', '.pdf', $filename);

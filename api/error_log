@@ -7441,3 +7441,755 @@ PDF generated successfully: /tmp/playwright_pdf_692cae5ce1cf9/Technical Appendix
 [30-Nov-2025 20:51:42 UTC] sendPdfToBrowser: Headers sent
 [30-Nov-2025 20:51:42 UTC] sendPdfToBrowser: Reading file
 [30-Nov-2025 20:51:42 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 04:26:54 UTC] generate_pdf.php: Starting with filename=011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:26:54 UTC] generate_pdf.php: Filename validated: 011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:26:54 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 04:26:54 UTC] Using Playwright for PDF generation
+[01-Dec-2025 04:26:54 UTC] Starting PDF generation for filename: 011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:26:54 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:26:54 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:26:54 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:26:54 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:26:54 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:26:54 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 04:26:54 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 04:26:54 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 04:26:54 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d190e13dc5/invoice.html' '/tmp/playwright_pdf_692d190e13dc5/Technical Appendix VEC 2025_12_01 01.pdf' 2>&1
+[01-Dec-2025 04:26:54 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 04:26:54 UTC] HTML file: /tmp/playwright_pdf_692d190e13dc5/invoice.html
+[01-Dec-2025 04:26:54 UTC] PDF output: /tmp/playwright_pdf_692d190e13dc5/Technical Appendix VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:26:55 UTC] Command return code: 0
+[01-Dec-2025 04:26:55 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d190e13dc5/Technical Appendix VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:26:55 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_01 01.pdf, Filename: Technical Appendix VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:26:55 UTC] sendPdfToBrowser: File size OK: 174032 bytes
+[01-Dec-2025 04:26:55 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 04:26:55 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 04:26:55 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 04:28:29 UTC] generate_pdf.php: Starting with filename=011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:28:29 UTC] generate_pdf.php: Filename validated: 011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:28:29 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 04:28:29 UTC] Using Playwright for PDF generation
+[01-Dec-2025 04:28:29 UTC] Starting PDF generation for filename: 011225-01_2025-12-01_04-26-47.json
+[01-Dec-2025 04:28:29 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:28:29 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:28:29 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:28:29 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:28:29 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 04:28:29 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 04:28:29 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 04:28:29 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 04:28:29 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d196d15c0b/invoice.html' '/tmp/playwright_pdf_692d196d15c0b/Proforma Invoice VEC 2025_12_01 01.pdf' 2>&1
+[01-Dec-2025 04:28:29 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 04:28:29 UTC] HTML file: /tmp/playwright_pdf_692d196d15c0b/invoice.html
+[01-Dec-2025 04:28:29 UTC] PDF output: /tmp/playwright_pdf_692d196d15c0b/Proforma Invoice VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:28:30 UTC] Command return code: 0
+[01-Dec-2025 04:28:30 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d196d15c0b/Proforma Invoice VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:28:30 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Proforma Invoice VEC 2025_12_01 01.pdf, Filename: Proforma Invoice VEC 2025_12_01 01.pdf
+[01-Dec-2025 04:28:30 UTC] sendPdfToBrowser: File size OK: 162914 bytes
+[01-Dec-2025 04:28:30 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 04:28:30 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 04:28:30 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:00:08 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:00:08 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:00:08 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:00:08 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:00:08 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:00:08 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:00:08 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:00:08 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:00:08 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:00:08 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:00:08 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:00:08 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:00:08 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:00:08 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d2ee89bf79/invoice.html' '/tmp/playwright_pdf_692d2ee89bf79/Proforma Invoice VEC 2025_12_01 02.pdf' 2>&1
+[01-Dec-2025 06:00:08 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:00:08 UTC] HTML file: /tmp/playwright_pdf_692d2ee89bf79/invoice.html
+[01-Dec-2025 06:00:08 UTC] PDF output: /tmp/playwright_pdf_692d2ee89bf79/Proforma Invoice VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:00:10 UTC] Command return code: 0
+[01-Dec-2025 06:00:10 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d2ee89bf79/Proforma Invoice VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:00:10 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Proforma Invoice VEC 2025_12_01 02.pdf, Filename: Proforma Invoice VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:00:10 UTC] sendPdfToBrowser: File size OK: 169023 bytes
+[01-Dec-2025 06:00:10 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:00:10 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:00:10 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:04:21 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:04:21 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:04:21 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:04:21 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:04:21 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:04:21 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:04:21 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:04:21 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:04:21 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:04:21 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:04:21 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:04:21 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:04:21 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:04:21 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d2fe51e955/invoice.html' '/tmp/playwright_pdf_692d2fe51e955/Proforma Invoice VEC 2025_12_01 03.pdf' 2>&1
+[01-Dec-2025 06:04:21 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:04:21 UTC] HTML file: /tmp/playwright_pdf_692d2fe51e955/invoice.html
+[01-Dec-2025 06:04:21 UTC] PDF output: /tmp/playwright_pdf_692d2fe51e955/Proforma Invoice VEC 2025_12_01 03.pdf
+[01-Dec-2025 06:04:22 UTC] Command return code: 0
+[01-Dec-2025 06:04:22 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d2fe51e955/Proforma Invoice VEC 2025_12_01 03.pdf
+[01-Dec-2025 06:04:22 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Proforma Invoice VEC 2025_12_01 03.pdf, Filename: Proforma Invoice VEC 2025_12_01 03.pdf
+[01-Dec-2025 06:04:22 UTC] sendPdfToBrowser: File size OK: 169018 bytes
+[01-Dec-2025 06:04:22 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:04:22 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:04:22 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:19:34 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:19:34 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:19:34 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:19:34 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:19:34 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:19:34 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:19:34 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:19:34 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:19:34 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:19:34 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:19:34 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:19:34 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:19:34 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:19:34 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d3376ae5c9/invoice.html' '/tmp/playwright_pdf_692d3376ae5c9/Коммерческое предложени VEC 2025_12_01 01.pdf' 2>&1
+[01-Dec-2025 06:19:34 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:19:34 UTC] HTML file: /tmp/playwright_pdf_692d3376ae5c9/invoice.html
+[01-Dec-2025 06:19:34 UTC] PDF output: /tmp/playwright_pdf_692d3376ae5c9/Коммерческое предложени VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:19:36 UTC] Command return code: 0
+[01-Dec-2025 06:19:36 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d3376ae5c9/Коммерческое предложени VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:19:36 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Коммерческое предложени VEC 2025_12_01 01.pdf, Filename: Коммерческое предложени VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:19:36 UTC] sendPdfToBrowser: File size OK: 169018 bytes
+[01-Dec-2025 06:19:36 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:19:36 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:19:36 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:20:58 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:20:58 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:20:58 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:20:58 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:20:58 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:20:58 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:20:58 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:20:58 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:20:58 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:20:58 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:20:58 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:20:58 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:20:58 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:20:58 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d33ca86ffc/invoice.html' '/tmp/playwright_pdf_692d33ca86ffc/Commercial Proposal VEC 2025_12_01 01.pdf' 2>&1
+[01-Dec-2025 06:20:58 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:20:58 UTC] HTML file: /tmp/playwright_pdf_692d33ca86ffc/invoice.html
+[01-Dec-2025 06:20:58 UTC] PDF output: /tmp/playwright_pdf_692d33ca86ffc/Commercial Proposal VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:21:00 UTC] Command return code: 0
+[01-Dec-2025 06:21:00 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d33ca86ffc/Commercial Proposal VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:21:00 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_01 01.pdf, Filename: Commercial Proposal VEC 2025_12_01 01.pdf
+[01-Dec-2025 06:21:00 UTC] sendPdfToBrowser: File size OK: 169018 bytes
+[01-Dec-2025 06:21:00 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:21:00 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:21:00 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:24:41 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:24:41 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:24:41 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:24:41 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:24:41 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 06:24:41 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:24:41 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:24:41 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:24:41 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:24:41 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:24:41 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:24:41 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:24:41 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:24:41 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d34a98a1b6/invoice.html' '/tmp/playwright_pdf_692d34a98a1b6/Commercial Proposal VEC 2025_12_01 02.pdf' 2>&1
+[01-Dec-2025 06:24:41 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:24:41 UTC] HTML file: /tmp/playwright_pdf_692d34a98a1b6/invoice.html
+[01-Dec-2025 06:24:41 UTC] PDF output: /tmp/playwright_pdf_692d34a98a1b6/Commercial Proposal VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:24:43 UTC] Command return code: 0
+[01-Dec-2025 06:24:43 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d34a98a1b6/Commercial Proposal VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:24:43 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_01 02.pdf, Filename: Commercial Proposal VEC 2025_12_01 02.pdf
+[01-Dec-2025 06:24:43 UTC] sendPdfToBrowser: File size OK: 169018 bytes
+[01-Dec-2025 06:24:43 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:24:43 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:24:43 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:30:49 UTC] generate_pdf.php: Starting with filename=251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:49 UTC] generate_pdf.php: Filename validated: 251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:49 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:30:49 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:30:49 UTC] Starting PDF generation for filename: 251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:49 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:49 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:49 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:49 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:49 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:49 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:30:49 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:30:49 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:30:49 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d36198b632/invoice.html' '/tmp/playwright_pdf_692d36198b632/Commercial Proposal VEC 2025_11_25 01.pdf' 2>&1
+[01-Dec-2025 06:30:49 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:30:49 UTC] HTML file: /tmp/playwright_pdf_692d36198b632/invoice.html
+[01-Dec-2025 06:30:49 UTC] PDF output: /tmp/playwright_pdf_692d36198b632/Commercial Proposal VEC 2025_11_25 01.pdf
+[01-Dec-2025 06:30:51 UTC] Command return code: 0
+[01-Dec-2025 06:30:51 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d36198b632/Commercial Proposal VEC 2025_11_25 01.pdf
+[01-Dec-2025 06:30:51 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_11_25 01.pdf, Filename: Commercial Proposal VEC 2025_11_25 01.pdf
+[01-Dec-2025 06:30:51 UTC] sendPdfToBrowser: File size OK: 163325 bytes
+[01-Dec-2025 06:30:51 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:30:51 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:30:51 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 06:30:57 UTC] generate_pdf.php: Starting with filename=251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:57 UTC] generate_pdf.php: Filename validated: 251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:57 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 06:30:57 UTC] Using Playwright for PDF generation
+[01-Dec-2025 06:30:57 UTC] Starting PDF generation for filename: 251125-10_2025-11-30_18-58-00.json
+[01-Dec-2025 06:30:57 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:57 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:57 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:57 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:57 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 06:30:57 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 06:30:57 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 06:30:57 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 06:30:57 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d3621100ae/invoice.html' '/tmp/playwright_pdf_692d3621100ae/Technical Appendix VEC 2025_11_25 22.pdf' 2>&1
+[01-Dec-2025 06:30:57 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 06:30:57 UTC] HTML file: /tmp/playwright_pdf_692d3621100ae/invoice.html
+[01-Dec-2025 06:30:57 UTC] PDF output: /tmp/playwright_pdf_692d3621100ae/Technical Appendix VEC 2025_11_25 22.pdf
+[01-Dec-2025 06:30:58 UTC] Command return code: 0
+[01-Dec-2025 06:30:58 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d3621100ae/Technical Appendix VEC 2025_11_25 22.pdf
+[01-Dec-2025 06:30:58 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_11_25 22.pdf, Filename: Technical Appendix VEC 2025_11_25 22.pdf
+[01-Dec-2025 06:30:58 UTC] sendPdfToBrowser: File size OK: 190463 bytes
+[01-Dec-2025 06:30:58 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 06:30:58 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 06:30:58 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 07:09:46 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:46 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:46 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 07:09:46 UTC] Using Playwright for PDF generation
+[01-Dec-2025 07:09:46 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:46 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:46 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:46 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:46 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:46 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:46 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 07:09:46 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 07:09:46 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 07:09:46 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d3f3a59e49/invoice.html' '/tmp/playwright_pdf_692d3f3a59e49/Technical Appendix VEC 2025_12_01 02.pdf' 2>&1
+[01-Dec-2025 07:09:46 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 07:09:46 UTC] HTML file: /tmp/playwright_pdf_692d3f3a59e49/invoice.html
+[01-Dec-2025 07:09:46 UTC] PDF output: /tmp/playwright_pdf_692d3f3a59e49/Technical Appendix VEC 2025_12_01 02.pdf
+[01-Dec-2025 07:09:48 UTC] Command return code: 0
+[01-Dec-2025 07:09:48 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d3f3a59e49/Technical Appendix VEC 2025_12_01 02.pdf
+[01-Dec-2025 07:09:48 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_01 02.pdf, Filename: Technical Appendix VEC 2025_12_01 02.pdf
+[01-Dec-2025 07:09:48 UTC] sendPdfToBrowser: File size OK: 181046 bytes
+[01-Dec-2025 07:09:48 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 07:09:48 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 07:09:48 UTC] sendPdfToBrowser: File sent successfully
+[01-Dec-2025 07:09:56 UTC] generate_pdf.php: Starting with filename=011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:56 UTC] generate_pdf.php: Filename validated: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:56 UTC] generate_pdf.php: Invoice data loaded successfully
+[01-Dec-2025 07:09:56 UTC] Using Playwright for PDF generation
+[01-Dec-2025 07:09:56 UTC] Starting PDF generation for filename: 011225-02_2025-12-01_06-00-07.json
+[01-Dec-2025 07:09:56 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC] Checking path: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:56 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:56 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:56 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:56 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[01-Dec-2025 07:09:56 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[01-Dec-2025 07:09:56 UTC] Setting HOME to /home/serveradmin for real path
+[01-Dec-2025 07:09:56 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[01-Dec-2025 07:09:56 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692d3f4424f84/invoice.html' '/tmp/playwright_pdf_692d3f4424f84/Technical Appendix VEC 2025_12_01 03.pdf' 2>&1
+[01-Dec-2025 07:09:56 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[01-Dec-2025 07:09:56 UTC] HTML file: /tmp/playwright_pdf_692d3f4424f84/invoice.html
+[01-Dec-2025 07:09:56 UTC] PDF output: /tmp/playwright_pdf_692d3f4424f84/Technical Appendix VEC 2025_12_01 03.pdf
+[01-Dec-2025 07:09:57 UTC] Command return code: 0
+[01-Dec-2025 07:09:57 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692d3f4424f84/Technical Appendix VEC 2025_12_01 03.pdf
+[01-Dec-2025 07:09:57 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_01 03.pdf, Filename: Technical Appendix VEC 2025_12_01 03.pdf
+[01-Dec-2025 07:09:57 UTC] sendPdfToBrowser: File size OK: 181046 bytes
+[01-Dec-2025 07:09:57 UTC] sendPdfToBrowser: Headers sent
+[01-Dec-2025 07:09:57 UTC] sendPdfToBrowser: Reading file
+[01-Dec-2025 07:09:57 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 04:32:38 UTC] generate_pdf.php: Starting with filename=011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:38 UTC] generate_pdf.php: Filename validated: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:38 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 04:32:38 UTC] Using Playwright for PDF generation
+[02-Dec-2025 04:32:38 UTC] Starting PDF generation for filename: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:38 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:38 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:38 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:38 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:38 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:38 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 04:32:38 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 04:32:38 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:32:38 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e6be6363c5/invoice.html' '/tmp/playwright_pdf_692e6be6363c5/Commercial Proposal VEC 2025_12_01 03.pdf' 2>&1
+[02-Dec-2025 04:32:38 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 04:32:38 UTC] HTML file: /tmp/playwright_pdf_692e6be6363c5/invoice.html
+[02-Dec-2025 04:32:38 UTC] PDF output: /tmp/playwright_pdf_692e6be6363c5/Commercial Proposal VEC 2025_12_01 03.pdf
+[02-Dec-2025 04:32:40 UTC] Command return code: 0
+[02-Dec-2025 04:32:40 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e6be6363c5/Commercial Proposal VEC 2025_12_01 03.pdf
+[02-Dec-2025 04:32:40 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_01 03.pdf, Filename: Commercial Proposal VEC 2025_12_01 03.pdf
+[02-Dec-2025 04:32:40 UTC] sendPdfToBrowser: File size OK: 163429 bytes
+[02-Dec-2025 04:32:40 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 04:32:40 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 04:32:40 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 04:32:40 UTC] generate_pdf.php: Starting with filename=011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:40 UTC] generate_pdf.php: Filename validated: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:40 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 04:32:40 UTC] Using Playwright for PDF generation
+[02-Dec-2025 04:32:40 UTC] Starting PDF generation for filename: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 04:32:40 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:40 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:40 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:40 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:40 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:32:40 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 04:32:40 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 04:32:40 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:32:40 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e6be894d76/invoice.html' '/tmp/playwright_pdf_692e6be894d76/Commercial Proposal VEC 2025_12_01 04.pdf' 2>&1
+[02-Dec-2025 04:32:40 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 04:32:40 UTC] HTML file: /tmp/playwright_pdf_692e6be894d76/invoice.html
+[02-Dec-2025 04:32:40 UTC] PDF output: /tmp/playwright_pdf_692e6be894d76/Commercial Proposal VEC 2025_12_01 04.pdf
+[02-Dec-2025 04:32:41 UTC] Command return code: 0
+[02-Dec-2025 04:32:41 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e6be894d76/Commercial Proposal VEC 2025_12_01 04.pdf
+[02-Dec-2025 04:32:41 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_01 04.pdf, Filename: Commercial Proposal VEC 2025_12_01 04.pdf
+[02-Dec-2025 04:32:41 UTC] sendPdfToBrowser: File size OK: 163429 bytes
+[02-Dec-2025 04:32:41 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 04:32:41 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 04:32:41 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 04:40:33 UTC] generate_pdf.php: Starting with filename=021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:33 UTC] generate_pdf.php: Filename validated: 021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:33 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 04:40:33 UTC] Using Playwright for PDF generation
+[02-Dec-2025 04:40:33 UTC] Starting PDF generation for filename: 021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:33 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:33 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:33 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:33 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:33 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:33 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 04:40:33 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 04:40:33 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:40:33 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e6dc1e4143/invoice.html' '/tmp/playwright_pdf_692e6dc1e4143/Technical Appendix VEC 2025_12_02 01.pdf' 2>&1
+[02-Dec-2025 04:40:33 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 04:40:33 UTC] HTML file: /tmp/playwright_pdf_692e6dc1e4143/invoice.html
+[02-Dec-2025 04:40:33 UTC] PDF output: /tmp/playwright_pdf_692e6dc1e4143/Technical Appendix VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:35 UTC] Command return code: 0
+[02-Dec-2025 04:40:35 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e6dc1e4143/Technical Appendix VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:35 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_02 01.pdf, Filename: Technical Appendix VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:35 UTC] sendPdfToBrowser: File size OK: 180299 bytes
+[02-Dec-2025 04:40:35 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 04:40:35 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 04:40:35 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 04:40:52 UTC] generate_pdf.php: Starting with filename=021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:52 UTC] generate_pdf.php: Filename validated: 021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:52 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 04:40:52 UTC] Using Playwright for PDF generation
+[02-Dec-2025 04:40:52 UTC] Starting PDF generation for filename: 021225-01_2025-12-02_04-40-32.json
+[02-Dec-2025 04:40:52 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:52 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:52 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:52 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:52 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 04:40:52 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 04:40:52 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 04:40:52 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 04:40:52 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e6dd4a6cdb/invoice.html' '/tmp/playwright_pdf_692e6dd4a6cdb/Commercial Proposal VEC 2025_12_02 01.pdf' 2>&1
+[02-Dec-2025 04:40:52 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 04:40:52 UTC] HTML file: /tmp/playwright_pdf_692e6dd4a6cdb/invoice.html
+[02-Dec-2025 04:40:52 UTC] PDF output: /tmp/playwright_pdf_692e6dd4a6cdb/Commercial Proposal VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:53 UTC] Command return code: 0
+[02-Dec-2025 04:40:53 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e6dd4a6cdb/Commercial Proposal VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:53 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 01.pdf, Filename: Commercial Proposal VEC 2025_12_02 01.pdf
+[02-Dec-2025 04:40:53 UTC] sendPdfToBrowser: File size OK: 168558 bytes
+[02-Dec-2025 04:40:53 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 04:40:53 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 04:40:53 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 05:07:16 UTC] generate_pdf.php: Starting with filename=021225-02_2025-12-02_05-07-12.json
+[02-Dec-2025 05:07:16 UTC] generate_pdf.php: Filename validated: 021225-02_2025-12-02_05-07-12.json
+[02-Dec-2025 05:07:16 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 05:07:16 UTC] Using Playwright for PDF generation
+[02-Dec-2025 05:07:16 UTC] Starting PDF generation for filename: 021225-02_2025-12-02_05-07-12.json
+[02-Dec-2025 05:07:16 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 05:07:16 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 05:07:16 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 05:07:16 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 05:07:16 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 05:07:16 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 05:07:16 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 05:07:16 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 05:07:16 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e74042e599/invoice.html' '/tmp/playwright_pdf_692e74042e599/Commercial Proposal VEC 2025_12_02 02.pdf' 2>&1
+[02-Dec-2025 05:07:16 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 05:07:16 UTC] HTML file: /tmp/playwright_pdf_692e74042e599/invoice.html
+[02-Dec-2025 05:07:16 UTC] PDF output: /tmp/playwright_pdf_692e74042e599/Commercial Proposal VEC 2025_12_02 02.pdf
+[02-Dec-2025 05:07:17 UTC] Command return code: 0
+[02-Dec-2025 05:07:17 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e74042e599/Commercial Proposal VEC 2025_12_02 02.pdf
+[02-Dec-2025 05:07:17 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 02.pdf, Filename: Commercial Proposal VEC 2025_12_02 02.pdf
+[02-Dec-2025 05:07:17 UTC] sendPdfToBrowser: File size OK: 162968 bytes
+[02-Dec-2025 05:07:17 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 05:07:17 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 05:07:17 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 06:48:28 UTC] generate_pdf.php: Starting with filename=021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:28 UTC] generate_pdf.php: Filename validated: 021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:28 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 06:48:28 UTC] Using Playwright for PDF generation
+[02-Dec-2025 06:48:28 UTC] Starting PDF generation for filename: 021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:28 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:28 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:28 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:28 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:28 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:28 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 06:48:28 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 06:48:28 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 06:48:28 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e8bbc57b10/invoice.html' '/tmp/playwright_pdf_692e8bbc57b10/Technical Appendix VEC 2025_12_02 02.pdf' 2>&1
+[02-Dec-2025 06:48:28 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 06:48:28 UTC] HTML file: /tmp/playwright_pdf_692e8bbc57b10/invoice.html
+[02-Dec-2025 06:48:28 UTC] PDF output: /tmp/playwright_pdf_692e8bbc57b10/Technical Appendix VEC 2025_12_02 02.pdf
+[02-Dec-2025 06:48:29 UTC] Command return code: 0
+[02-Dec-2025 06:48:29 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e8bbc57b10/Technical Appendix VEC 2025_12_02 02.pdf
+[02-Dec-2025 06:48:29 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_02 02.pdf, Filename: Technical Appendix VEC 2025_12_02 02.pdf
+[02-Dec-2025 06:48:29 UTC] sendPdfToBrowser: File size OK: 178821 bytes
+[02-Dec-2025 06:48:29 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 06:48:29 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 06:48:29 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 06:48:35 UTC] generate_pdf.php: Starting with filename=021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:35 UTC] generate_pdf.php: Filename validated: 021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:35 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 06:48:35 UTC] Using Playwright for PDF generation
+[02-Dec-2025 06:48:35 UTC] Starting PDF generation for filename: 021225-03_2025-12-02_06-48-21.json
+[02-Dec-2025 06:48:35 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:35 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:35 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:35 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:35 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 06:48:35 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 06:48:35 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 06:48:35 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 06:48:35 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e8bc355dfd/invoice.html' '/tmp/playwright_pdf_692e8bc355dfd/Commercial Proposal VEC 2025_12_02 03.pdf' 2>&1
+[02-Dec-2025 06:48:35 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 06:48:35 UTC] HTML file: /tmp/playwright_pdf_692e8bc355dfd/invoice.html
+[02-Dec-2025 06:48:35 UTC] PDF output: /tmp/playwright_pdf_692e8bc355dfd/Commercial Proposal VEC 2025_12_02 03.pdf
+[02-Dec-2025 06:48:36 UTC] Command return code: 0
+[02-Dec-2025 06:48:36 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e8bc355dfd/Commercial Proposal VEC 2025_12_02 03.pdf
+[02-Dec-2025 06:48:36 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 03.pdf, Filename: Commercial Proposal VEC 2025_12_02 03.pdf
+[02-Dec-2025 06:48:36 UTC] sendPdfToBrowser: File size OK: 165677 bytes
+[02-Dec-2025 06:48:36 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 06:48:36 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 06:48:36 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 07:48:37 UTC] generate_pdf.php: Starting with filename=011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 07:48:37 UTC] generate_pdf.php: Filename validated: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 07:48:37 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 07:48:37 UTC] Using Playwright for PDF generation
+[02-Dec-2025 07:48:37 UTC] Starting PDF generation for filename: 011225-01_2025-12-01_04-26-47.json
+[02-Dec-2025 07:48:37 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 07:48:37 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 07:48:37 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 07:48:37 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 07:48:37 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 07:48:37 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 07:48:37 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 07:48:37 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 07:48:37 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692e99d5c6af3/invoice.html' '/tmp/playwright_pdf_692e99d5c6af3/Commercial Proposal VEC 2025_12_01 05.pdf' 2>&1
+[02-Dec-2025 07:48:37 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 07:48:37 UTC] HTML file: /tmp/playwright_pdf_692e99d5c6af3/invoice.html
+[02-Dec-2025 07:48:37 UTC] PDF output: /tmp/playwright_pdf_692e99d5c6af3/Commercial Proposal VEC 2025_12_01 05.pdf
+[02-Dec-2025 07:48:39 UTC] Command return code: 0
+[02-Dec-2025 07:48:39 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692e99d5c6af3/Commercial Proposal VEC 2025_12_01 05.pdf
+[02-Dec-2025 07:48:39 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_01 05.pdf, Filename: Commercial Proposal VEC 2025_12_01 05.pdf
+[02-Dec-2025 07:48:39 UTC] sendPdfToBrowser: File size OK: 163508 bytes
+[02-Dec-2025 07:48:39 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 07:48:39 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 07:48:39 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 08:16:12 UTC] generate_pdf.php: Starting with filename=021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:12 UTC] generate_pdf.php: Filename validated: 021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:12 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 08:16:12 UTC] Using Playwright for PDF generation
+[02-Dec-2025 08:16:12 UTC] Starting PDF generation for filename: 021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:12 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:12 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:12 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:12 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:12 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:12 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 08:16:12 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 08:16:12 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:16:12 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692ea04c7163a/invoice.html' '/tmp/playwright_pdf_692ea04c7163a/Technical Appendix VEC 2025_12_02 03.pdf' 2>&1
+[02-Dec-2025 08:16:12 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 08:16:12 UTC] HTML file: /tmp/playwright_pdf_692ea04c7163a/invoice.html
+[02-Dec-2025 08:16:12 UTC] PDF output: /tmp/playwright_pdf_692ea04c7163a/Technical Appendix VEC 2025_12_02 03.pdf
+[02-Dec-2025 08:16:14 UTC] Command return code: 0
+[02-Dec-2025 08:16:14 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692ea04c7163a/Technical Appendix VEC 2025_12_02 03.pdf
+[02-Dec-2025 08:16:14 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Technical Appendix VEC 2025_12_02 03.pdf, Filename: Technical Appendix VEC 2025_12_02 03.pdf
+[02-Dec-2025 08:16:14 UTC] sendPdfToBrowser: File size OK: 174958 bytes
+[02-Dec-2025 08:16:14 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 08:16:14 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 08:16:14 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 08:16:25 UTC] generate_pdf.php: Starting with filename=021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:25 UTC] generate_pdf.php: Filename validated: 021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:25 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 08:16:25 UTC] Using Playwright for PDF generation
+[02-Dec-2025 08:16:25 UTC] Starting PDF generation for filename: 021225-04_2025-12-02_08-16-10.json
+[02-Dec-2025 08:16:25 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:25 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:25 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:25 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:25 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:16:25 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 08:16:25 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 08:16:25 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:16:25 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692ea0595f281/invoice.html' '/tmp/playwright_pdf_692ea0595f281/Commercial Proposal VEC 2025_12_02 04.pdf' 2>&1
+[02-Dec-2025 08:16:25 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 08:16:25 UTC] HTML file: /tmp/playwright_pdf_692ea0595f281/invoice.html
+[02-Dec-2025 08:16:25 UTC] PDF output: /tmp/playwright_pdf_692ea0595f281/Commercial Proposal VEC 2025_12_02 04.pdf
+[02-Dec-2025 08:16:26 UTC] Command return code: 0
+[02-Dec-2025 08:16:26 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692ea0595f281/Commercial Proposal VEC 2025_12_02 04.pdf
+[02-Dec-2025 08:16:26 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 04.pdf, Filename: Commercial Proposal VEC 2025_12_02 04.pdf
+[02-Dec-2025 08:16:26 UTC] sendPdfToBrowser: File size OK: 163049 bytes
+[02-Dec-2025 08:16:26 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 08:16:26 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 08:16:26 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 08:48:17 UTC] generate_pdf.php: Starting with filename=021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:17 UTC] generate_pdf.php: Filename validated: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:17 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 08:48:17 UTC] Using Playwright for PDF generation
+[02-Dec-2025 08:48:17 UTC] Starting PDF generation for filename: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:17 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:17 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:17 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:17 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:17 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:17 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 08:48:17 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 08:48:17 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:48:17 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692ea7d1a7b24/invoice.html' '/tmp/playwright_pdf_692ea7d1a7b24/Commercial Proposal VEC 2025_12_02 05.pdf' 2>&1
+[02-Dec-2025 08:48:17 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 08:48:17 UTC] HTML file: /tmp/playwright_pdf_692ea7d1a7b24/invoice.html
+[02-Dec-2025 08:48:17 UTC] PDF output: /tmp/playwright_pdf_692ea7d1a7b24/Commercial Proposal VEC 2025_12_02 05.pdf
+[02-Dec-2025 08:48:19 UTC] Command return code: 0
+[02-Dec-2025 08:48:19 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692ea7d1a7b24/Commercial Proposal VEC 2025_12_02 05.pdf
+[02-Dec-2025 08:48:19 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 05.pdf, Filename: Commercial Proposal VEC 2025_12_02 05.pdf
+[02-Dec-2025 08:48:19 UTC] sendPdfToBrowser: File size OK: 160063 bytes
+[02-Dec-2025 08:48:19 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 08:48:19 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 08:48:19 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 08:48:38 UTC] generate_pdf.php: Starting with filename=021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:38 UTC] generate_pdf.php: Filename validated: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:38 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 08:48:38 UTC] Using Playwright for PDF generation
+[02-Dec-2025 08:48:38 UTC] Starting PDF generation for filename: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 08:48:38 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:38 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:38 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:38 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:38 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 08:48:38 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 08:48:38 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 08:48:38 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 08:48:38 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692ea7e6059b6/invoice.html' '/tmp/playwright_pdf_692ea7e6059b6/Commercial Proposal VEC 2025_12_02 06.pdf' 2>&1
+[02-Dec-2025 08:48:38 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 08:48:38 UTC] HTML file: /tmp/playwright_pdf_692ea7e6059b6/invoice.html
+[02-Dec-2025 08:48:38 UTC] PDF output: /tmp/playwright_pdf_692ea7e6059b6/Commercial Proposal VEC 2025_12_02 06.pdf
+[02-Dec-2025 08:48:39 UTC] Command return code: 0
+[02-Dec-2025 08:48:39 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692ea7e6059b6/Commercial Proposal VEC 2025_12_02 06.pdf
+[02-Dec-2025 08:48:39 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 06.pdf, Filename: Commercial Proposal VEC 2025_12_02 06.pdf
+[02-Dec-2025 08:48:39 UTC] sendPdfToBrowser: File size OK: 160063 bytes
+[02-Dec-2025 08:48:39 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 08:48:39 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 08:48:39 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 09:08:49 UTC] generate_pdf.php: Starting with filename=021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 09:08:49 UTC] generate_pdf.php: Filename validated: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 09:08:49 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 09:08:49 UTC] Using Playwright for PDF generation
+[02-Dec-2025 09:08:49 UTC] Starting PDF generation for filename: 021225-05_2025-12-02_08-48-12.json
+[02-Dec-2025 09:08:49 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:08:49 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:08:49 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:08:49 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:08:49 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:08:49 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 09:08:49 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 09:08:49 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 09:08:49 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692eaca1e3818/invoice.html' '/tmp/playwright_pdf_692eaca1e3818/Commercial Proposal VEC 2025_12_02 07.pdf' 2>&1
+[02-Dec-2025 09:08:49 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 09:08:49 UTC] HTML file: /tmp/playwright_pdf_692eaca1e3818/invoice.html
+[02-Dec-2025 09:08:49 UTC] PDF output: /tmp/playwright_pdf_692eaca1e3818/Commercial Proposal VEC 2025_12_02 07.pdf
+[02-Dec-2025 09:08:51 UTC] Command return code: 0
+[02-Dec-2025 09:08:51 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692eaca1e3818/Commercial Proposal VEC 2025_12_02 07.pdf
+[02-Dec-2025 09:08:51 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 07.pdf, Filename: Commercial Proposal VEC 2025_12_02 07.pdf
+[02-Dec-2025 09:08:51 UTC] sendPdfToBrowser: File size OK: 163160 bytes
+[02-Dec-2025 09:08:51 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 09:08:51 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 09:08:51 UTC] sendPdfToBrowser: File sent successfully
+[02-Dec-2025 09:49:14 UTC] generate_pdf.php: Starting with filename=021225-06_2025-12-02_09-49-12.json
+[02-Dec-2025 09:49:14 UTC] generate_pdf.php: Filename validated: 021225-06_2025-12-02_09-49-12.json
+[02-Dec-2025 09:49:14 UTC] generate_pdf.php: Invoice data loaded successfully
+[02-Dec-2025 09:49:14 UTC] Using Playwright for PDF generation
+[02-Dec-2025 09:49:14 UTC] Starting PDF generation for filename: 021225-06_2025-12-02_09-49-12.json
+[02-Dec-2025 09:49:14 UTC] Searching for Playwright browser (current user: www-data, HOME: /var/www) in paths: /var/www/.cache/ms-playwright, /home/serveradmin/.cache/ms-playwright, /var/www/kp/.playwright, /var/www/.cache/ms-playwright, /tmp/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC] Checking path: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC]   Path exists: yes, readable: yes, realpath: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC]   Found browser (new structure): /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:49:14 UTC]   Browser path: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:49:14 UTC]   Browser realpath: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:49:14 UTC] Found Playwright browser at: /var/www/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC]   Browser is symlink, real path: /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:49:14 UTC] Found browser path for symlink resolution: /var/www/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell -> /home/serveradmin/.cache/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-linux64/chrome-headless-shell
+[02-Dec-2025 09:49:14 UTC] Using real path instead of symlink: /home/serveradmin/.cache/ms-playwright (was: /var/www/.cache/ms-playwright)
+[02-Dec-2025 09:49:14 UTC] Setting HOME to /home/serveradmin for real path
+[02-Dec-2025 09:49:14 UTC] Setting PLAYWRIGHT_BROWSERS_PATH to: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC] Final PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+[02-Dec-2025 09:49:14 UTC] Executing Playwright command: '/usr/bin/node' '/var/www/kp/api/generate_pdf_playwright.js' '/tmp/playwright_pdf_692eb61a5281d/invoice.html' '/tmp/playwright_pdf_692eb61a5281d/Commercial Proposal VEC 2025_12_02 08.pdf' 2>&1
+[02-Dec-2025 09:49:14 UTC] Environment: HOME='/home/serveradmin' PATH='/usr/local/bin:/usr/bin:/bin' NODE_PATH='' PLAYWRIGHT_BROWSERS_PATH='/home/serveradmin/.cache/ms-playwright' 
+[02-Dec-2025 09:49:14 UTC] HTML file: /tmp/playwright_pdf_692eb61a5281d/invoice.html
+[02-Dec-2025 09:49:14 UTC] PDF output: /tmp/playwright_pdf_692eb61a5281d/Commercial Proposal VEC 2025_12_02 08.pdf
+[02-Dec-2025 09:49:15 UTC] Command return code: 0
+[02-Dec-2025 09:49:15 UTC] Command output: Using PLAYWRIGHT_BROWSERS_PATH: /home/serveradmin/.cache/ms-playwright
+PDF generated successfully: /tmp/playwright_pdf_692eb61a5281d/Commercial Proposal VEC 2025_12_02 08.pdf
+[02-Dec-2025 09:49:15 UTC] sendPdfToBrowser: Starting. PDF path: /var/www/kp/@archiv 2025/Commercial Proposal VEC 2025_12_02 08.pdf, Filename: Commercial Proposal VEC 2025_12_02 08.pdf
+[02-Dec-2025 09:49:15 UTC] sendPdfToBrowser: File size OK: 160777 bytes
+[02-Dec-2025 09:49:15 UTC] sendPdfToBrowser: Headers sent
+[02-Dec-2025 09:49:15 UTC] sendPdfToBrowser: Reading file
+[02-Dec-2025 09:49:15 UTC] sendPdfToBrowser: File sent successfully
+[2025-12-02 11:48:08] B2B-Center parser: HTML parsing skipped - domain new.etpgpb.ru not in allowed list
+[2025-12-02 11:48:08] B2B-Center parser: No data extracted, but platform identified. Returning empty data.

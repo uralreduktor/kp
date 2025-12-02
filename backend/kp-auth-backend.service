@@ -1,0 +1,20 @@
+[Unit]
+Description=KP Auth Backend (FastAPI)
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=serveradmin
+Group=serveradmin
+WorkingDirectory=/var/www/kp/backend
+Environment="PATH=/home/serveradmin/.local/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/serveradmin/.local/bin/poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001 --workers 4
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kp-auth-backend
+
+[Install]
+WantedBy=multi-user.target
+

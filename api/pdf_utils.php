@@ -395,14 +395,14 @@ function getNextSequenceNumberForInvoice($orgCode, $dateFormatted, $archiveDir) 
 }
 
 /**
- * Генерирует имя PDF файла в формате "Proforma Invoice SYP 2025_11_15 01"
+ * Генерирует имя PDF файла в формате "Commercial Proposal SYP 2025_11_15 01"
  * 
  * @param string $orgCode Код организации (например, "SYP")
  * @param string $archiveDir Директория архива для подсчета порядкового номера
  * @param string|null $date Дата в формате Y-m-d (если null, используется текущая дата)
  * @return string Имя файла PDF
  */
-function generatePdfFilename($orgCode, $archiveDir, $date = null, $label = 'Proforma Invoice') {
+function generatePdfFilename($orgCode, $archiveDir, $date = null, $label = 'Commercial Proposal') {
     // Используем текущую дату, если не указана
     if ($date === null) {
         $date = date('Y-m-d');
@@ -433,12 +433,12 @@ function generatePdfFilename($orgCode, $archiveDir, $date = null, $label = 'Prof
  * @param string $archiveDir Директория архива
  * @return int Порядковый номер
  */
-function getNextSequenceNumber($orgCode, $dateFormatted, $archiveDir, $label = 'Proforma Invoice') {
+function getNextSequenceNumber($orgCode, $dateFormatted, $archiveDir, $label = 'Commercial Proposal') {
     if (!is_dir($archiveDir)) {
         return 1;
     }
     
-    // Паттерн для поиска файлов: "Proforma Invoice SYP 2025_11_15 XX.pdf"
+    // Паттерн для поиска файлов: "Commercial Proposal SYP 2025_11_15 XX.pdf"
     $pattern = sprintf('/^%s %s %s (\d+)\.pdf$/i', 
         preg_quote($label, '/'),
         preg_quote($orgCode, '/'), 

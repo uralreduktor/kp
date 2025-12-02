@@ -64,7 +64,7 @@ try {
     
     // Генерация имени файла PDF в новом формате
     $invoiceDate = $invoiceData['date'] ?? null;
-    $label = $documentType === 'technical' ? 'Technical Appendix' : 'Proforma Invoice';
+    $label = $documentType === 'technical' ? 'Technical Appendix' : 'Commercial Proposal';
     $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
     
     // Создаем PDF во временной директории (где есть права на запись)

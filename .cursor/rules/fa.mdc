@@ -1,0 +1,79 @@
+---
+alwaysApply: true
+---
+
+# Правила FastAPI + Postgres
+
+## 1. Контекст и архитектура
+
+- Приложение: FastAPI (Python 3.11+) за `nginx`, обслуживает `/api/*`.
+- Хранилище: Postgres (отдельный инстанс), миграции через Alembic.
+- Дополнительно: Redis (rate limiting, кэш), Celery/BackgroundTasks при необходимости.
+- Frontend (`index.html`) остаётся статикой, все auth-флоу идут через API.
+- Перед изменениями сверяться с `auth_plan`; расхождения фиксировать в PR.
+
+## 2. Общие принципы разработки
+
+- Строгая типизация Pydantic v2; каждый endpoint описан схемами запрос/ответ.
+- Архитектура слоёв: `routers` → `services` → `repositories`, без обращения к БД из роутеров.
+- Асинхронные обработчики и ORM (SQLAlchemy 2 async или SQLModel) с `asyncpg`.
+- Любые изменения сопровождаем описанием в PR и тестами (unit/integration).
+
+## 3. Аутентификация и сессии
+
+- Используем пароль + device-bound refresh tokens:
+  - `session` cookie (короткий TTL, HttpOnly, Secure, SameSite=Lax).
+  - `device_id` (постоянный cookie) + `device_token` (HttpOnly, Secure).
+- Таблицы: `users`, `sessions`, `trusted_devices`, `audit_log`, `password_resets`.
+- Храним только хэши токенов (bcrypt/argon2). Нельзя записывать raw tokens в БД или логи.
+- Middleware `SessionGuard` → проверка сессии; `DeviceGuard` → автоматический выпуск новой сессии при валидном устройстве.
+- Изменения в device-flow документируем в `auth_plan` и README, синхронизируем с фронтендом.
+
+## 4. Работа с Postgres
+
+- Любые новые таблицы описывать в Alembic миграциях; скрипты должны быть idempotent.
+- Использовать транзакции для операций входа/выдачи токенов (`SELECT ... FOR UPDATE` при необходимости).
+- Индексы на `user_id`, `fingerprint`, `hashed_token`.
+- Для JSON (fingerprint/device info) использовать `JSONB` + валидировать на приложении.
+
+## 5. Безопасность
+
+- HTTPS обязателен; cookies как описано в разделе 3 (Secure + HttpOnly).
+- CSRF защита: double-submit cookie (например, `X-CSRF-Token`), обязательно документировать при изменениях.
+- Rate limiting на `/api/login` и `/api/refresh` (Redis или in-memory).
+- Логирование событий: успешные/неудачные логины, выдача/ревок устройств, подозрительные действия.
+- Пароли хэшируем Argon2id (`phc-string`). Минимальная политика сложности описана в конфиге.
+
+## 6. Frontend взаимодействие
+
+- Любые изменения в API документировать и синхронизировать с `index.html`.
+- Фронт обязан отправлять `rememberDevice` + fingerprint (SHA-256) при логине. Fingerprint формируется только из небезопасной информации (без PII).
+- Обновления сессии реализуются через silent refresh; ошибки 401/419 должны приводить к logout.
+
+## 7. Тестирование
+
+- Unit: pytest (routers/services/repositories). Использовать фикстуры с тестовой БД (pytest-asyncio).
+- Integration: httpx.AsyncClient + тестовый сервер FastAPI.
+- Нагрузочные сценарии (k6/JMeter) для `/api/login`, `/api/refresh`.
+- Перед мержем гоняем `ruff`, `mypy`, `pytest`; load-тесты — по регламенту релиза.
+
+## 8. DevOps и деплой
+
+- Конфигурация окружения через `.env` (Poetry) / Docker secrets. Никогда не хардкодим креды.
+- Локальный Secrets-файл: `/var/www/kp/backend/.env` (копия с `.env.example`), доступен только на сервере; не коммитим в репозиторий.
+- `nginx` конфиг хранится в репозитории (IaC); изменения проходят ревью.
+- CI/CD: при пуше выполняем `poetry check`, `ruff`, `mypy`, `pytest`. Деплой через GitHub Actions/ArgoCD (описать в README).
+- Обязателен мониторинг (Prometheus/Grafana), алерты по ошибкам auth сервиса (Sentry).
+- Локальный запуск: `poetry install`, `alembic upgrade head`, `uvicorn app.main:app --reload`. В проде — `gunicorn -k uvicorn.workers.UvicornWorker`.
+
+## 9. Документация
+
+- Обновлять `auth_plan` и `README` при любых изменениях в auth флоу.
+- Сгенерированный Swagger/OpenAPI публиковать (доступно по `/docs` на staging).
+- Для AI-агентов: перед правками читать актуальные планы/миграции, не вноситьbreaking changes без согласования.
+
+## 10. Инструменты
+
+- Poetry/uv для управления зависимостями; Alembic для миграций; pytest/httpx для тестов; ruff/mypy для проверок; k6/JMeter для нагрузки; Redis для rate limiting.
+
+> Примечание: `sudo`‑команды не выполняем — просим пользователя запустить их вручную.
