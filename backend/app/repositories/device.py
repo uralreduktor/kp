@@ -79,12 +79,23 @@ class DeviceRepository:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def revoke(self, device_id: uuid.UUID) -> None:
-        """Отзывает устройство."""
+    async def revoke(self, device_id: uuid.UUID, user_id: uuid.UUID | None = None) -> None:
+        """Отзывает устройство по UUID первичного ключа.
+        
+        Args:
+            device_id: UUID первичного ключа устройства (TrustedDevice.id)
+            user_id: Опциональный UUID пользователя для проверки принадлежности
+        """
         device = await self.session.get(TrustedDevice, device_id)
-        if device:
-            device.revoked_at = datetime.utcnow()
-            await self.session.commit()
+        if not device:
+            raise ValueError(f"Device {device_id} not found")
+        
+        # Проверяем принадлежность устройства пользователю, если указан user_id
+        if user_id is not None and device.user_id != user_id:
+            raise ValueError(f"Device {device_id} does not belong to user {user_id}")
+        
+        device.revoked_at = datetime.utcnow()
+        await self.session.commit()
 
     async def update_last_seen(
         self,

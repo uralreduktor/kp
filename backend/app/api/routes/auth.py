@@ -42,11 +42,14 @@ async def login(
         user_agent=user_agent,
     )
 
+    # Для локальной разработки используем secure=False
+    is_secure = settings.environment != "local"
+    
     response.set_cookie(
         key=settings.session_cookie_name,
         value=session_token,
         httponly=True,
-        secure=True,
+        secure=is_secure,
         samesite="lax",
         max_age=settings.access_token_ttl_minutes * 60,
     )
@@ -56,7 +59,7 @@ async def login(
             key=settings.device_cookie_name,
             value=device_id,
             httponly=False,
-            secure=True,
+            secure=is_secure,
             samesite="lax",
             max_age=settings.device_token_ttl_days * 24 * 60 * 60,
         )
@@ -64,7 +67,7 @@ async def login(
             key=settings.device_token_cookie_name,
             value=device_token,
             httponly=True,
-            secure=True,
+            secure=is_secure,
             samesite="lax",
             max_age=settings.device_token_ttl_days * 24 * 60 * 60,
         )
@@ -110,11 +113,14 @@ async def refresh(
         user_agent=user_agent,
     )
 
+    # Для локальной разработки используем secure=False
+    is_secure = settings.environment != "local"
+    
     response.set_cookie(
         key=settings.session_cookie_name,
         value=session_token,
         httponly=True,
-        secure=True,
+        secure=is_secure,
         samesite="lax",
         max_age=settings.access_token_ttl_minutes * 60,
     )
@@ -150,22 +156,25 @@ async def logout(
     if session_token:
         await service.logout(session_token)
 
+    # Для локальной разработки используем secure=False
+    is_secure = settings.environment != "local"
+    
     response.delete_cookie(
         key=settings.session_cookie_name,
         httponly=True,
-        secure=True,
+        secure=is_secure,
         samesite="lax",
     )
     response.delete_cookie(
         key=settings.device_cookie_name,
         httponly=False,
-        secure=True,
+        secure=is_secure,
         samesite="lax",
     )
     response.delete_cookie(
         key=settings.device_token_cookie_name,
         httponly=True,
-        secure=True,
+        secure=is_secure,
         samesite="lax",
     )
 

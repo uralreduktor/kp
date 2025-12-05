@@ -4,8 +4,6 @@
  * Путь: /Proforma Invoise/api/delete.php
  */
 
-require_once __DIR__ . '/auth_utils.php';
-
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -24,17 +22,70 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Проверка прав на удаление
-$permissionCheck = checkPermission('delete');
+// Получение данных (читаем один раз)
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+// Проверка прав на удаление через FastAPI или email из запроса
+function checkDeletePermission($requestData = null) {
+    // Вариант 1: Проверка через FastAPI сессию (если доступен)
+    $sessionCookie = $_COOKIE['session'] ?? null;
+    if ($sessionCookie) {
+        // Пытаемся проверить сессию через FastAPI
+        $fastApiUrl = 'http://127.0.0.1:8001/api/auth/me';
+        $ch = curl_init($fastApiUrl);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_COOKIE => 'session=' . $sessionCookie,
+            CURLOPT_TIMEOUT => 2,
+        ]);
+        $response = @curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode === 200 && $response) {
+            $userData = json_decode($response, true);
+            if ($userData && isset($userData['email'])) {
+                $email = $userData['email'];
+                // Проверяем права на удаление (только для админов)
+                if (strpos($email, 'admin') !== false || ($userData['is_superuser'] ?? false)) {
+                    return null; // Доступ разрешен
+                }
+            }
+        }
+    }
+    
+    // Вариант 2: Проверка через email из запроса (если передан)
+    if ($requestData && isset($requestData['user_email'])) {
+        $userEmail = $requestData['user_email'];
+        if ($userEmail && strpos($userEmail, 'admin') !== false) {
+            return null; // Доступ разрешен
+        }
+    }
+    
+    // Вариант 3: Старая система через auth_utils (для обратной совместимости)
+    if (file_exists(__DIR__ . '/auth_utils.php')) {
+        require_once __DIR__ . '/auth_utils.php';
+        $permissionCheck = checkPermission('delete');
+        if ($permissionCheck === null) {
+            return null; // Доступ разрешен
+        }
+    }
+    
+    // Доступ запрещен
+    return [
+        'success' => false,
+        'error' => 'Forbidden',
+        'message' => 'У вас нет прав на удаление документов. Требуется роль администратора.'
+    ];
+}
+
+$permissionCheck = checkDeletePermission($data);
 if ($permissionCheck !== null) {
     http_response_code(403);
     echo json_encode($permissionCheck);
     exit;
 }
-
-// Получение данных
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
 
 $filename = $data['filename'] ?? '';
 

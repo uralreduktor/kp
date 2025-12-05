@@ -73,7 +73,7 @@ async def revoke_device(
         )
 
     user_id = await auth_service.get_current_user(session_token)
-    await device_service.revoke(user_id, revoke_data.device_id)
+    await device_service.revoke(user_id, revoke_data.id)
 
     return {"message": "Device revoked successfully"}
 

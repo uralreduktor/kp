@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DeviceInfo(BaseModel):
@@ -27,9 +27,13 @@ class DeviceListResponse(BaseModel):
 
 
 class DeviceRevokeRequest(BaseModel):
-    """Запрос на отзыв устройства."""
+    """Запрос на отзыв устройства.
+    
+    Использует UUID первичного ключа (id) устройства из модели TrustedDevice,
+    а не строковый device_id.
+    """
 
-    device_id: UUID
+    id: UUID = Field(..., description="UUID устройства (первичный ключ из TrustedDevice)")
 
 
 

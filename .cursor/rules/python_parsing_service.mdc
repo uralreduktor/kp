@@ -1,0 +1,64 @@
+---
+description: Технические детали реализации Python Parsing Service (Playwright, Stealth, Scrolling)
+globs: backend/app/parsing/**/*.py
+alwaysApply: false
+---
+# Техническая реализация Python Parsing Service
+
+Этот документ описывает внутреннее устройство и паттерны разработки для микросервиса парсинга на Python (FastAPI + Playwright).
+
+## 1. Окружение и Деплой
+
+- **Путь к сервису**: `/var/www/kp/backend`
+- **Сервис Systemd**: `kp-auth-backend.service`
+- **Виртуальное окружение**: Poetry (обычно в `~/.cache/pypoetry/virtualenvs/...`).
+- **Важно**: При изменении кода в `/backend/app/` необходимо перезапускать сервис: `sudo systemctl restart kp-auth-backend.service`. Если изменения не применяются, проверьте, не используется ли закешированная версия в `site-packages` виртуального окружения.
+
+## 2. Движок Playwright (`engine/playwright.py`)
+
+### 2.1 Stealth Mode
+Обязательно использовать маскировку для обхода анти-бот систем:
+- Удаление `navigator.webdriver`.
+- Мокинг `navigator.plugins`, `navigator.languages`.
+- Мокинг WebGL вендоров (Intel Inc.).
+- Использование реалистичных User-Agent.
+
+### 2.2 SPA и Lazy Loading (Критично!)
+Многие сайты (например, B2B-Center на Next.js) загружают контент динамически или "лениво" при скролле.
+**Обязательные шаги при загрузке:**
+1. `wait_until="domcontentloaded"`.
+2. `wait_for_selector(...)` если известен ключевой элемент.
+3. **Скроллинг страницы**: Обязательно скроллить (на 30-80% высоты), чтобы триггернуть подгрузку футера или боковых панелей (где часто контакты).
+4. `wait_for_load_state("networkidle")` после скролла.
+
+```python
+# Пример скроллинга
+await page.evaluate("window.scrollTo(0, document.body.scrollHeight * 0.5)")
+await page.wait_for_load_state("networkidle")
+```
+
+## 3. Стратегии Парсинга (`router.py`, `parsers/`)
+
+### 3.1 Pattern: Recursive Link Following
+Если на странице тендера нет ИНН, но есть ссылка на профиль организатора/заказчика:
+1. Парсер (`B2BCenterParser`) возвращает ссылку в поле `found_organizer_link`.
+2. Роутер (`router.py`) обнаруживает отсутствие ИНН и наличие ссылки.
+3. Роутер выполняет **второй запрос** (рекурсивно) к странице профиля.
+4. ИНН извлекается со страницы профиля.
+
+### 3.2 Pattern: JSON Extraction (`__NEXT_DATA__`)
+Для Next.js сайтов искать данные в `<script id="__NEXT_DATA__">`.
+- Использовать регулярные выражения, устойчивые к атрибутам (`<script[^>]*id=...>`).
+- Искать ключи рекурсивно (`inn`, `taxpayer_id`, `org_name`), так как структура пропсов меняется.
+
+### 3.3 Pattern: Contextual DOM Scan
+Не искать ИНН "вслепую" по всему тексту (слишком много мусора).
+Искать строго в контексте:
+- Внутри элементов, содержащих слова "Заказчик", "Организатор", "Покупатель".
+- В соседних ячейках таблиц (`<td>Label</td><td>Value</td>`).
+- В родительских блоках (`<div>Label: Value</div>`).
+
+## 4. Отладка
+
+- Логи сервиса: `sudo journalctl -u kp-auth-backend.service -f`
+- **Debug Field**: Если данные не найдены, записывать отладочную информацию (размер HTML, статус JSON, найденные ссылки) прямо в поле `recipient` возвращаемого объекта. Это позволит увидеть причину в PHP-логах (`api/error_log`) без доступа к консоли сервера.

@@ -122,12 +122,12 @@ if (!empty($data['_filename']) && is_string($data['_filename'])) {
     // Проверяем, что имя файла безопасно (только буквы, цифры, дефисы, подчеркивания, точки)
     $proposedFilename = basename($data['_filename']);
     if (preg_match('/^[a-zA-Z0-9._-]+\.json$/', $proposedFilename)) {
-        $filename = $proposedFilename;
-        // Проверяем, существует ли файл
-        $filepath = $archiveDir . '/' . $filename;
-        if (!file_exists($filepath)) {
-            // Если файл не существует, создаем новый с timestamp
-            $filename = null;
+        // Для временных файлов preview всегда создаем файл с указанным именем
+        if (strpos($proposedFilename, 'temp_preview_') === 0) {
+            $filename = $proposedFilename;
+        } else {
+            // Для обычных файлов - перезаписываем, если имя валидно
+            $filename = $proposedFilename;
         }
     }
 }

@@ -32,7 +32,7 @@ function loadInvoiceData($filename) {
     }
     
     // Определение организации
-    $orgId = $invoiceData['organizationId'] ?? 'syreducer';
+    $orgId = !empty($invoiceData['organizationId']) ? $invoiceData['organizationId'] : 'vector';
     
     return [
         'invoiceData' => $invoiceData,

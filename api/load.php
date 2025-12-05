@@ -59,6 +59,7 @@ if (!$data) {
 http_response_code(200);
 echo json_encode([
     'success' => true,
-    'data' => $data
+    'invoice' => $data, // Используем 'invoice' для совместимости с фронтендом
+    'data' => $data // Дублируем для обратной совместимости
 ]);
 

@@ -12,7 +12,16 @@ settings = get_settings()
 def create_application() -> FastAPI:
     app = FastAPI(title=settings.app_name, version="0.1.0")
 
-    if settings.cors_origins:
+    # Для локальной разработки разрешаем все origins, если не указаны явно
+    if settings.environment == "local" and not settings.cors_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    elif settings.cors_origins:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=[str(origin) for origin in settings.cors_origins],

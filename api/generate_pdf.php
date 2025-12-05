@@ -32,6 +32,12 @@ try {
     $archiveDir = $loadedData['archiveDir'];
     error_log('generate_pdf.php: Invoice data loaded successfully');
     $documentType = (isset($_GET['document']) && $_GET['document'] === 'technical') ? 'technical' : 'commercial';
+    
+    // Определяем, является ли это временным файлом превью
+    $isTempPreview = strpos($filename, 'temp_preview_') === 0;
+    if ($isTempPreview) {
+        error_log('generate_pdf.php: Detected temporary preview file');
+    }
 } catch (Exception $e) {
     $code = $e->getCode() ?: 400;
     error_log('generate_pdf.php error: ' . $e->getMessage());
@@ -121,16 +127,27 @@ if (file_exists($mpdfPath)) {
         // Генерация имени файла PDF в новом формате
         $invoiceDate = $invoiceData['date'] ?? null;
         $label = $documentType === 'technical' ? 'Technical Appendix' : 'Commercial Proposal';
-        $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
-        $pdfPath = $archiveDir . '/' . $pdfFilename;
         
-        // Проверка и исправление прав доступа к директории архива
-        if (!is_dir($archiveDir)) {
-            throw new Exception("Archive directory does not exist: $archiveDir");
+        if ($isTempPreview) {
+            // Для превью используем временный файл
+            $pdfFilename = 'preview_' . uniqid() . '.pdf';
+            $pdfPath = sys_get_temp_dir() . '/' . $pdfFilename;
+        } else {
+            // Для обычных файлов сохраняем в архив
+            $pdfFilename = generatePdfFilename($orgCode, $archiveDir, $invoiceDate, $label);
+            $pdfPath = $archiveDir . '/' . $pdfFilename;
         }
         
-        // Проверка прав на запись в директорию
-        if (!is_writable($archiveDir)) {
+        // Проверка и исправление прав доступа к директории архива (только если не превью)
+        if (!$isTempPreview) {
+            if (!is_dir($archiveDir)) {
+                throw new Exception("Archive directory does not exist: $archiveDir");
+            }
+            // ... (остальные проверки прав)
+        }
+        
+        // Проверка прав на запись в директорию (только если не превью)
+        if (!$isTempPreview && !is_writable($archiveDir)) {
             // Попытка установить права на запись (если возможно)
             @chmod($archiveDir, 0775);
             
@@ -195,6 +212,19 @@ if (file_exists($mpdfPath)) {
         if ($tempDir && is_dir($tempDir)) {
             array_map('unlink', glob("$tempDir/*"));
             @rmdir($tempDir);
+        }
+        
+        // Если это превью, удаляем временный PDF и исходный JSON
+        if ($isTempPreview) {
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
+            // Удаляем исходный JSON
+            $jsonPath = $archiveDir . '/' . $filename;
+            if (file_exists($jsonPath)) {
+                unlink($jsonPath);
+                error_log("Deleted temporary JSON: $jsonPath");
+            }
         }
         
         exit;

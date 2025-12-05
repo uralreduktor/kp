@@ -178,6 +178,12 @@
           const [copyInvoiceFilename, setCopyInvoiceFilename] = useState(null);
           const [copying, setCopying] = useState(false);
           
+          // Состояние панели фильтров (свёрнута/развёрнута)
+          const [filtersExpanded, setFiltersExpanded] = useState(false);
+          
+          // Быстрый поиск в header
+          const [quickSearch, setQuickSearch] = useState('');
+          
           const t = translations[language];
           
           // Вспомогательная функция для получения пути к API
@@ -575,63 +581,118 @@
           return (
             <div className="min-h-screen bg-gray-50">
               {/* Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
-                <div className="max-w-7xl mx-auto px-4 py-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex flex-col md:flex-row items-center text-center md:text-left">
-                      <img src={organization.logo} alt={organization.shortName} className="h-16 w-auto object-contain mb-2 md:mb-0 md:mr-4 bg-white p-2 rounded" />
-                      <div>
-                        <h1 className="text-2xl md:text-3xl font-bold">{t.registry}</h1>
-                        <p className="text-sm text-blue-100">{organization.name}</p>
-                        {userInfo && (
-                          <p className="text-xs text-blue-200 mt-1">
-                            Пользователь: {userInfo.email}
-                          </p>
-                        )}
+              <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg relative">
+                <div className="max-w-7xl mx-auto px-4 py-4">
+                  {/* Верхняя строка: логотип, поиск, пользователь */}
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    {/* Логотип и название */}
+                    <div className="flex items-center gap-3">
+                      <img src={organization.logo} alt={organization.shortName} className="h-12 w-auto object-contain bg-white p-1.5 rounded" />
+                      <div className="hidden sm:block">
+                        <h1 className="text-xl font-bold">{t.registry}</h1>
+                        <p className="text-xs text-blue-200">{organization.shortName}</p>
                       </div>
                     </div>
-
-                    <div className="flex flex-wrap gap-3 items-center">
-                      {/* Кнопка выхода */}
+                    
+                    {/* Компактный поиск */}
+                    <div className="flex-1 max-w-md mx-4">
+                      <div className="relative">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input
+                          type="text"
+                          value={quickSearch}
+                          onChange={(e) => { setQuickSearch(e.target.value); setSearchTerm(e.target.value); setCurrentPage(1); }}
+                          placeholder="Поиск по контрагенту или номеру..."
+                          className="w-full pl-9 pr-4 py-2 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                          style={{backgroundColor: 'rgba(29, 78, 216, 0.5)', borderColor: 'rgba(59, 130, 246, 0.5)'}}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Пользователь и выход */}
+                    {userInfo && (
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 rounded-lg px-3 py-1.5" style={{backgroundColor: 'rgba(29, 78, 216, 0.6)'}}>
+                          <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          <span className="text-sm text-white font-medium">
+                            {userInfo.email}
+                          </span>
+                        </div>
+                        <button
+                          onClick={handleLogout}
+                          className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors shadow-md flex items-center justify-center"
+                          title="Выйти"
+                        >
+                          <img src="sign-out-alt-2.svg" alt="Выход" className="w-5 h-5 filter brightness-0 invert" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Нижняя часть: табы в стиле браузера и кнопка создания */}
+                  <div className="flex items-end justify-between">
+                    {/* Browser-style Tabs */}
+                    <div className="flex items-end gap-1">
                       <button
-                        onClick={handleLogout}
-                        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors shadow-md"
-                        title="Выйти"
+                        onClick={() => { setActiveTab('regular'); setCurrentPage(1); }}
+                        className={`relative px-5 py-2.5 font-medium transition-all rounded-t-lg ${
+                          activeTab === 'regular'
+                            ? 'bg-gray-50 text-gray-800 shadow-sm z-10'
+                            : 'text-blue-100 hover:text-white'
+                        }`}
+                        style={activeTab === 'regular' ? {
+                          clipPath: 'polygon(8px 0%, calc(100% - 8px) 0%, 100% 100%, 0% 100%)',
+                          marginBottom: '-1px'
+                        } : {
+                          clipPath: 'polygon(8px 0%, calc(100% - 8px) 0%, 100% 100%, 0% 100%)',
+                          backgroundColor: 'rgba(29, 78, 216, 0.5)'
+                        }}
                       >
-                        Выход
-                      </button>
-                      {/* Tabs */}
-                      <div className="flex bg-blue-500 rounded-lg p-1">
-                        <button
-                          onClick={() => { setActiveTab('regular'); setCurrentPage(1); }}
-                          className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                            activeTab === 'regular'
-                              ? 'bg-white text-blue-600 shadow-sm'
-                              : 'text-white hover:bg-blue-400'
-                          }`}
-                        >
+                        <span className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
                           КП
-                        </button>
-                        <button
-                          onClick={() => { setActiveTab('tender'); setCurrentPage(1); }}
-                          className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                            activeTab === 'tender'
-                              ? 'bg-white text-blue-600 shadow-sm'
-                              : 'text-white hover:bg-blue-400'
-                          }`}
-                        >
-                          КП для тендеров
-                        </button>
-                      </div>
-                      
-                      {/* Create New Button */}
-                      <a
-                        href={activeTab === 'tender' ? 'torgikp.html' : 'pi.html'}
-                        className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors shadow-md"
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => { setActiveTab('tender'); setCurrentPage(1); }}
+                        className={`relative px-5 py-2.5 font-medium transition-all rounded-t-lg ${
+                          activeTab === 'tender'
+                            ? 'bg-gray-50 text-gray-800 shadow-sm z-10'
+                            : 'text-blue-100 hover:text-white'
+                        }`}
+                        style={activeTab === 'tender' ? {
+                          clipPath: 'polygon(8px 0%, calc(100% - 8px) 0%, 100% 100%, 0% 100%)',
+                          marginBottom: '-1px'
+                        } : {
+                          clipPath: 'polygon(8px 0%, calc(100% - 8px) 0%, 100% 100%, 0% 100%)',
+                          backgroundColor: 'rgba(29, 78, 216, 0.5)'
+                        }}
                       >
-                        ➕ {t.createNew}
-                      </a>
+                        <span className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                          </svg>
+                          КП для тендеров
+                        </span>
+                      </button>
                     </div>
+                    
+                    {/* Create New Button */}
+                    <a
+                      href={activeTab === 'tender' ? 'torgikp.html' : 'pi.html'}
+                      className="px-5 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors shadow-md flex items-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                      </svg>
+                      {t.createNew}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -659,122 +720,135 @@
                   </div>
                 </div>
 
-                {/* Filters Panel */}
+                {/* Collapsible Filters Panel */}
                 {!loading && invoices.length > 0 && (
-                  <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-gray-800">
-                        🔍 Фильтры и сортировка коммерческих предложений
-                      </h3>
-                      <button
-                        onClick={clearFilters}
-                        className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded transition-colors"
-                      >
-                        Сбросить
-                      </button>
-                    </div>
+                  <div className="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+                    {/* Header - всегда видимый */}
+                    <button
+                      onClick={() => setFiltersExpanded(!filtersExpanded)}
+                      className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <svg className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${filtersExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <span className="font-medium text-gray-700">Фильтры</span>
+                        {/* Показываем активные фильтры */}
+                        {(filterDateFrom || filterDateTo || filterCurrency !== 'all' || filterMinAmount || filterMaxAmount) && (
+                          <div className="flex items-center gap-2">
+                            {filterDateFrom && (
+                              <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">от {filterDateFrom}</span>
+                            )}
+                            {filterDateTo && (
+                              <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">до {filterDateTo}</span>
+                            )}
+                            {filterCurrency !== 'all' && (
+                              <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">{filterCurrency}</span>
+                            )}
+                            {(filterMinAmount || filterMaxAmount) && (
+                              <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full">
+                                {filterMinAmount || '0'} - {filterMaxAmount || '∞'}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {(filterDateFrom || filterDateTo || filterCurrency !== 'all' || filterMinAmount || filterMaxAmount) && (
+                          <span
+                            onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+                            className="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors cursor-pointer"
+                          >
+                            Сбросить
+                          </span>
+                        )}
+                        <span className="text-sm text-gray-500">{filtersExpanded ? 'Свернуть' : 'Развернуть'}</span>
+                      </div>
+                    </button>
                     
-                    {/* Search */}
-                    <div className="mb-4">
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                        placeholder="Поиск по контрагенту или номеру..."
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      {/* Date From */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Дата от:
-                        </label>
-                        <input
-                          type="date"
-                          value={filterDateFrom}
-                          onChange={(e) => { setFilterDateFrom(e.target.value); setCurrentPage(1); }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        />
+                    {/* Expandable content */}
+                    {filtersExpanded && (
+                      <div className="p-4 border-t border-gray-200">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                          {/* Date From */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Дата от</label>
+                            <input
+                              type="date"
+                              value={filterDateFrom}
+                              onChange={(e) => { setFilterDateFrom(e.target.value); setCurrentPage(1); }}
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
+                          
+                          {/* Date To */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Дата до</label>
+                            <input
+                              type="date"
+                              value={filterDateTo}
+                              onChange={(e) => { setFilterDateTo(e.target.value); setCurrentPage(1); }}
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
+                          
+                          {/* Currency */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Валюта</label>
+                            <select
+                              value={filterCurrency}
+                              onChange={(e) => { setFilterCurrency(e.target.value); setCurrentPage(1); }}
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            >
+                              <option value="all">Все</option>
+                              {currencies.filter(c => c && c !== 'all').map(currency => (
+                                <option key={currency} value={currency}>{currency}</option>
+                              ))}
+                            </select>
+                          </div>
+                          
+                          {/* Min Amount */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Мин. сумма</label>
+                            <input
+                              type="number"
+                              value={filterMinAmount}
+                              onChange={(e) => { setFilterMinAmount(e.target.value); setCurrentPage(1); }}
+                              placeholder="0"
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
+                          
+                          {/* Max Amount */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Макс. сумма</label>
+                            <input
+                              type="number"
+                              value={filterMaxAmount}
+                              onChange={(e) => { setFilterMaxAmount(e.target.value); setCurrentPage(1); }}
+                              placeholder="∞"
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
+                          
+                          {/* Items per page */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">На странице</label>
+                            <select
+                              value={itemsPerPage}
+                              onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                              className="w-full px-2 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            >
+                              <option value="5">5</option>
+                              <option value="10">10</option>
+                              <option value="20">20</option>
+                              <option value="50">50</option>
+                              <option value="100">100</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      
-                      {/* Date To */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Дата до:
-                        </label>
-                        <input
-                          type="date"
-                          value={filterDateTo}
-                          onChange={(e) => { setFilterDateTo(e.target.value); setCurrentPage(1); }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        />
-                      </div>
-                      
-                      {/* Currency */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Валюта:
-                        </label>
-                        <select
-                          value={filterCurrency}
-                          onChange={(e) => { setFilterCurrency(e.target.value); setCurrentPage(1); }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        >
-                          <option value="all">Все</option>
-                          {currencies.filter(c => c && c !== 'all').map(currency => (
-                            <option key={currency} value={currency}>{currency}</option>
-                          ))}
-                        </select>
-                      </div>
-                      
-                      {/* Items per page */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          На странице:
-                        </label>
-                        <select
-                          value={itemsPerPage}
-                          onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        >
-                          <option value="5">5</option>
-                          <option value="10">10</option>
-                          <option value="20">20</option>
-                          <option value="50">50</option>
-                          <option value="100">100</option>
-                        </select>
-                      </div>
-                    </div>
-                    
-                    {/* Amount Range */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Мин. сумма:
-                        </label>
-                        <input
-                          type="number"
-                          value={filterMinAmount}
-                          onChange={(e) => { setFilterMinAmount(e.target.value); setCurrentPage(1); }}
-                          placeholder="0"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Макс. сумма:
-                        </label>
-                        <input
-                          type="number"
-                          value={filterMaxAmount}
-                          onChange={(e) => { setFilterMaxAmount(e.target.value); setCurrentPage(1); }}
-                          placeholder="999999"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
 
@@ -1212,14 +1286,19 @@
                 </div>
               )}
 
-              {/* Footer */}
-              <div className="bg-white border-t border-gray-200 mt-12">
-                <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600">
-                  <p>© 2025 {organization.name}. Все права защищены.</p>
-                  <p className="mt-1 text-xs text-gray-500">{organization.INN_vektor}</p>
-                  <p className="mt-1 text-xs text-gray-500">{organization.address}</p>
+              {/* Compact Sticky Footer */}
+              <div 
+                className="fixed bottom-0 left-0 right-0 border-t border-gray-200 shadow-lg z-50"
+                style={{backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(8px)'}}
+              >
+                <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between text-xs text-gray-500">
+                  <span>© 2025 {organization.shortName}</span>
+                  <span>{organization.INN_vektor}</span>
+                  <span className="hidden md:inline truncate max-w-xs">{organization.address}</span>
                 </div>
               </div>
+              {/* Spacer for sticky footer */}
+              <div style={{height: '48px'}}></div>
             </div>
           );
         };

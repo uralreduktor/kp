@@ -11,6 +11,25 @@
 
 if (!function_exists('generateInvoiceHTML')) {
 function generateInvoiceHTML($data, $orgId, $styleType = 'playwright', $documentType = 'commercial') {
+    // Нормализация данных для поддержки разных форматов JSON (старый и новый с вложенными объектами)
+    
+    // Обработка условий (commercialTerms)
+    if (isset($data['commercialTerms']) && is_array($data['commercialTerms'])) {
+        $terms = $data['commercialTerms'];
+        $data['incoterm'] = $terms['incoterm'] ?? $data['incoterm'] ?? '';
+        $data['deliveryPlace'] = $terms['deliveryPlace'] ?? $data['deliveryPlace'] ?? '';
+        $data['deliveryTime'] = $terms['deliveryTime'] ?? $data['deliveryTime'] ?? '';
+        $data['paymentTerms'] = $terms['paymentTerms'] ?? $data['paymentTerms'] ?? '';
+        $data['warranty'] = $terms['warranty'] ?? $data['warranty'] ?? '';
+    }
+
+    // Обработка контактов (contact)
+    if (isset($data['contact']) && is_array($data['contact'])) {
+        $contact = $data['contact'];
+        $data['contactPerson'] = $contact['person'] ?? $data['contactPerson'] ?? '';
+        $data['position'] = $contact['position'] ?? $data['position'] ?? '';
+    }
+
     // Загрузка данных организации из organizations.js
     $orgFile = dirname(__DIR__) . '/js/organizations.js';
     if (!file_exists($orgFile)) {
@@ -62,7 +81,9 @@ function generateInvoiceHTML($data, $orgId, $styleType = 'playwright', $document
                 $itemsRowsHtml .= '<tr>
                     <td class="text-center">' . ($idx + 1) . '</td>
                     <td>
-                        <div class="item-title">' . htmlspecialchars($item['type'] ?? '—') . '</div>
+                        <div class="item-title">' . htmlspecialchars($item['description'] ?? $item['type'] ?? '—') . '</div>
+                        ' . (!empty($item['model']) ? '<div class="item-meta">' . htmlspecialchars($item['model']) . '</div>' : '') . '
+                        ' . (!empty($item['name']) ? '<div class="item-meta">' . htmlspecialchars($item['name']) . '</div>' : '') . '
                     </td>
                     <td class="text-center">' . htmlspecialchars($item['quantity'] ?? '') . '</td>
                     <td class="text-center">' . htmlspecialchars($item['unit'] ?? '') . '</td>
@@ -309,7 +330,11 @@ function generateInvoiceHTML($data, $orgId, $styleType = 'playwright', $document
         
         $html .= '<tr>
             <td class="text-center">' . ($idx + 1) . '</td>
-            <td>' . htmlspecialchars($item['type'] ?? '') . '</td>
+            <td>
+                <div style="font-weight: bold;">' . htmlspecialchars($item['description'] ?? $item['type'] ?? '') . '</div>
+                ' . (!empty($item['model']) ? '<div style="font-size: 0.9em; color: #555;">' . htmlspecialchars($item['model']) . '</div>' : '') . '
+                ' . (!empty($item['name']) ? '<div style="font-size: 0.9em; color: #333;">' . htmlspecialchars($item['name']) . '</div>' : '') . '
+            </td>
             <td class="text-center">' . htmlspecialchars($item['countryOfOrigin'] ?? '') . '</td>
             <td class="text-center">' . $qty . '</td>
             <td class="text-center">' . htmlspecialchars($item['unit'] ?? '') . '</td>

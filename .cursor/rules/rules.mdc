@@ -1,0 +1,148 @@
+---
+description: Основные правила архитектуры проекта (FastAPI, React, Postgres), стиля кода и безопасности.
+globs: **/*
+alwaysApply: true
+---
+# Правила FastAPI + Postgres + React
+
+## 1. Контекст и архитектура
+
+- **Backend**: FastAPI (Python 3.11+) за `nginx`, обслуживает `/api/*`.
+- **Frontend**: React (Vite) статика, все auth-флоу через API.
+- **Хранилище**: Postgres (асинхронный, миграции Alembic).
+- **Безопасность**: Пароли (Argon2id), сессии (HttpOnly Cookies), Device-bound токены.
+- **Процесс**: Изменения в auth-флоу согласовывать с `auth_plan`.
+
+## 2. Общие принципы разработки (Backend)
+
+- **Типизация**: Строгая Pydantic v2 для всех схем.
+- **Архитектура**: `routers` → `services` → `repositories`. Роутеры не ходят в БД.
+- **Асинхронность**: `async`/`await` везде, `asyncpg` для БД.
+- **Тесты**: Обязательные unit/integration тесты (pytest) на изменения.
+
+## 3. Аутентификация и сессии
+
+- **Механизм**: Session Cookie + Device Token. Без JWT в LocalStorage.
+- **Таблицы**: `users`, `sessions`, `trusted_devices`, `audit_log`.
+- **Токены**: Хранить только хэши.
+- **Middleware**: `SessionGuard` (валидация сессии), `DeviceGuard` (авто-обновление).
+
+## 4. Работа с Postgres
+
+- **Миграции**: Alembic (idempotent скрипты).
+- **Транзакции**: Явные транзакции для критических операций (`SELECT ... FOR UPDATE`).
+- **JSONB**: Использовать для неструктурированных данных (fingerprints), валидировать в Pydantic.
+
+## 5. Безопасность API
+
+- **HTTPS**: Обязателен.
+- **CSRF**: Double-submit cookie (`X-CSRF-Token`).
+- **Rate Limiting**: Redis/Memory на endpoints логина.
+- **Логирование**: Аудит событий безопасности (без PII).
+
+## 6. Frontend разработка (React + TypeScript)
+
+### 6.1 Стек и Типизация
+- **Core**: React, TypeScript (Strict), Vite, TailwindCSS, React Router.
+- **API Типы**: 
+ - Все ответы API типизированы (Zod).
+ - Ошибки Axios обрабатывать через `isAxiosError`.
+ - **Важно**: Использовать трансформеры (Zod `preprocess`) для нормализации данных от PHP (например, пустые массивы `[]` -> `{}`).
+
+### 6.2 Формы и Валидация
+- **Библиотеки**: `react-hook-form` + `@hookform/resolvers/zod`.
+- **Обработка ошибок**: 
+ - **Обязательно**: Передавать `onError` в `handleSubmit(onSubmit, onError)`.
+ - Выводить понятные сообщения (alert/toast), особенно для вложенных полей (массивов).
+- **Даты**: 
+ - UI: `<input type="date">` (авто-форматирование браузера).
+ - API: ISO формат `YYYY-MM-DD`.
+
+### 6.3 Навигация и UX
+- **Ссылки**: Использовать `<Link>` для внутренних переходов (особенно в таблицах). Избегать `onClick={() => navigate(...)}` на неинтерактивных элементах.
+- **Интерактивность**:
+ - Не вкладывать интерактивные элементы друг в друга (`<a>` в `<button>`).
+ - Разделять зоны клика (заголовок vs действия).
+- **Режим просмотра**: Компоненты (степперы, табы) должны поддерживать `readOnly` режим для свободной навигации без возможности редактирования.
+
+### 6.4 Структура кода
+- Feature-based (`features/invoice`, `features/registry`).
+- API логика изолирована в `service.ts`.
+- Компоненты не вызывают `fetch`/`axios` напрямую.
+
+## 7. Тестирование и QA
+
+- **Backend**: `pytest` (unit), `httpx` (integration).
+- **Frontend**: `tsc -b`, `eslint`.
+- **Ручное**: Проверка ключевых сценариев (создание, ред., просмотр) перед коммитом.
+
+## 8. DevOps
+
+- **Конфиг**: `.env` (не в git), `docker secrets`.
+- **CI/CD**: `poetry check`, `lint`, `test` при пуше.
+- **Мониторинг**: Prometheus/Grafana, Sentry.
+
+## 9. Особенности Legacy PHP API
+
+- **Пустые объекты**: Часто приходят как `[]`. Требуют проверки `Array.isArray()` и конвертации.
+- **Типы данных**: Числа могут быть строками.
+- **Даты**: Разнобой форматов. Требуется нормализация.
+
+---
+
+## 10. Чек-лист перед коммитом (Frontend)
+
+- [ ] `any` отсутствуют или обоснованы (с валидацией).
+- [ ] Формы имеют обработчик `onError`.
+- [ ] Навигация через `<Link>`, а не `onClick` на `tr`/`div`.
+- [ ] Валидный HTML (нет вложенных кнопок).
+- [ ] Трансформеры API данных обрабатывают `[]` -> `{}`.
+- [ ] Режим `readOnly` работает корректно в UI компонентах.
+- [ ] `tsc -b` и линтеры проходят без ошибок.
+
+## 11. Примеры кода (Best Practices)
+
+### ✅ Навигация и Ссылки
+```tsx
+// Правильно: Link для навигации
+<Link to={`/editor?id=${id}`} className="hover:underline">{number}</Link>
+
+// Неправильно: onClick на строке
+<tr onClick={() => nav('/editor')}>...</tr>
+```
+
+### ✅ Обработка ошибок формы
+```tsx
+const onError: SubmitErrorHandler<Form> = (errors) => {
+ // Явное уведомление пользователя
+ alert(`Ошибки:\n${formatErrors(errors)}`);
+};
+<form onSubmit={handleSubmit(onSubmit, onError)}>
+```
+
+### ✅ Трансформация данных (PHP Fix)
+```tsx
+// service.ts
+transform(data: ApiType): FormType {
+ let specs = data.specs;
+ // Fix: PHP возвращает [] для пустого объекта
+ if (Array.isArray(specs)) specs = {}; 
+ return { specs, ... };
+}
+```
+
+### ✅ Разделение интерактивности
+```tsx
+// Правильно
+<div className="flex justify-between">
+ <button onClick={toggle}>Title</button>
+ <button onClick={action}>Action</button>
+</div>
+
+// Неправильно (HTML Invalid)
+<button onClick={toggle}>
+ Title <button onClick={action}>Action</button>
+</button>
+```
+
+> **Примечание**: `sudo` команды выполнять вручную.
