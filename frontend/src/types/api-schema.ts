@@ -110,6 +110,7 @@ export const ApiFullInvoiceSchema = z.object({
   tenderPlatform: z.string().optional(),
   tenderLink: z.string().optional(),
   
-  organizationId: z.string().optional(),
+  organizationId: z.string().nullable().optional(),
+  selectedBankId: z.string().nullable().optional(),
 }).passthrough(); // Allow other fields
 

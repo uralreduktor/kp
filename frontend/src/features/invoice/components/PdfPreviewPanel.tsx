@@ -92,7 +92,7 @@ export function PdfPreviewPanel({
         // Небольшая задержка для гарантии, что файл записан на диск
         await new Promise(resolve => setTimeout(resolve, 300));
         
-        const pdfUrl = `/api/generate_pdf.php?filename=${encodeURIComponent(actualFilename)}`;
+        const pdfUrl = `/api/invoices/${encodeURIComponent(actualFilename)}/pdf`;
         console.log('Preview: Generating PDF from:', pdfUrl);
         setPreviewUrl(pdfUrl);
       } catch (err) {

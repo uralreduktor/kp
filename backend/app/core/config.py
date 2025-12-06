@@ -47,6 +47,16 @@ class Settings(BaseSettings):
     access_token_ttl_minutes: int = 15
     device_token_ttl_days: int = 30
 
+    invoice_storage_path: str = Field(
+        default="/var/www/kp/@archiv 2025",
+        alias="INVOICE_STORAGE_PATH"
+    )
+    
+    dadata_api_key: str = Field(
+        default="0f1a2df340f6231ed018d99db0a69fedba08f819",
+        alias="DADATA_API_KEY"
+    )
+
     sqlalchemy_echo: bool = False
 
     @field_validator("cors_origins", mode="before")

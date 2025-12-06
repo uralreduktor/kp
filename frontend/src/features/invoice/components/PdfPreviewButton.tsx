@@ -21,15 +21,16 @@ export function PdfPreviewButton() {
       
       // 1. Save current state to a temp file
       const tempFilename = `temp_preview_${Date.now()}.json`;
-      const saveData = { ...data, filename: tempFilename };
-      await invoiceService.save(saveData);
+      // Use _filename to force overwrite/create specific file
+      const saveData = { ...data, _filename: tempFilename };
+      const result = await invoiceService.save(saveData);
+
+      const actualFilename = result.filename || tempFilename;
 
       // 2. Generate PDF from this temp file
-      // Using existing API which expects filename
-      // Note: In a real app, we might POST raw data to generate endpoint, 
-      // but here we reuse the existing "save then generate" flow.
+      // Using new Python API which expects filename
       
-      const pdfUrl = `/api/generate_pdf.php?filename=${tempFilename}`;
+      const pdfUrl = `/api/invoices/${encodeURIComponent(actualFilename)}/pdf`;
       setPreviewUrl(pdfUrl);
     } catch (error) {
       console.error('Preview error:', error);
@@ -58,4 +59,3 @@ export function PdfPreviewButton() {
     </>
   );
 }
-

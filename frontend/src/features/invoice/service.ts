@@ -130,25 +130,13 @@ export const invoiceService = {
    * Load invoice by filename
    */
   async load(filename: string): Promise<InvoiceFormData> {
-    const { data } = await axios.get(`/api/load.php?filename=${encodeURIComponent(filename)}`);
+    // Using new Python API
+    const { data } = await axios.get(`/api/invoices/${encodeURIComponent(filename)}`);
     
-    let invoiceData: unknown;
-    
-    // Handle different response formats
-    if (data.success && data.data) {
-      invoiceData = data.data;
-    } else if (data.success && data.invoice) {
-      invoiceData = data.invoice;
-    } else if (data.number) {
-      // Raw JSON format
-      invoiceData = data;
-    } else {
-      throw new Error(data.error || 'Ошибка загрузки');
-    }
+    // FastAPI returns data directly
+    const invoiceData = data;
 
     // Runtime Validation: Check if the data resembles an invoice
-    // We use passthrough() schema to be permissive with legacy fields,
-    // but it ensures we don't get garbage.
     const parsed = ApiFullInvoiceSchema.safeParse(invoiceData);
     if (!parsed.success) {
       console.error('Invoice Data Validation Error:', parsed.error);
@@ -173,7 +161,8 @@ export const invoiceService = {
       }))
     };
 
-    const response = await axios.post('/api/save.php', payload);
+    // Using new Python API
+    const response = await axios.post('/api/invoices', payload);
     return response.data;
   },
 
@@ -182,8 +171,9 @@ export const invoiceService = {
    */
   async getNextNumber(year: number = new Date().getFullYear()): Promise<string> {
     try {
-      const { data } = await axios.get(`/api/get_next_invoice_number.php?year=${year}`);
-      return data.nextNumber || `VEC-${year}-001`;
+      // Using new Python API
+      const { data } = await axios.get(`/api/invoices/next-number`);
+      return data.number || `VEC-${year}-001`;
     } catch {
       return `VEC-${year}-001`;
     }
@@ -194,7 +184,8 @@ export const invoiceService = {
    */
   async searchCompanies(query: string, count: number = 5): Promise<DaDataSuggestion[]> {
     try {
-      const { data } = await axios.get(`/api/company-suggest.php`, {
+      // Using new Python API
+      const { data } = await axios.get(`/api/suggest/party`, {
         params: { query, count }
       });
       return data.suggestions || [];
@@ -209,24 +200,17 @@ export const invoiceService = {
    */
   async getCompanyByINN(inn: string): Promise<DaDataSuggestion | null> {
     try {
-      // Используем company-suggest с ИНН как запросом
-      const { data } = await axios.get(`/api/company-suggest.php`, {
+      // Using new Python API
+      const { data } = await axios.get(`/api/suggest/party`, {
         params: { query: inn, count: 1 }
       });
-      console.log('DaData API response:', data);
-      if (data.success && data.suggestions && data.suggestions.length > 0) {
-        const company = data.suggestions[0];
-        console.log('Found company:', company);
-        return company;
+      
+      if (data.suggestions && data.suggestions.length > 0) {
+        return data.suggestions[0];
       }
-      console.log('No company found for INN:', inn);
       return null;
     } catch (error) {
       console.error('Get company by INN error:', error);
-      if (isAxiosError(error)) {
-        console.error('Response:', error.response?.data);
-        console.error('Status:', error.response?.status);
-      }
       return null;
     }
   },
@@ -236,7 +220,8 @@ export const invoiceService = {
    */
   async searchAddresses(query: string, count: number = 10): Promise<DaDataSuggestion[]> {
     try {
-      const { data } = await axios.get(`/api/address-suggest.php`, {
+      // Using new Python API
+      const { data } = await axios.get(`/api/suggest/address`, {
         params: { query, count }
       });
       return data.suggestions || [];
@@ -251,15 +236,21 @@ export const invoiceService = {
    */
   async importTenderData(url: string): Promise<TenderImportResponse> {
     try {
-      // Encode the URL properly
+      // Using new Python API directly (it already exists in ParsingService)
+      // ParsingService router: /api/parsing/tender
       const encodedUrl = encodeURIComponent(url);
-      const { data } = await axios.get(`/api/parse-tender-data.php?url=${encodedUrl}`);
-      return data;
+      const { data } = await axios.get(`/api/parsing/tender?url=${encodedUrl}`);
+      
+      // Python Parsing service returns a structured object
+      return {
+        success: true,
+        data: data
+      };
     } catch (error: unknown) {
       console.error('Tender import error:', error);
       let errorMessage = 'Ошибка импорта данных';
       if (isAxiosError(error)) {
-        errorMessage = error.response?.data?.error || error.message || errorMessage;
+        errorMessage = error.response?.data?.detail || error.response?.data?.error || error.message || errorMessage;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
@@ -271,5 +262,3 @@ export const invoiceService = {
     }
   }
 };
-
-

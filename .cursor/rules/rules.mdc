@@ -146,3 +146,15 @@ transform(data: ApiType): FormType {
 ```
 
 > **Примечание**: `sudo` команды выполнять вручную.
+
+## 12. Миграция PHP → FastAPI (Invoices, PDF, DaData)
+
+- **ENV путь хранилища**: `INVOICE_STORAGE_PATH=/var/www/kp/@archiv 2025` **без кавычек**. Любые кавычки превращают их в часть пути. После изменения — `sudo systemctl restart kp-auth-backend.service`.
+- **FastAPI импорт**: поля со строкой `"_metadata"` маппить через `Field(alias="_metadata", validation_alias="_metadata")` в поле `meta_data` (без ведущего `_`) из-за ограничений Pydantic v2.
+- **Legacy пустые объекты**: для словарей, приходящих как `[]`, использовать `BeforeValidator(empty_list_to_dict)` (пример: `commercialTerms`, `contact`).
+- **Null в схемах фронтенда**: поля вроде `organizationId` и `selectedBankId` должны быть `.nullable().optional()`, иначе `null` от legacy JSON валится на валидации.
+- **Валюты**: принимаем строку как есть (legacy `"Руб."`), нормализацию делаем на фронте/сервисе при сохранении.
+- **Vite proxy (dev)**: обязательно проксировать `/api/invoices`, `/api/suggest`, `/api/pdf` на `http://127.0.0.1:8001` **до** общего правила `/api`, чтобы не ходить на прод `kp.uralreduktor.com` для новых Python-эндпоинтов.
+- **Доступ к файлам КП**: 404 чаще всего из-за неверного `INVOICE_STORAGE_PATH` или прав. В сервисе логируем путь к файлу; проверяем, что система смотрит именно в `/var/www/kp/@archiv 2025`.
+- **Запуск backend локально**: через Poetry (`poetry run python -m app.main` или uvicorn), иначе ModuleNotFound (fastapi) при запуске вне venv.
+- **PDF (гибрид)**: Python-сервис вызывает PHP-CLI `api/cli/render_invoice.php` для HTML, затем Playwright (Python) генерирует PDF. Нужны PHP и node deps для Playwright.

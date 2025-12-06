@@ -311,7 +311,7 @@ export default function InvoiceEditorPage() {
                 {isViewMode ? (
                   <>
                     <a
-                      href={`/api/generate_pdf.php?filename=${filename}`}
+                      href={`/api/invoices/${encodeURIComponent(filename)}/pdf`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium text-sm transition-colors"
