@@ -12,6 +12,14 @@ const CoercedNumber = z.union([z.string(), z.number()])
     return isNaN(parsed) ? 0 : parsed;
   });
 
+// Helper to handle PHP empty array [] instead of object {}
+const phpArrayToObject = (val: unknown) => {
+  if (Array.isArray(val) && val.length === 0) {
+    return {};
+  }
+  return val;
+};
+
 /**
  * Schema for Invoice items coming from API
  * PHP backend might return mixed types
@@ -74,12 +82,12 @@ export const ApiFullInvoiceSchema = z.object({
   contactPhone: z.string().optional(),
   contactEmail: z.string().optional(),
   position: z.string().optional(),
-  contact: z.object({
+  contact: z.preprocess(phpArrayToObject, z.object({
       person: z.string().optional(),
       phone: z.string().optional(),
       email: z.string().optional(),
       position: z.string().optional(),
-  }).optional(),
+  }).optional()),
 
   // Legacy terms
   incoterm: z.string().optional(),
@@ -87,13 +95,13 @@ export const ApiFullInvoiceSchema = z.object({
   deliveryTime: z.string().optional(),
   paymentTerms: z.string().optional(),
   warranty: z.string().optional(),
-  commercialTerms: z.object({
+  commercialTerms: z.preprocess(phpArrayToObject, z.object({
       incoterm: z.string().optional(),
       deliveryPlace: z.string().optional(),
       deliveryTime: z.string().optional(),
       paymentTerms: z.string().optional(),
       warranty: z.string().optional(),
-  }).optional(),
+  }).optional()),
 
   items: z.array(z.any()).optional(), // We validate items separately or loosely here
   
