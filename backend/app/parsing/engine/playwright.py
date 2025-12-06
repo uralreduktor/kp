@@ -12,17 +12,14 @@ logger = logging.getLogger(__name__)
 class PlaywrightEngine(ParsingEngine):
     def __init__(self):
         self.ua = UserAgent()
+        self.default_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 
     async def _apply_stealth(self, page: Page):
         """
         Apply stealth techniques to avoid bot detection.
         """
-        # 1. Randomize User-Agent
-        try:
-            user_agent = self.ua.random
-            await page.set_extra_http_headers({"User-Agent": user_agent})
-        except Exception:
-            pass
+        # 1. Set stable modern Chrome UA (avoid suspicious random strings)
+        await page.set_extra_http_headers({"User-Agent": self.default_ua})
 
         # 2. Remove navigator.webdriver property
         await page.add_init_script("""
@@ -85,10 +82,7 @@ class PlaywrightEngine(ParsingEngine):
                     ]
                 )
                 
-                user_agent = None
-                if request.use_stealth:
-                    try: user_agent = self.ua.random
-                    except Exception: pass
+                user_agent = self.default_ua if request.use_stealth else None
 
                 context = await browser.new_context(
                     viewport={"width": 1920, "height": 1080},
@@ -105,10 +99,23 @@ class PlaywrightEngine(ParsingEngine):
                 logger.info(f"Navigating to {request.url}")
                 
                 response = await page.goto(
-                    str(request.url), 
-                    wait_until="domcontentloaded", 
+                    str(request.url),
+                    wait_until="domcontentloaded",
                     timeout=request.timeout
                 )
+
+                # If got redirected to login_required, retry original URL with referer
+                if "login_required" in (page.url or ""):
+                    logger.warning(f"Detected login_required redirect for {request.url}, retrying with referer and stable UA")
+                    try:
+                        response = await page.goto(
+                            str(request.url),
+                            wait_until="domcontentloaded",
+                            timeout=request.timeout,
+                            referer="https://www.b2b-center.ru/app/market/"
+                        )
+                    except PlaywrightError as e:
+                        logger.error(f"Retry after login_required failed: {e}")
 
                 # Wait for Selector or Network Idle
                 if request.wait_for_selector:

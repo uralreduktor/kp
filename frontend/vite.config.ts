@@ -16,7 +16,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // FastAPI endpoints (auth, health, devices, parsing)
+      // FastAPI (Python) — приоритет выше
+      '/api/v1': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+        secure: false,
+      },
       '/api/auth': {
         target: 'http://127.0.0.1:8001',
         changeOrigin: true,
@@ -37,22 +42,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      '/api/invoices': {
-        target: 'http://127.0.0.1:8001',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/api/suggest': {
-        target: 'http://127.0.0.1:8001',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/api/pdf': {
-        target: 'http://127.0.0.1:8001',
-        changeOrigin: true,
-        secure: false,
-      },
-      // PHP endpoints - проксируем на продакшн сервер
+      // PHP legacy fallback
       '/api': {
         target: 'https://kp.uralreduktor.com',
         changeOrigin: true,

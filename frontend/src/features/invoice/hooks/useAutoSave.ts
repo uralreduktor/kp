@@ -22,17 +22,17 @@ interface AutoSaveStatus {
 function normalizeDataForComparison(data: InvoiceFormData): string {
   // Создаем копию данных и нормализуем их
   const normalized = {
-    number: data.number?.trim() || '',
+    number: String(data.number || '').trim(),
     date: data.date || '',
     validUntil: data.validUntil || '',
-    recipient: data.recipient?.trim() || '',
-    recipientINN: data.recipientINN?.trim() || '',
-    recipientAddress: data.recipientAddress?.trim() || '',
+    recipient: String(data.recipient || '').trim(),
+    recipientINN: String(data.recipientINN || '').trim(),
+    recipientAddress: String(data.recipientAddress || '').trim(),
     currency: data.currency || 'Руб.',
     items: (data.items || []).map(item => ({
       id: item.id,
-      description: item.description?.trim() || '',
-      model: item.model?.trim() || '',
+      description: String(item.description || '').trim(),
+      model: String(item.model || '').trim(),
       quantity: Number(item.quantity) || 0,
       price: Number(item.price) || 0,
       reducerSpecs: item.reducerSpecs || { stages: undefined, torqueNm: undefined },

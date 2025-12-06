@@ -1,18 +1,6 @@
 import { z } from 'zod';
 
-/**
- * Helper to coerce strings to numbers safely
- * Handles "123.45", 123.45, and "" -> 0
- */
-const CoercedNumber = z.union([z.string(), z.number()])
-  .transform((val) => {
-    if (typeof val === 'number') return val;
-    if (val.trim() === '') return 0;
-    const parsed = parseFloat(val);
-    return isNaN(parsed) ? 0 : parsed;
-  });
-
-// Helper to handle PHP empty array [] instead of object {}
+// Helper to handle empty array -> {} for legacy data
 const phpArrayToObject = (val: unknown) => {
   if (Array.isArray(val) && val.length === 0) {
     return {};
@@ -22,26 +10,32 @@ const phpArrayToObject = (val: unknown) => {
 
 /**
  * Schema for Invoice items coming from API
- * PHP backend might return mixed types
  */
 export const ApiInvoiceItemSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().nullable().optional(),
   description: z.string().optional(),
   type: z.string().optional(), // Legacy field often used as description
   model: z.string().optional(),
   name: z.string().optional(), // Legacy field
-  quantity: CoercedNumber,
-  price: CoercedNumber,
-  reducerSpecs: z.any().optional(), // Too complex to strictly validate from legacy
-}).transform((item) => ({
-    // Normalize on the fly to match our internal structure
-    id: item.id,
+  quantity: z.number(),
+  price: z.number(),
+  reducerSpecs: z.record(z.string(), z.any()).optional(),
+}).transform((item) => {
+  const ensureId = (value?: unknown) => {
+    if (typeof value === 'string' && value.trim() !== '') return value;
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  };
+
+  return {
+    id: ensureId(item.id),
     description: item.description || item.type || '',
     model: item.model || (item.name !== 'Модель' ? item.name : '') || '',
     quantity: item.quantity,
     price: item.price,
     reducerSpecs: item.reducerSpecs || { stages: undefined, torqueNm: undefined },
-}));
+  };
+});
 
 /**
  * Schema for the Invoice structure in the Registry list
@@ -51,7 +45,7 @@ export const ApiRegistryInvoiceSchema = z.object({
   number: z.string().optional().default('N/A'),
   date: z.string().optional().default('N/A'), // We'll parse this later with utils.parseDate
   recipient: z.string().optional().default('N/A'),
-  total: CoercedNumber,
+  total: z.number(),
   currency: z.string().optional().default('Руб.'),
   documentType: z.enum(['regular', 'tender']).optional().default('regular'),
   saved_at: z.string().optional(),
@@ -68,33 +62,28 @@ export const ApiRegistryListSchema = z.object({
  * Schema for Full Invoice Data (Load/Save)
  */
 export const ApiFullInvoiceSchema = z.object({
-  filename: z.string().optional(),
-  number: z.string().optional(),
-  date: z.string().optional(),
+  filename: z.string().nullable().optional(),
+  number: z.string(),
+  date: z.string(),
   validUntil: z.string().optional(),
   recipient: z.string().optional(),
   recipientINN: z.string().optional(),
   recipientAddress: z.string().optional(),
   currency: z.string().optional(),
+  reducerSpecs: z.record(z.string(), z.any()).optional(),
   
-  // Legacy contact fields
-  contactPerson: z.string().optional(),
-  contactPhone: z.string().optional(),
-  contactEmail: z.string().optional(),
-  position: z.string().optional(),
   contact: z.preprocess(phpArrayToObject, z.object({
       person: z.string().optional(),
       phone: z.string().optional(),
       email: z.string().optional(),
       position: z.string().optional(),
   }).optional()),
+  // Legacy contact fields still may arrive
+  contactPerson: z.string().optional(),
+  contactPhone: z.string().optional(),
+  contactEmail: z.string().optional(),
+  position: z.string().optional(),
 
-  // Legacy terms
-  incoterm: z.string().optional(),
-  deliveryPlace: z.string().optional(),
-  deliveryTime: z.string().optional(),
-  paymentTerms: z.string().optional(),
-  warranty: z.string().optional(),
   commercialTerms: z.preprocess(phpArrayToObject, z.object({
       incoterm: z.string().optional(),
       deliveryPlace: z.string().optional(),
@@ -102,8 +91,14 @@ export const ApiFullInvoiceSchema = z.object({
       paymentTerms: z.string().optional(),
       warranty: z.string().optional(),
   }).optional()),
+  // Legacy flattened terms
+  incoterm: z.string().optional(),
+  deliveryPlace: z.string().optional(),
+  deliveryTime: z.string().optional(),
+  paymentTerms: z.string().optional(),
+  warranty: z.string().optional(),
 
-  items: z.array(z.any()).optional(), // We validate items separately or loosely here
+  items: z.array(ApiInvoiceItemSchema).optional().default([]),
   
   documentType: z.enum(['regular', 'tender']).optional(),
   tenderId: z.string().optional(),
@@ -112,5 +107,6 @@ export const ApiFullInvoiceSchema = z.object({
   
   organizationId: z.string().nullable().optional(),
   selectedBankId: z.string().nullable().optional(),
-}).passthrough(); // Allow other fields
+  _metadata: z.record(z.string(), z.any()).optional(),
+}).passthrough();
 

@@ -42,7 +42,7 @@ async def get_invoice_pdf(
     Generate and download PDF for an existing invoice.
     """
     invoice = service.get_invoice(filename)
-    data = invoice.model_dump(by_alias=True, exclude_none=True)
+    data = invoice.model_dump(by_alias=True, exclude_none=False)  # Не исключаем None/пустые строки
     pdf_bytes = await pdf_service.generate_pdf(data)
     
     download_filename = f"Invoice_{invoice.number}.pdf"
@@ -72,3 +72,14 @@ async def save_invoice(
     Save or update an invoice.
     """
     return service.save_invoice(invoice)
+
+
+@router.delete("/{filename}", response_model=Dict)
+async def delete_invoice(
+    filename: str,
+    service: InvoiceService = Depends(get_invoice_service)
+):
+    """
+    Delete an invoice by filename.
+    """
+    return service.delete_invoice(filename)

@@ -30,7 +30,7 @@ export function PdfPreviewButton() {
       // 2. Generate PDF from this temp file
       // Using new Python API which expects filename
       
-      const pdfUrl = `/api/invoices/${encodeURIComponent(actualFilename)}/pdf`;
+      const pdfUrl = `/api/v1/invoices/${encodeURIComponent(actualFilename)}/pdf`;
       setPreviewUrl(pdfUrl);
     } catch (error) {
       console.error('Preview error:', error);

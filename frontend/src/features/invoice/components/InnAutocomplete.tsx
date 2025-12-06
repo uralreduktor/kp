@@ -55,7 +55,7 @@ export function InnAutocomplete({
   useEffect(() => {
     const val = innValueFromForm !== undefined && innValueFromForm !== null ? String(innValueFromForm) : '';
     setInnValue(val);
-  }, [innValueFromForm]);
+  }, [innValueFromForm, innFieldName]);
 
   const [suggestions, setSuggestions] = useState<CompanySuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);

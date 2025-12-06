@@ -1,13 +1,5 @@
 import { z } from 'zod';
 
-// Helper to handle PHP empty array [] instead of object {}
-const phpArrayToObject = (val: unknown) => {
-  if (Array.isArray(val) && val.length === 0) {
-    return {};
-  }
-  return val;
-};
-
 // Helper for optional numbers that handles NaN from valueAsNumber: true
 const optionalNumber = z.preprocess(
   (val) => (typeof val === 'number' && isNaN(val) ? undefined : val),
@@ -68,8 +60,8 @@ export const invoiceSchema = z.object({
   
   items: z.array(invoiceItemSchema).default([]),
   
-  commercialTerms: z.preprocess(phpArrayToObject, commercialTermsSchema).default({}),
-  contact: z.preprocess(phpArrayToObject, contactSchema).default({}),
+  commercialTerms: commercialTermsSchema.default({}),
+  contact: contactSchema.default({}),
   
   organizationId: z.string().optional(),
   selectedBankId: z.string().optional(),

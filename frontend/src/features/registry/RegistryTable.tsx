@@ -75,7 +75,7 @@ export function RegistryTable({ invoices, onCopy, onDelete, canDelete }: Registr
                 <td className="px-6 py-4 text-center whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-center gap-2">
                     <a 
-                      href={`/api/invoices/${encodeURIComponent(invoice.filename)}/pdf`} 
+                      href={`/api/v1/invoices/${encodeURIComponent(invoice.filename)}/pdf`}
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="p-1.5 text-purple-600 hover:bg-purple-50 rounded transition-colors"

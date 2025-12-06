@@ -85,16 +85,7 @@ class InvoiceService:
         safe_filename = os.path.basename(filename)
         file_path = os.path.join(self.storage_path, safe_filename)
         
-        # DEBUG
-        print(f"DEBUG: accessing file path: '{file_path}'")
-        
         if not os.path.exists(file_path):
-            print(f"DEBUG: File not found: '{file_path}'")
-            try:
-                print(f"DEBUG: Dir listing: {os.listdir(self.storage_path)[:5]}")
-            except Exception as e:
-                print(f"DEBUG: List dir error: {e}")
-            
             raise HTTPException(status_code=404, detail="Invoice not found")
             
         try:
@@ -152,10 +143,25 @@ class InvoiceService:
             
         return {"success": True, "filename": safe_filename, "filepath": file_path}
 
-    def get_next_number(self, date_str: str = None) -> int:
+    def delete_invoice(self, filename: str) -> Dict:
+        safe_filename = os.path.basename(filename)
+        file_path = os.path.join(self.storage_path, safe_filename)
+
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=404, detail="Invoice not found")
+
+        try:
+            os.remove(file_path)
+        except OSError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to delete file: {e}")
+
+        return {"success": True, "filename": safe_filename}
+
+    def get_next_number(self, date_str: str = None) -> str:
         """
         Scans all JSON files to find the next sequence number for the given date.
         Format: DDMMYY-NN (e.g. 251118-01)
+        Returns the full formatted number as a string.
         """
         if not date_str:
             date_str = datetime.now().strftime("%d%m%y")
@@ -175,7 +181,8 @@ class InvoiceService:
         try:
             files = os.listdir(self.storage_path)
         except OSError:
-            return 1
+            # Return formatted number with leading zero
+            return f"{date_str}-01"
             
         for filename in files:
             if not filename.endswith(".json"):
@@ -193,6 +200,8 @@ class InvoiceService:
                             max_number = num
             except (json.JSONDecodeError, OSError):
                 continue
-                
-        return max_number + 1
+        
+        # Format with leading zero (e.g., 01, 02, ...)
+        next_num = max_number + 1
+        return f"{date_str}-{next_num:02d}"
 

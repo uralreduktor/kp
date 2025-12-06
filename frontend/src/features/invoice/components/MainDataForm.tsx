@@ -59,6 +59,9 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
           items?: Array<{ name: string; quantity: string | number }>;
         };
         
+        console.log('📦 Import data:', data);
+        console.log('📦 recipientINN:', data.recipientINN, 'type:', typeof data.recipientINN);
+        
         // Auto-fill fields
         if (data.tenderNumber) setValue('tenderId', data.tenderNumber, { shouldDirty: true });
         if (data.platform) setValue('tenderPlatform', data.platform, { shouldDirty: true });
@@ -68,8 +71,33 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
         if (data.recipientINN) {
           // Found INN directly (either on page or auto-matched via DaData)
           setValue('recipientINN', String(data.recipientINN), { shouldDirty: true, shouldValidate: true });
-          if (data.recipient) setValue('recipient', data.recipient, { shouldDirty: true, shouldValidate: true });
-          if (data.recipientAddress) setValue('recipientAddress', data.recipientAddress, { shouldDirty: true, shouldValidate: true });
+          if (data.recipient) {
+            setValue('recipient', data.recipient, { shouldDirty: true, shouldValidate: true });
+          }
+          
+          // If address is not provided, fetch it from DaData by INN
+          if (data.recipientAddress) {
+            setValue('recipientAddress', data.recipientAddress, { shouldDirty: true, shouldValidate: true });
+          } else {
+            // Automatically fetch company details by INN from DaData
+            try {
+              const companyDetails = await invoiceService.getCompanyByINN(String(data.recipientINN));
+              if (companyDetails) {
+                // Extract address from DaData response (same logic as InnAutocomplete)
+                const address = (companyDetails as any).address || (companyDetails.data as any)?.address?.value || '';
+                if (address) {
+                  setValue('recipientAddress', address, { shouldDirty: true, shouldValidate: true });
+                }
+                // Also update recipient name if it's more accurate from DaData and wasn't already set
+                if (!data.recipient && companyDetails.value) {
+                  setValue('recipient', companyDetails.value, { shouldDirty: true, shouldValidate: true });
+                }
+              }
+            } catch (error) {
+              console.error('Failed to fetch company details from DaData:', error);
+              // Continue without address - not critical
+            }
+          }
         } else if (data.companySuggestions && data.companySuggestions.length > 0) {
           // Found suggestions but no confident match
           const suggestions = data.companySuggestions;
@@ -156,9 +184,9 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
       {/* Basic Info */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Номер документа</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Номер документа</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
               <span className="text-xs font-bold">#</span>
             </div>
             <input
@@ -166,10 +194,10 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
               {...register('number')}
               disabled={readOnly}
               readOnly={readOnly}
-              className={`pl-8 block w-full rounded-md shadow-sm focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500 ${
+              className={`pl-8 block w-full rounded-md shadow-sm focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500 ${
                 errors.number 
                   ? 'border-red-500 focus:border-red-500' 
-                  : 'border-gray-300 focus:border-blue-500'
+                  : 'border-gray-300 dark:border-slate-600 focus:border-blue-500'
               }`}
               placeholder="VEC-2025-..."
             />
@@ -178,9 +206,9 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Дата создания</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Дата создания</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
               <Calendar size={16} />
             </div>
             <input
@@ -188,10 +216,10 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
               {...register('date')}
               disabled={readOnly}
               readOnly={readOnly}
-              className={`pl-10 block w-full rounded-md shadow-sm focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500 ${
+              className={`pl-10 block w-full rounded-md shadow-sm focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500 ${
                 errors.date 
                   ? 'border-red-500 focus:border-red-500' 
-                  : 'border-gray-300 focus:border-blue-500'
+                  : 'border-gray-300 dark:border-slate-600 focus:border-blue-500'
               }`}
             />
           </div>
@@ -199,9 +227,9 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Срок действия до</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Срок действия до</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
               <Calendar size={16} />
             </div>
             <input
@@ -209,28 +237,28 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
               {...register('validUntil')}
               disabled={readOnly}
               readOnly={readOnly}
-              className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+              className="pl-10 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
             />
           </div>
         </div>
       </div>
 
       {/* Recipient Info */}
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <Building2 size={18} className="text-gray-500" />
+      <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 space-y-4">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+          <Building2 size={18} className="text-gray-500 dark:text-slate-400" />
           Данные получателя
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Название организации</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Название организации</label>
             <input
               type="text"
               {...register('recipient')}
               disabled={readOnly}
               readOnly={readOnly}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+              className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
               placeholder="ООО Ромашка"
             />
             {errors.recipient && <p className="text-xs text-red-500">{errors.recipient.message}</p>}
@@ -239,14 +267,14 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
           {readOnly ? (
             <>
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">ИНН</label>
-                <div className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2 border bg-gray-50 text-gray-500">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">ИНН</label>
+                <div className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm sm:text-sm p-2 border bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-slate-100">
                   {watch('recipientINN') || '-'}
                 </div>
               </div>
               <div className="col-span-1 md:col-span-2 space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Адрес доставки / Юридический адрес</label>
-                <div className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2 border bg-gray-50 text-gray-500">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Адрес доставки / Юридический адрес</label>
+                <div className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm sm:text-sm p-2 border bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-slate-100">
                   {watch('recipientAddress') || '-'}
                 </div>
               </div>
@@ -271,16 +299,16 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
       </div>
 
       {/* Contact Person */}
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
+      <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            <User size={18} className="text-gray-500" />
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+            <User size={18} className="text-gray-500 dark:text-slate-400" />
             Контактное лицо
           </h3>
           
           {!readOnly && (
             <select
-              className="text-xs border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 p-1 bg-white"
+              className="text-xs border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 p-1 bg-white dark:bg-slate-900 dark:text-slate-100"
               onChange={(e) => {
                 const template = CONTACT_TEMPLATES.find(t => t.id === e.target.value);
                 if (template) {
@@ -300,46 +328,46 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-             <label className="block text-sm font-medium text-gray-700">ФИО</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">ФИО</label>
              <input
                type="text"
                {...register('contact.person')}
                disabled={readOnly}
                readOnly={readOnly}
-               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+               className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
                placeholder="Иванов Иван Иванович"
              />
           </div>
           <div className="space-y-2">
-             <label className="block text-sm font-medium text-gray-700">Должность</label>
+             <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Должность</label>
              <input
                type="text"
                {...register('contact.position')}
                disabled={readOnly}
                readOnly={readOnly}
-               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+               className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
                placeholder="Начальник отдела снабжения"
              />
           </div>
           <div className="space-y-2">
-             <label className="block text-sm font-medium text-gray-700">Email</label>
+             <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Email</label>
              <input
                type="email"
                {...register('contact.email')}
                disabled={readOnly}
                readOnly={readOnly}
-               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+               className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
                placeholder="ivanov@example.com"
              />
           </div>
           <div className="space-y-2">
-             <label className="block text-sm font-medium text-gray-700">Телефон</label>
+             <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Телефон</label>
              <input
                type="text"
                {...register('contact.phone')}
                disabled={readOnly}
                readOnly={readOnly}
-               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+               className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100 disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500"
                placeholder="+7 (999) ..."
              />
           </div>
@@ -347,24 +375,24 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
       </div>
 
       {/* Banking Details */}
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <Landmark size={18} className="text-gray-500" />
+      <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 space-y-4">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+          <Landmark size={18} className="text-gray-500 dark:text-slate-400" />
           Банковские реквизиты
         </h3>
         
         {/* Selector - only if multiple accounts */}
         {ORGANIZATIONS[organizationId as keyof typeof ORGANIZATIONS]?.bankAccounts?.length > 1 && (
           <div className="space-y-2 mb-4">
-            <label className="block text-sm font-medium text-gray-700">Выберите банк для оплаты</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Выберите банк для оплаты</label>
             {readOnly ? (
-              <div className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2 border bg-gray-50 text-gray-500">
+              <div className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm sm:text-sm p-2 border bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-slate-100">
                 {ORGANIZATIONS[organizationId as keyof typeof ORGANIZATIONS]?.bankAccounts?.find(b => b.id === watch('selectedBankId'))?.name || 'По умолчанию'}
               </div>
             ) : (
               <select
                 {...register('selectedBankId')}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100"
               >
                 {/* If nothing selected, logic will pick first. We can add empty option or select first by default */}
                 {ORGANIZATIONS[organizationId as keyof typeof ORGANIZATIONS]?.bankAccounts.map(bank => (
@@ -377,8 +405,8 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
 
         {/* Details Text (Always visible as preview) */}
         <div className="space-y-2">
-          <label className="block text-xs font-medium text-gray-500">Реквизиты (предпросмотр)</label>
-          <pre className="block w-full rounded-md border-gray-200 bg-white p-3 text-xs text-gray-700 whitespace-pre-wrap font-mono border">
+          <label className="block text-xs font-medium text-gray-500 dark:text-slate-400">Реквизиты (предпросмотр)</label>
+          <pre className="block w-full rounded-md border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 text-xs text-gray-700 dark:text-slate-100 whitespace-pre-wrap font-mono border">
             {formatBankDetails(organizationId, watch('selectedBankId'))}
           </pre>
         </div>
@@ -386,23 +414,23 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
 
       {/* Tender Specifics */}
       {isTender && (
-         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-4">
-            <h3 className="text-sm font-semibold text-blue-900 flex items-center gap-2">
+         <div className="bg-blue-50 dark:bg-slate-800 p-4 rounded-lg border border-blue-200 dark:border-slate-700 space-y-4">
+            <h3 className="text-sm font-semibold text-blue-900 dark:text-slate-100 flex items-center gap-2">
               <Link size={18} />
               Параметры тендера
             </h3>
             
             {/* Import Section */}
             {!readOnly && (
-              <div className="mb-4 p-3 bg-white rounded border border-blue-100 shadow-sm">
-                <label className="block text-xs font-medium text-gray-500 mb-2">Импорт данных из ссылки (B2B-Center и др.)</label>
+              <div className="mb-4 p-3 bg-white dark:bg-slate-900 rounded border border-blue-100 dark:border-slate-700 shadow-sm">
+                <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-2">Импорт данных из ссылки (B2B-Center и др.)</label>
                 <div className="flex gap-2">
                   <input
                     type="url"
                     value={importUrl}
                     onChange={(e) => setImportUrl(e.target.value)}
                     placeholder="https://www.b2b-center.ru/market/..."
-                    className="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                    className="flex-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100"
                   />
                   <button
                     type="button"
@@ -425,26 +453,26 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-blue-800">Номер закупки</label>
+                  <label className="block text-sm font-medium text-blue-800 dark:text-slate-200">Номер закупки</label>
                   <input
                     type="text"
                     {...register('tenderId')}
                     disabled={readOnly}
                     readOnly={readOnly}
-                    className="block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+                    className="block w-full rounded-md border-blue-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500 dark:text-slate-100 dark:bg-slate-900"
                   />
                </div>
                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-blue-800">Торговая площадка</label>
+                  <label className="block text-sm font-medium text-blue-800 dark:text-slate-200">Торговая площадка</label>
                   {readOnly ? (
-                    <div className="block w-full rounded-md border-blue-300 shadow-sm sm:text-sm p-2 border bg-blue-50 text-gray-700">
+                    <div className="block w-full rounded-md border-blue-300 dark:border-slate-600 shadow-sm sm:text-sm p-2 border bg-blue-50 dark:bg-slate-800 text-gray-700 dark:text-slate-100">
                       {TRADING_PLATFORMS.find(p => p.id === watch('tenderPlatform'))?.name || watch('tenderPlatform') || '-'}
                     </div>
                   ) : (
                     <div className="space-y-2">
                       <select
                         {...register('tenderPlatform')}
-                        className="block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                        className="block w-full rounded-md border-blue-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white dark:bg-slate-900 dark:text-slate-100"
                       >
                         <option value="">Выберите площадку...</option>
                         {TRADING_PLATFORMS.map(p => (
@@ -470,7 +498,7 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
                          <input
                            type="text"
                            placeholder="Введите название площадки"
-                           className="block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border mt-2"
+                           className="block w-full rounded-md border-blue-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border mt-2 bg-white dark:bg-slate-900 dark:text-slate-100"
                            onChange={(e) => setValue('tenderPlatform', e.target.value, { shouldDirty: true })}
                            // We don't bind value directly to avoid conflict with select if we want to switch back?
                            // Actually, if we type, value changes, so select might lose 'other'.
@@ -486,13 +514,13 @@ export function MainDataForm({ readOnly = false }: MainDataFormProps) {
                   )}
                </div>
                <div className="col-span-1 md:col-span-2 space-y-2">
-                  <label className="block text-sm font-medium text-blue-800">Ссылка на закупку</label>
+                  <label className="block text-sm font-medium text-blue-800 dark:text-slate-200">Ссылка на закупку</label>
                   <input
                     type="url"
                     {...register('tenderLink')}
                     disabled={readOnly}
                     readOnly={readOnly}
-                    className="block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 disabled:text-gray-500"
+                    className="block w-full rounded-md border-blue-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border disabled:bg-gray-50 dark:disabled:bg-slate-800 disabled:text-gray-500 dark:text-slate-100 dark:bg-slate-900"
                   />
                </div>
             </div>

@@ -3,6 +3,10 @@ import { z } from 'zod';
 import { ApiFullInvoiceSchema } from '@/types/api-schema';
 import type { InvoiceFormData, ReducerSpecs } from './schema';
 
+const api = axios.create({
+  withCredentials: true,
+});
+
 // Типы для DaData
 interface DaDataSuggestion<T = Record<string, unknown>> {
   value: string;
@@ -58,9 +62,12 @@ export const invoiceService = {
         reducerSpecs = {};
       }
       
+      // Если description всё ещё пустой, используем placeholder
+      const finalDescription = description.trim() || `Позиция ${index + 1}`;
+      
       return {
         id: item.id || generateId(),
-        description: description || `Позиция ${index + 1}`,
+        description: finalDescription,
         model: model || '',
         quantity: Number(item.quantity) || 1,
         price: Number(item.price) || 0,
@@ -130,21 +137,24 @@ export const invoiceService = {
    * Load invoice by filename
    */
   async load(filename: string): Promise<InvoiceFormData> {
-    // Using new Python API
-    const { data } = await axios.get(`/api/invoices/${encodeURIComponent(filename)}`);
-    
-    // FastAPI returns data directly
-    const invoiceData = data;
+    try {
+      const { data } = await api.get(`/api/v1/invoices/${encodeURIComponent(filename)}`);
+      
+      const parsed = ApiFullInvoiceSchema.safeParse(data);
+      if (!parsed.success) {
+        console.error('Invoice Data Validation Error:', parsed.error, 'data:', data);
+        throw new Error('Получены некорректные данные от сервера');
+      }
 
-    // Runtime Validation: Check if the data resembles an invoice
-    const parsed = ApiFullInvoiceSchema.safeParse(invoiceData);
-    if (!parsed.success) {
-      console.error('Invoice Data Validation Error:', parsed.error);
-      throw new Error('Получены некорректные данные от сервера');
+      return this.transformLegacyData(parsed.data);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const detail = error.response?.data?.detail || error.response?.data?.error || error.message;
+        throw new Error(`Ошибка загрузки КП: ${detail}`);
+      }
+      if (error instanceof Error) throw error;
+      throw new Error('Неизвестная ошибка загрузки КП');
     }
-
-    // Transform legacy format to new format
-    return this.transformLegacyData(parsed.data);
   },
 
   /**
@@ -161,9 +171,27 @@ export const invoiceService = {
       }))
     };
 
-    // Using new Python API
-    const response = await axios.post('/api/invoices', payload);
+    // Using versioned Python API
+    const response = await api.post('/api/v1/invoices/', payload);
     return response.data;
+  },
+
+  /**
+   * Delete invoice by filename
+   */
+  async delete(filename: string): Promise<{ success: boolean; filename: string }> {
+    try {
+      const encoded = encodeURIComponent(filename);
+      const { data } = await api.delete(`/api/v1/invoices/${encoded}`);
+      return data;
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        const detail = error.response?.data?.detail || error.response?.data?.error || error.message;
+        throw new Error(`Ошибка удаления КП: ${detail}`);
+      }
+      if (error instanceof Error) throw error;
+      throw new Error('Неизвестная ошибка удаления КП');
+    }
   },
 
   /**
@@ -171,8 +199,8 @@ export const invoiceService = {
    */
   async getNextNumber(year: number = new Date().getFullYear()): Promise<string> {
     try {
-      // Using new Python API
-      const { data } = await axios.get(`/api/invoices/next-number`);
+      // Using versioned Python API
+      const { data } = await api.get(`/api/v1/invoices/next-number`);
       return data.number || `VEC-${year}-001`;
     } catch {
       return `VEC-${year}-001`;
@@ -184,8 +212,8 @@ export const invoiceService = {
    */
   async searchCompanies(query: string, count: number = 5): Promise<DaDataSuggestion[]> {
     try {
-      // Using new Python API
-      const { data } = await axios.get(`/api/suggest/party`, {
+      // Using versioned Python API
+      const { data } = await api.get(`/api/v1/suggest/party`, {
         params: { query, count }
       });
       return data.suggestions || [];
@@ -200,8 +228,8 @@ export const invoiceService = {
    */
   async getCompanyByINN(inn: string): Promise<DaDataSuggestion | null> {
     try {
-      // Using new Python API
-      const { data } = await axios.get(`/api/suggest/party`, {
+      // Using versioned Python API
+      const { data } = await api.get(`/api/v1/suggest/party`, {
         params: { query: inn, count: 1 }
       });
       
@@ -220,8 +248,8 @@ export const invoiceService = {
    */
   async searchAddresses(query: string, count: number = 10): Promise<DaDataSuggestion[]> {
     try {
-      // Using new Python API
-      const { data } = await axios.get(`/api/suggest/address`, {
+      // Using versioned Python API
+      const { data } = await api.get(`/api/v1/suggest/address`, {
         params: { query, count }
       });
       return data.suggestions || [];
@@ -239,13 +267,11 @@ export const invoiceService = {
       // Using new Python API directly (it already exists in ParsingService)
       // ParsingService router: /api/parsing/tender
       const encodedUrl = encodeURIComponent(url);
-      const { data } = await axios.get(`/api/parsing/tender?url=${encodedUrl}`);
+      const { data } = await api.get(`/api/parsing/tender?url=${encodedUrl}`);
       
-      // Python Parsing service returns a structured object
-      return {
-        success: true,
-        data: data
-      };
+      // Python Parsing service already returns { success: true, data: {...}, error: null }
+      // So we just return it as-is to avoid double wrapping
+      return data;
     } catch (error: unknown) {
       console.error('Tender import error:', error);
       let errorMessage = 'Ошибка импорта данных';

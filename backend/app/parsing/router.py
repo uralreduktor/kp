@@ -43,6 +43,33 @@ async def parse_tender(url: str = Query(..., description="Tender URL")):
         # 3. Follow Link Logic
         debug_steps = [f"MainHTML:{len(page_result.content)}"]
         
+        # 3.1 Load positions page if no items found
+        if not data.items and 'b2b-center.ru' in url:
+            # Construct positions URL
+            positions_url = url.rstrip('/') + '/positions/'
+            debug_steps.append(f"LoadingPositions:{positions_url}")
+            
+            try:
+                positions_req = ParseRequest(
+                    url=positions_url,
+                    use_stealth=True,
+                    render_js=True,
+                    wait_for_selector='table, tbody'
+                )
+                positions_result = await parsing_service.parse_url(positions_req)
+                
+                if positions_result.status_code == 200 and positions_result.content:
+                    debug_steps.append(f"PositionsHTML:{len(positions_result.content)}")
+                    # Parse ONLY items from positions page (don't overwrite recipient/INN)
+                    positions_items = parser.parse_positions_only(positions_result.content)
+                    data.items = positions_items
+                    debug_steps.append(f"ItemsFound:{len(data.items)}")
+                else:
+                    debug_steps.append(f"PositionsFetchFail:{positions_result.status_code}")
+            except Exception as e:
+                debug_steps.append(f"PositionsErr:{str(e)}")
+        
+        # 3.2 Follow organizer link for INN if not found
         if hasattr(parser, 'found_organizer_link') and parser.found_organizer_link:
             link = parser.found_organizer_link
             debug_steps.append(f"FoundLink:{link}")
@@ -69,11 +96,14 @@ async def parse_tender(url: str = Query(..., description="Tender URL")):
         else:
             debug_steps.append("NoLinkFound")
 
-        # Inject debug info if failed
-        if not data.recipientINN:
-            debug_str = " | ".join(debug_steps)
-            if data.recipient: data.recipient += f" [{debug_str}]"
-            else: data.recipient = f"[{debug_str}]"
+        # Debug info (only for development - comment out in production)
+        # Uncomment if you need to debug parsing issues:
+        # if not data.recipientINN:
+        #     debug_str = " | ".join(debug_steps)
+        #     if data.recipient: data.recipient += f" [{debug_str}]"
+        #     else: data.recipient = f"[{debug_str}]"
+        
+        logger.info(f"Parse complete: {' | '.join(debug_steps)}")
         
         return TenderParseResponse(success=True, data=data)
 
